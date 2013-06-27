@@ -14,20 +14,14 @@ import spock.lang.*
  */
 class PathFactoryTest extends Specification{
 
-    def 'by String (1 arg)'(){
-        when:
-        def path = 'src'.toPath()
-
-        then:
-        path == Paths.get('src')
-    }
-
-    def 'by String (3 args)'(){
-        when:
-        def path = 'src/test/groovy'.toPath()
-
-        then:
-        path == Paths.get('src', 'test', 'groovy')
+    def 'by String'(){
+        expect:
+        s.toPath() == nioPath
+        
+        where:
+        s                 | nioPath
+        'src'             | Paths.get('src')
+        'src/test/groovy' | Paths.get('src/test/groovy')
     }
 
     def 'by String array (0 args)'(){
@@ -38,20 +32,14 @@ class PathFactoryTest extends Specification{
         thrown(IllegalArgumentException)
     }
 
-    def 'by String array (1 args)'(){
-        when:
-        def path = (['src'] as String[]).toPath()
-
-        then:
-        path == Paths.get('src')
-    }
-
-    def 'by String array (3 args)'(){
-        when:
-        def path = (['src', 'test', 'groovy'] as String[]).toPath()
-
-        then:
-        path == Paths.get('src', 'test', 'groovy')
+    def 'by String array'(){
+        expect:
+        (ss as String[]).toPath() == nioPath
+        
+        where:
+        ss                        | nioPath
+        ['src']                   | Paths.get('src')
+        ['src', 'test', 'groovy'] | Paths.get('src', 'test', 'groovy')
     }
 
     def 'by List of String (0 args)'(){
@@ -62,20 +50,14 @@ class PathFactoryTest extends Specification{
         thrown(IllegalArgumentException)
     }
 
-    def 'by List of String (1 args)'(){
-        when:
-        def path = ['src'].toPath()
-
-        then:
-        path == Paths.get('src')
-    }
-
-    def 'by List of String (3 args)'(){
-        when:
-        def path = ['src', 'test', 'groovy'].toPath()
-
-        then:
-        path == Paths.get('src', 'test', 'groovy')
+    def 'by String array'(){
+        expect:
+        slist.toPath() == nioPath
+        
+        where:
+        slist                     | nioPath
+        ['src']                   | Paths.get('src')
+        ['src', 'test', 'groovy'] | Paths.get('src', 'test', 'groovy')
     }
     
     def 'by URI'(){

@@ -36,6 +36,7 @@ task generateExtensionModuleDescriptor << {
 
     def extensionClasses = [
         'org.waman.gluino.nio.PathFactoryExtension',
+        'org.waman.gluino.nio.PathOperatorExtension',
         'org.waman.gluino.nio.ByteIOExtension'
     ]
 
