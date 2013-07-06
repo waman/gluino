@@ -33,7 +33,7 @@ class PathAccessorTest extends Specification{
         'src/test/groovy'.toPath()[1..<1].isEmpty()
     }
     
-    def 'getAt(range) method'(){
+    def 'getAt(intRange) method'(){
         expect:
         'src/test/groovy/org/waman/gluino/nio'.toPath()[indexRange].toPath() == 
                 result.toPath()
@@ -42,13 +42,13 @@ class PathAccessorTest extends Specification{
         indexRange | result
          2..4      | 'groovy/org/waman'
          4..2      | 'waman/org/groovy'
-         /*2..-2     | 'groovy/org/waman/gluino'
+         2..-2     | 'groovy/org/waman/gluino'
         -2..2      | 'gluino/waman/org/groovy'
         -4..-2     | 'org/waman/gluino'
-        -2..-4     | 'gluino/waman/org'*/
+        -2..-4     | 'gluino/waman/org'
          2..2      | 'groovy'
         -2..-2     | 'gluino'
-         /*2..<4     | 'groovy/org'
+         2..<4     | 'groovy/org'
          4..<2     | 'waman/org'
          2..<-2    | 'groovy/org/waman/gluino/nio'    // note!
         -2..<2     | 'gluino/waman/org/groovy/test'    // note!
@@ -57,7 +57,7 @@ class PathAccessorTest extends Specification{
          2..<3     | 'groovy'
          2..<1     | 'groovy'
         -2..<-1    | 'gluino'
-        -2..<-3    | 'gluino'*/
+        -2..<-3    | 'gluino'
     }
     
     def 'getAt(List) method'(){

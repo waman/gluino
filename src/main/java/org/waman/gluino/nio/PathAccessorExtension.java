@@ -28,22 +28,22 @@ public class PathAccessorExtension{
     }
     
     public static List<Path> getAt(Path path, IntRange range){
-        int start = !range.isReverse() ? range.getFromInt() : range.getToInt();
-        int end   = !range.isReverse() ? range.getToInt() : range.getFromInt();
+        int left  = !range.isReverse() ? range.getFromInt() : range.getToInt();
+        int right = !range.isReverse() ? range.getToInt()   : range.getFromInt();
         
-        start = start >= 0 ? start : start + path.getNameCount();
-        end   = end   >= 0 ? end   : end   + path.getNameCount();
+        left  = left  >= 0 ? left : left  + path.getNameCount();
+        right = right >= 0 ? right: right + path.getNameCount();
         
-        if(start == end){
-            return Collections.singletonList(path.getName(start));
-        }else if(start < end){
-            List<Path> result = new ArrayList<>(end - start + 1);
-            for(int i = start; i <= end; i++)
+        if(left == right){
+            return Collections.singletonList(path.getName(left));
+        }else if(left < right){
+            List<Path> result = new ArrayList<>(right - left + 1);
+            for(int i = left; i <= right; i++)
                 result.add(path.getName(i));
             return result;
         }else{
-            List<Path> result = new ArrayList<>(start - end + 1);
-            for(int i = start; i >= end; i--)
+            List<Path> result = new ArrayList<>(left - right + 1);
+            for(int i = left; i >= right; i--)
                 result.add(path.getName(i));
             return result;
         }
