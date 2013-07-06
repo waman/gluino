@@ -25,6 +25,7 @@ import java.net.URI
  */
 class PathOperatorTest extends Specification{
     
+    //********** File Search **********
     def '/ operator return a child path'(){
         expect:
         parent / child == nioPath
@@ -53,6 +54,7 @@ class PathOperatorTest extends Specification{
         'src/test/groovy'.toPath() | 'src/test'.toPath()
     }
     
+    //********** Type Transformation **********
     def 'as operator transforms Path into proper type'(){
         expect:
         'src/test/groovy'.toPath().asType(type) == result
@@ -65,5 +67,10 @@ class PathOperatorTest extends Specification{
         String[] | (['src', 'test', 'groovy'] as String[])
         Path[] | (['src', 'test', 'groovy'].collect{ it.toPath() } as Path[])
         List | ['src', 'test', 'groovy'].collect{ it.toPath() }
+    }
+    
+    def 'as operator transforms Path into URI'(){
+        expect:
+        'src/test/groovy'.toPath().asType(URI) in URI
     }
 }

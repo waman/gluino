@@ -1,3 +1,3 @@
 moduleName=gluino
 moduleVersion=0.1
-extensionClasses=org.waman.gluino.nio.PathFactoryExtension,org.waman.gluino.nio.PathOperatorExtension,org.waman.gluino.nio.ByteIOExtension
+extensionClasses=org.waman.gluino.nio.PathFactoryExtension,org.waman.gluino.nio.PathOperatorExtension,org.waman.gluino.nio.PathAccessorExtension,org.waman.gluino.nio.ByteIOExtension

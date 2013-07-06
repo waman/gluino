@@ -14,7 +14,7 @@ import spock.lang.*
  *   <li>leftShift(byte) : Path</li>
  * </ul>
  */
-class ByteArrayAccessor extends Specification{
+class ByteArrayAccessorTest extends Specification{
 
     def testDir = Files.createTempDirectory('gluino')
     def path_get

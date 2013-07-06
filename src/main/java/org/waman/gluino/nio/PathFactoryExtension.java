@@ -35,19 +35,31 @@ public class PathFactoryExtension{
     	}
     }
 
-    public static Path toPath(List<String> s){
-        switch(s.size()){
+    public static Path toPath(List<?> list){
+        switch(list.size()){
     		case 0:
-    		    throw new IllegalArgumentException("Argument array must not be empty :" + s);
+    		    throw new IllegalArgumentException("Argument array must not be empty.");
     		    
     		case 1:
-    		    return Paths.get(s.get(0));
+    		    Object o0 = list.get(0);
+    		    return (o0 instanceof String) ? Paths.get((String)o0) : (Path)o0;
     		    
     		default:
-    		    int n = s.size() - 1;
-    		    String[] sub = new String[n];
-    		    for(int i = 0; i < n; i++)sub[i] = s.get(i+1);
-    		    return Paths.get(s.get(0), sub);
+    		    int n = list.size() - 1;
+    		    Object obj0 = list.get(0);
+    		    
+    		    if(obj0 instanceof String){
+    		        Path result = Paths.get((String)obj0);
+    		        for(int i = 1; i <= n; i++)
+    		            result = result.resolve((String)list.get(i));
+    		        return result;
+    		        
+    		    }else{
+    		        Path result = (Path)list.get(0);
+    		        for(int i = 1; i <= n; i++)
+    		            result = result.resolve((Path)list.get(i));
+    		        return result;
+    		    }
     	}
     }
 

@@ -1,10 +1,10 @@
 package org.waman.gluino.nio;
 
 import java.nio.file.*;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import java.io.File;
 import java.net.URI;
+import groovy.lang.*;
 
 /**
  * Implemeted methods : 
@@ -31,6 +31,7 @@ import java.net.URI;
  */
 public class PathOperatorExtension{
 
+    //********** File Search **********
     public static Path div(Path parent, Path child){
         return parent.resolve(child);
     }
@@ -47,14 +48,7 @@ public class PathOperatorExtension{
         return path.getParent();
     }
 
-    public static Path plus(Path path0, Path path1){
-        return null;
-    }
-
-    public static Path plus(Path path, String s){
-        return plus(path, Paths.get(s));
-    } 
-
+    //********** Type Transformations **********
     public static Object asType(Path path, Class<?> type){
         if(Path.class.equals(type))
             return path;
@@ -68,29 +62,45 @@ public class PathOperatorExtension{
         else if(URI.class.equals(type))
             return path.toUri();
         
-        else if(Path[].class.equals(type)){
-             int n = path.getNameCount();
-             Path[] result = new Path[n];
-             for(int i = 0; i < n; i++)
-                 result[i] = path.getName(i);
-             return result;
-        }
+        else if(Path[].class.equals(type))
+            return toArray(path);
         
-        else if(String[].class.equals(type)){
-             int n = path.getNameCount();
-             String[] result = new String[n];
-             for(int i = 0; i < n; i++)
-                 result[i] = path.getName(i).toString();
-             return result;
-        }
+        else if(String[].class.equals(type))
+            return toStringArray(path);
         
-        else if(List.class.equals(type)){
-             List<Path> result = new ArrayList<>(path.getNameCount());
-             for(Path p : path)
-                 result.add(p);
-             return result;
-        }
+        else if(List.class.equals(type))
+            return toList(path);
         
         throw new ClassCastException("Path object cannot transform into the type "+type);
+    }
+    
+    public static Path[] toArray(Path path){
+         int n = path.getNameCount();
+         Path[] result = new Path[n];
+         for(int i = 0; i < n; i++)
+             result[i] = path.getName(i);
+         return result;
+    }
+    
+    public static String[] toStringArray(Path path){
+         int n = path.getNameCount();
+         String[] result = new String[n];
+         for(int i = 0; i < n; i++)
+             result[i] = path.getName(i).toString();
+         return result;
+    }
+    
+    public static List<Path> toList(Path path){
+         List<Path> result = new ArrayList<>(path.getNameCount());
+         for(Path p : path)
+             result.add(p);
+         return result;
+    }
+    
+    public static List<String> toStringList(Path path){
+         List<String> result = new ArrayList<>(path.getNameCount());
+         for(Path p : path)
+             result.add(p.toString());
+         return result;
     }
 }
