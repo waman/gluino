@@ -23,11 +23,11 @@ public class PathAccessorExtension{
             return null;
     }
     
-    public static List<Path> getAt(Path path, EmptyRange range){
-        return Collections.emptyList();
+    public static Path getAt(Path path, EmptyRange range){
+        return null;
     }
     
-    public static List<Path> getAt(Path path, IntRange range){
+    public static Path getAt(Path path, IntRange range){
         int left  = !range.isReverse() ? range.getFromInt() : range.getToInt();
         int right = !range.isReverse() ? range.getToInt()   : range.getFromInt();
         
@@ -35,25 +35,25 @@ public class PathAccessorExtension{
         right = right >= 0 ? right: right + path.getNameCount();
         
         if(left == right){
-            return Collections.singletonList(path.getName(left));
+            return path.getName(left);
         }else if(left < right){
             List<Path> result = new ArrayList<>(right - left + 1);
             for(int i = left; i <= right; i++)
                 result.add(path.getName(i));
-            return result;
+            return PathFactoryExtension.toPath(result);
         }else{
             List<Path> result = new ArrayList<>(left - right + 1);
             for(int i = left; i >= right; i--)
                 result.add(path.getName(i));
-            return result;
+            return PathFactoryExtension.toPath(result);
         }
     }
     
-    public static List<Path> getAt(Path path, List<Integer> indices){
+    public static Path getAt(Path path, List<Integer> indices){
         List<Path> result = new ArrayList<>(indices.size());
         for(int i : indices)
             result.add(getAt(path, i));
-        return result;
+        return PathFactoryExtension.toPath(result);
     }
 /*
     // these are not operators.

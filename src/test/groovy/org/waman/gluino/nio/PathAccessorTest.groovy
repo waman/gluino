@@ -29,14 +29,13 @@ class PathAccessorTest extends Specification{
     
     def 'getAt(empty) method'(){
         expect:
-        'src/test/groovy'.toPath()[0..<0].isEmpty()
-        'src/test/groovy'.toPath()[1..<1].isEmpty()
+        'src/test/groovy'.toPath()[0..<0] == null
+        'src/test/groovy'.toPath()[1..<1] == null
     }
     
     def 'getAt(intRange) method'(){
         expect:
-        'src/test/groovy/org/waman/gluino/nio'.toPath()[indexRange].toPath() == 
-                result.toPath()
+        'src/test/groovy/org/waman/gluino/nio'.toPath()[indexRange] == result.toPath()
         
         where:
         indexRange | result
@@ -62,7 +61,7 @@ class PathAccessorTest extends Specification{
     
     def 'getAt(List) method'(){
         expect:
-        'src/test/groovy/org/waman/gluino/nio'.toPath()[1, 5, 3, 2].toPath() == 
+        'src/test/groovy/org/waman/gluino/nio'.toPath()[1, 5, 3, 2] == 
                 'test/gluino/org/groovy'.toPath()
     }
     
