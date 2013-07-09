@@ -37,23 +37,23 @@ public class PathAccessorExtension{
         if(left == right){
             return path.getName(left);
         }else if(left < right){
-            List<Path> result = new ArrayList<>(right - left + 1);
-            for(int i = left; i <= right; i++)
-                result.add(path.getName(i));
-            return PathFactoryExtension.toPath(result);
+            Path result = path.getName(left);
+            for(int i = left+1; i <= right; i++)
+                result = result.resolve(path.getName(i));
+            return result;
         }else{
-            List<Path> result = new ArrayList<>(left - right + 1);
-            for(int i = left; i >= right; i--)
-                result.add(path.getName(i));
-            return PathFactoryExtension.toPath(result);
+            Path result = path.getName(left);
+            for(int i = left-1; i >= right; i--)
+                result = result.resolve(path.getName(i));
+            return result;
         }
     }
     
     public static Path getAt(Path path, List<Integer> indices){
-        List<Path> result = new ArrayList<>(indices.size());
-        for(int i : indices)
-            result.add(getAt(path, i));
-        return PathFactoryExtension.toPath(result);
+        Path result = getAt(path, indices.get(0));
+        for(int i = 1, n = indices.size(); i < n; i++)
+            result = result.resolve(getAt(path, indices.get(i)));
+        return result;
     }
 /*
     // these are not operators.

@@ -18,9 +18,6 @@ import groovy.lang.*;
  *   <li>minus() : Path, -</li>
  *   <li>multiply() : Path, *</li>
  *   <li>power() : Path, **</li>
- *
- *   <li>getAt() : Path, []</li>
- *   <li>setAt() : Path, [] = </li>
  
  *   <li>isCase() : Path, in</li>
  
