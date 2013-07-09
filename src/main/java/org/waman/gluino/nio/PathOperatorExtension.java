@@ -10,11 +10,11 @@ import groovy.lang.*;
  * Implemeted methods : 
  * <ul>
  *   <li>div() : Path, /</li>
+ *   <li>plus() : Path, +</li>
  
  *   <li>previous() : Path, --</li>
  *   <li>bitwiseNegate() : Path, ~</li>
  
- *   <li>plus() : Path, +</li>
  *   <li>minus() : Path, -</li>
  *   <li>multiply() : Path, *</li>
  *   <li>power() : Path, **</li>
@@ -36,6 +36,14 @@ public class PathOperatorExtension{
     public static Path div(Path parent, String child){
         return div(parent, Paths.get(child));
     }
+    
+    public static Path plus(Path parent, Path child){
+        return parent.resolve(child);
+    }
+    
+    public static Path plus(Path parent, String child){
+        return parent.resolve(child);
+    }
 
     public static Path previous(Path path){
         return path.getParent();
@@ -43,6 +51,29 @@ public class PathOperatorExtension{
 
     public static Path bitwiseNegate(Path path){
         return path.getParent();
+    }
+    
+    //********** File Search **********
+    public static Path minus(Path path, Path sub){
+        int i = 0, n = path.getNameCount();
+        Path result = null;
+        while(result == null && i < n){
+            if(!path.getName(i).equals(sub)){
+                result = path.getName(i);
+                i++;
+                break;
+            }
+            i++;
+        }
+        for(;i < n; i++){
+            if(!path.getName(i).equals(sub))
+                result = result.resolve(path.getName(i));
+        }
+        return result;
+    }
+
+    public static Path minus(Path path, String sub){
+        return minus(path, Paths.get(sub));
     }
 
     //********** Type Transformations **********

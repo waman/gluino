@@ -26,32 +26,71 @@ import java.net.URI
 class PathOperatorTest extends Specification{
     
     //********** File Search **********
-    def '/ operator return a child path'(){
+    def '/ operator returns a child path'(){
         expect:
-        parent / child == nioPath
+        parent.toPath() / child == nioPath.toPath()
         
         where:
-        parent              | child             | nioPath
-        'src/test'.toPath() | 'groovy'.toPath() | Paths.get('src/test/groovy') 
-        'src/test'.toPath() | 'groovy'          | Paths.get('src/test/groovy') 
+        parent     | child             | nioPath
+        'src/test' | 'groovy'.toPath() | 'src/test/groovy'
+        'src/test' | 'groovy'          | 'src/test/groovy'
     }
     
-    def '~ operator return a parent path'(){
+    def '+ operator returns a child path, too'(){
         expect:
-        ~current == parent
+        parent.toPath() + child == nioPath.toPath()
         
         where:
-        current                    | parent
-        'src/test/groovy'.toPath() | 'src/test'.toPath()
+        parent     | child             | nioPath
+        'src/test' | 'groovy'.toPath() | 'src/test/groovy'
+        'src/test' | 'groovy'          | 'src/test/groovy'
     }
     
-    def '-- operator return a parent path'(){
+    def '~ operator returns a parent path'(){
         expect:
-        --current == parent
+        ~(current.toPath()) == parent.toPath()
         
         where:
-        current                    | parent
-        'src/test/groovy'.toPath() | 'src/test'.toPath()
+        current           | parent
+        'src/test/groovy' | 'src/test'
+    }
+    
+    def '-- operator returns a parent path, too'(){
+        expect:
+        --(current.toPath()) == parent.toPath()
+        
+        where:
+        current           | parent
+        'src/test/groovy' | 'src/test'
+    }
+    
+    //********** Path Transformation **********
+    def '- operator removes a specified path fragment(s)'(){
+        expect:
+        current.toPath() - sub == result.toPath()
+        
+        where:
+        current                       | sub             | result
+        'src/test/groovy'             | 'test'.toPath() | 'src/groovy'
+        'src/test/groovy'             | 'test'          | 'src/groovy'
+        'src/test/groovy/test/gluino' | 'test'.toPath() | 'src/groovy/gluino'
+        'src/test/groovy/test/gluino' | 'test'          | 'src/groovy/gluino'
+        'test/src/groovy/gluino'      | 'test'.toPath() | 'src/groovy/gluino'
+        'test/src/groovy/gluino'      | 'test'          | 'src/groovy/gluino'
+        'src/groovy/gluino'           | 'test'.toPath() | 'src/groovy/gluino'
+        'src/groovy/gluino'           | 'test'          | 'src/groovy/gluino'
+    }
+    
+    def '- operator can remove all path fragments (then return null)'(){
+        expect:
+        current.toPath() - sub == null
+        
+        where:
+        current     | sub
+        'test'      | 'test'.toPath()
+        'test'      | 'test'
+        'test/test' | 'test'.toPath()
+        'test/test' | 'test'
     }
     
     //********** Type Transformation **********
