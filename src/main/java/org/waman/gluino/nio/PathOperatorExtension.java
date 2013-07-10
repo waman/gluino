@@ -11,19 +11,19 @@ import groovy.lang.*;
  * <ul>
  *   <li>div() : Path, /</li>
  *   <li>plus() : Path, +</li>
- 
+ *   <--li>leftShift() : Path, &lt;&lt;</li-->
+ *
  *   <li>previous() : Path, --</li>
  *   <li>bitwiseNegate() : Path, ~</li>
- 
+ *
  *   <li>minus() : Path, -</li>
+ *
  *   <li>multiply() : Path, *</li>
  *   <li>power() : Path, **</li>
- 
+ *
  *   <li>isCase() : Path, in</li>
- 
+ *
  *   <li>asType() : Path, as</li>
- 
- *   <li>leftShift() : Path, &lt;&lt;</li>
  * </ul>
  */
 public class PathOperatorExtension{

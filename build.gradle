@@ -35,25 +35,30 @@ task generateExtensionModuleDescriptor << {
     ant.mkdir dir:servicesDir
 
     def extensionClasses = [
+        'java.nio.file.Files',
         'org.waman.gluino.nio.PathFactoryExtension',
         'org.waman.gluino.nio.PathOperatorExtension',
         'org.waman.gluino.nio.PathAccessorExtension',
-        'org.waman.gluino.nio.ByteIOExtension'
+        'org.waman.gluino.nio.ByteIOExtension',
+        //'org.waman.gluino.nio.FileInfoAccessorExtension'
+        
+        'org.waman.gluino.nio.PathMatcherExtension'
     ]
 
     def staticExtensionClasses = [
-        //'org.waman.groops.math.stat.StaticStatisticsExtension'
+        'org.waman.gluino.nio.NioStaticExtension'
     ]
 
     def moduleDescriptor = new File("$servicesDir/org.codehaus.groovy.runtime.ExtensionModule")
     if(!moduleDescriptor.exists())moduleDescriptor.createNewFile()
 
     // ***** module descriptor content *****
-moduleDescriptor.text = """moduleName=$project.name
+    moduleDescriptor.text = """\
+moduleName=$project.name
 moduleVersion=$project.version
 extensionClasses=${extensionClasses.join(',')}
+staticExtensionClasses = ${staticExtensionClasses.join(',')}
 """
-//staticExtensionClasses = ${staticExtensionClasses.join(',')}
     ant.echo("Output file : $moduleDescriptor.path")
 }
 
