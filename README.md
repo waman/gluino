@@ -7,10 +7,14 @@ This project is Groovy extension module,so **automatically** adds methods to alr
 ##### Create Path object
 To create a Path object, `Paths#get()` methods are usually used.
 Gluino add `toPath()` methods for creating Path object to the following types:
-*`java.lang.String`
-*`java.lang.String[]`
-*`java.util.List` with element type `Path` or `String`
-*`java.net.URI`
+* `java.lang.String`
+* `java.lang.String[]`
+* `java.util.List` with element type `Path` or `String`
+* `java.net.URI`
+For example, the following codes can create a Path object (of cource written by Groovy):
+    'src/test/groovy'.toPath()
+    ['src', 'test', 'groovy'].toPath()
+    new URI('file:///C:/waman/gluino/').toPath()
 
 ##### Path Operations
 
