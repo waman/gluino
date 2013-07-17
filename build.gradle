@@ -35,7 +35,6 @@ task generateExtensionModuleDescriptor << {
     ant.mkdir dir:servicesDir
 
     def extensionClasses = [
-        'java.nio.file.Files',
         'org.waman.gluino.nio.PathFactoryExtension',
         'org.waman.gluino.nio.PathOperatorExtension',
         'org.waman.gluino.nio.PathAccessorExtension',
