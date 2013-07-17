@@ -39,7 +39,7 @@ task generateExtensionModuleDescriptor << {
         'org.waman.gluino.nio.PathOperatorExtension',
         'org.waman.gluino.nio.PathAccessorExtension',
         'org.waman.gluino.nio.ByteIOExtension',
-        //'org.waman.gluino.nio.FileInfoAccessorExtension'
+        'org.waman.gluino.nio.FileInfoAccessorExtension',
         
         'org.waman.gluino.nio.PathMatcherExtension'
     ]
