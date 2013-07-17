@@ -9,7 +9,7 @@ import java.net.URI;
  * <ul>
  *   <li>String#toPath() : Path</li>
  *   <li>String[]#toPath() : Path</li>
- *   <li>List&lt;String>#toPath() : Path</li>
+ *   <li>List&lt;?>#toPath() : Path</li>
  *   <li>URI#toPath() : Path</li>
  * </ul>
  */
@@ -42,22 +42,22 @@ public class PathFactoryExtension{
     		    
     		case 1:
     		    Object o0 = list.get(0);
-    		    return (o0 instanceof String) ? Paths.get((String)o0) : (Path)o0;
+    		    return (o0 instanceof Path) ? (Path)o0 : Paths.get(o0.toString());
     		    
     		default:
     		    int n = list.size() - 1;
     		    Object obj0 = list.get(0);
     		    
-    		    if(obj0 instanceof String){
-    		        Path result = Paths.get((String)obj0);
-    		        for(int i = 1; i <= n; i++)
-    		            result = result.resolve((String)list.get(i));
-    		        return result;
-    		        
-    		    }else{
+    		    if(obj0 instanceof Path){
     		        Path result = (Path)list.get(0);
     		        for(int i = 1; i <= n; i++)
     		            result = result.resolve((Path)list.get(i));
+    		        return result;
+    		        
+    		    }else{
+    		        Path result = Paths.get(obj0.toString());
+    		        for(int i = 1; i <= n; i++)
+    		            result = result.resolve(list.get(i).toString());
     		        return result;
     		    }
     	}

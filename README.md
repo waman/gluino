@@ -2,9 +2,19 @@ Gluino is an extension module library of Groovy, aim to add utility methods to j
 
 This project is Groovy extension module,so **automatically** adds methods to already existing classes and interfaces (even Java standard API).
 
-#### Create Path object
+#### Path
 
-#### Path Operations
+##### Create Path object
+To create a Path object, `Paths#get()` methods are usually used.
+Gluino add `toPath()` methods for creating Path object to the following types:
+*`java.lang.String`
+*`java.lang.String[]`
+*`java.util.List` with element type `Path` or `String`
+*`java.net.URI`
 
-#### File Operations
+##### Path Operations
+
+##### File Operations
+
+#### PathMatcher
 

@@ -8,7 +8,7 @@ import spock.lang.*
  * <ul>
  *   <li>String#toPath() : Path</li>
  *   <li>String[]#toPath() : Path</li>
- *   <li>List&lt;String>#toPath() : Path</li>
+ *   <li>List&lt;?>#toPath() : Path</li>
  *   <li>URI#toPath() : Path</li>
  * </ul>
  */
@@ -39,10 +39,10 @@ class PathFactoryTest extends Specification{
         where:
         ss                        | nioPath
         ['src']                   | Paths.get('src')
-        ['src', 'test', 'groovy'] | Paths.get('src', 'test', 'groovy')
+        ['src', 'test', 'groovy'] | Paths.get('src/test/groovy')
     }
 
-    def 'by List of String (0 args)'(){
+    def 'by empty List of String'(){
         when:
         def path = [].toPath()
 
@@ -50,14 +50,24 @@ class PathFactoryTest extends Specification{
         thrown(IllegalArgumentException)
     }
 
-    def 'by String array'(){
+    def 'by List of String'(){
         expect:
         slist.toPath() == nioPath
         
         where:
         slist                     | nioPath
         ['src']                   | Paths.get('src')
-        ['src', 'test', 'groovy'] | Paths.get('src', 'test', 'groovy')
+        ['src', 'test', 'groovy'] | Paths.get('src/test/groovy')
+    }
+
+    def 'by List of Path'(){
+        expect:
+        plist.toPath() == nioPath
+        
+        where:
+        plist                                            | nioPath
+        ['src'].collect{ it.toPath() }                  | Paths.get('src')
+        ['src', 'test', 'groovy'].collect{ it.toPath()} | Paths.get('src/test/groovy')
     }
     
     def 'by URI'(){
