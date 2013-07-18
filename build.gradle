@@ -38,14 +38,18 @@ task generateExtensionModuleDescriptor << {
         'org.waman.gluino.nio.PathFactoryExtension',
         'org.waman.gluino.nio.PathOperatorExtension',
         'org.waman.gluino.nio.PathAccessorExtension',
-        'org.waman.gluino.nio.ByteIOExtension',
         'org.waman.gluino.nio.FileInfoAccessorExtension',
+        'org.waman.gluino.nio.FileOperationExtension',
+        'org.waman.gluino.nio.ByteIOExtension',
+        'org.waman.gluino.nio.CharIOExtension',
+        'org.waman.gluino.nio.FileVisitorExtension',
         
         'org.waman.gluino.nio.PathMatcherExtension'
     ]
 
     def staticExtensionClasses = [
-        'org.waman.gluino.nio.NioStaticExtension'
+        'org.waman.gluino.nio.NioStaticExtension',
+        'org.waman.gluino.nio.GNioStaticExtension'
     ]
 
     def moduleDescriptor = new File("$servicesDir/org.codehaus.groovy.runtime.ExtensionModule")

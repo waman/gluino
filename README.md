@@ -10,6 +10,7 @@ Gluino add `toPath()` methods for creating Path object to the following types:
 
 * `java.lang.String`
 * `java.lang.String[]`
+* `java.nio.file.Path[]`
 * `java.util.List` with element type `Path` or `String`
 * `java.net.URI`
 
@@ -20,8 +21,19 @@ For example, the following codes can create a Path object (of cource written by 
     new URI('file:///C:/waman/gluino/').toPath()
 
 ##### Path Operations
+Groovy operator overload
 
-##### File Operations
+* /
+* +
+* -
+
+Because `Path` implements Iterable&lt;Path>,
+Path should support `getAt()` methods with argument type `int`, `IntRange` and `List<Integer>`.
+Gluino be so. Note that a return type of these `getAt()` methods are all `Path`(not List).
+
+* getAt()
+
+##### File/Directroy Operations
 
 #### PathMatcher
 

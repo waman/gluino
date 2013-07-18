@@ -1,4 +1,4 @@
 moduleName=gluino
 moduleVersion=0.1
-extensionClasses=org.waman.gluino.nio.PathFactoryExtension,org.waman.gluino.nio.PathOperatorExtension,org.waman.gluino.nio.PathAccessorExtension,org.waman.gluino.nio.ByteIOExtension,org.waman.gluino.nio.FileInfoAccessorExtension,org.waman.gluino.nio.PathMatcherExtension
-staticExtensionClasses = org.waman.gluino.nio.NioStaticExtension
+extensionClasses=org.waman.gluino.nio.PathFactoryExtension,org.waman.gluino.nio.PathOperatorExtension,org.waman.gluino.nio.PathAccessorExtension,org.waman.gluino.nio.FileInfoAccessorExtension,org.waman.gluino.nio.FileOperationExtension,org.waman.gluino.nio.ByteIOExtension,org.waman.gluino.nio.CharIOExtension,org.waman.gluino.nio.FileVisitorExtension,org.waman.gluino.nio.PathMatcherExtension
+staticExtensionClasses = org.waman.gluino.nio.NioStaticExtension,org.waman.gluino.nio.GNioStaticExtension

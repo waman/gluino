@@ -8,6 +8,7 @@ import spock.lang.*
  * <ul>
  *   <li>String#toPath() : Path</li>
  *   <li>String[]#toPath() : Path</li>
+ *   <li>Path[]#toPath() : Path</li>
  *   <li>List&lt;?>#toPath() : Path</li>
  *   <li>URI#toPath() : Path</li>
  * </ul>
@@ -34,12 +35,30 @@ class PathFactoryTest extends Specification{
 
     def 'by String array'(){
         expect:
-        (ss as String[]).toPath() == nioPath
+        (sa as String[]).toPath() == result
         
         where:
-        ss                        | nioPath
+        sa                        | result
         ['src']                   | Paths.get('src')
         ['src', 'test', 'groovy'] | Paths.get('src/test/groovy')
+    }
+
+    def 'by Path array (0 args)'(){
+        when:
+        def path = ([] as Path[]).toPath()
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    def 'by Path array'(){
+        expect:
+        (pa as Path[]).toPath() == result
+        
+        where:
+        pa                                                | result
+        ['src'].collect{ it.toPath() }                   | Paths.get('src')
+        ['src', 'test', 'groovy'].collect{ it.toPath() } | Paths.get('src/test/groovy')
     }
 
     def 'by empty List of String'(){
@@ -52,20 +71,20 @@ class PathFactoryTest extends Specification{
 
     def 'by List of String'(){
         expect:
-        slist.toPath() == nioPath
+        slist.toPath() == result
         
         where:
-        slist                     | nioPath
+        slist                     | result
         ['src']                   | Paths.get('src')
         ['src', 'test', 'groovy'] | Paths.get('src/test/groovy')
     }
 
     def 'by List of Path'(){
         expect:
-        plist.toPath() == nioPath
+        plist.toPath() == result
         
         where:
-        plist                                            | nioPath
+        plist                                            | result
         ['src'].collect{ it.toPath() }                  | Paths.get('src')
         ['src', 'test', 'groovy'].collect{ it.toPath()} | Paths.get('src/test/groovy')
     }

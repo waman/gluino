@@ -9,6 +9,7 @@ import java.net.URI;
  * <ul>
  *   <li>String#toPath() : Path</li>
  *   <li>String[]#toPath() : Path</li>
+ *   <li>Path[]#toPath() : Path</li>
  *   <li>List&lt;?>#toPath() : Path</li>
  *   <li>URI#toPath() : Path</li>
  * </ul>
@@ -19,19 +20,35 @@ public class PathFactoryExtension{
         return Paths.get(s);
     }
 
-    public static Path toPath(String[] s){
-        switch(s.length){
+    public static Path toPath(String[] sa){
+        switch(sa.length){
     		case 0:
-    		    throw new IllegalArgumentException("Argument array must not be empty :" + s);
+    		    throw new IllegalArgumentException("Argument array must not be empty :" + sa);
     		    
     		case 1:
-    		    return Paths.get(s[0]);
+    		    return Paths.get(sa[0]);
     		    
     		default:
-    		    int n = s.length - 1;
-    		    String[] sub = new String[n];
-    		    System.arraycopy(s, 1, sub, 0, n);
-    		    return Paths.get(s[0], sub);
+    		    Path result = Paths.get(sa[0]);
+    		    for(int i = 1, n = sa.length; i < n; i++)
+    		        result = result.resolve(sa[i]);
+    		    return result;
+    	}
+    }
+
+    public static Path toPath(Path[] pa){
+        switch(pa.length){
+    		case 0:
+    		    throw new IllegalArgumentException("Argument array must not be empty :" + pa);
+    		    
+    		case 1:
+    		    return pa[0];
+    		    
+    		default:
+    		    Path result = pa[0];
+    		    for(int i = 1, n = pa.length; i < n; i++)
+    		        result = result.resolve(pa[i]);
+    		    return result;
     	}
     }
 
