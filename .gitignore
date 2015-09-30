@@ -1,4 +1,2 @@
-gluino.iws
-.gradle/
-build/
-out/
+.idea/workspace.xml
+target/

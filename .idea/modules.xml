@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/gradle/gradle.iml" filepath="$PROJECT_DIR$/gradle/gradle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gluino.iml" filepath="$PROJECT_DIR$/.idea/modules/gluino.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gluino-build.iml" filepath="$PROJECT_DIR$/.idea/modules/gluino-build.iml" />
     </modules>
   </component>
 </project>
-
