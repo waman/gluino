@@ -2,6 +2,7 @@
   <dictionary name="higashida">
     <words>
       <w>gluino</w>
+      <w>tempdir</w>
     </words>
   </dictionary>
 </component>
