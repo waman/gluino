@@ -15,36 +15,48 @@ class FilesCategory(path: Path){
   //***** Creation *****
   def createFile(attributes: Set[FileAttribute[_]] = Set()): Path =
     Files.createFile(path, attributes.toArray:_*)
+
   def createDirectory(attributes: Set[FileAttribute[_]] = Set()): Path =
     Files.createDirectory(path, attributes.toArray:_*)
+
   def createDirectories(attributes: Set[FileAttribute[_]] = Set()): Path =
     Files.createDirectories(path, attributes.toArray:_*)
 
+  // temp-file
   def createTempFile
     (prefix: String = null, suffix: String = null, attributes: Set[FileAttribute[_]] = Set()): Path =
     Files.createTempFile(path, prefix, suffix, attributes.toArray:_*)
+
   def createTempDirectory(prefix: String = null, attributes: Set[FileAttribute[_]] = Set()): Path =
     Files.createTempDirectory(path, prefix, attributes.toArray:_*)
 
+  // links
   def createLink(target: Path): Path = Files.createLink(path, target)
+
   def createSymbolicLink(target: Path, attributes: Set[FileAttribute[_]] = Set()) =
     Files.createSymbolicLink(path, target, attributes.toArray:_*)
 
 
   //***** Operation *****
+  // exist/delete
   def exists(options: Set[LinkOption] = Set()): Boolean = Files.exists(path, options.toArray:_*)
   def	notExists(options: Set[LinkOption] = Set()): Boolean = Files.notExists(path, options.toArray:_*)
   def delete(): Unit = Files.delete(path)
   def	deleteIfExists(): Boolean = Files.deleteIfExists(path)
 
+  // copy/move
   def copy(in: InputStream, options: Set[CopyOption] = Set()): Long = Files.copy(in, path, options.toArray:_*)
   def copy(out: OutputStream): Long = Files.copy(path, out)
+
   def copyFrom(source: Path, options: Set[CopyOption] = Set()): Path =
     Files.copy(source, path, options.toArray:_*)
+
   def copyTo(target: Path, options: Set[CopyOption] = Set()): Path =
     Files.copy(path, target, options.toArray:_*)
+
   def moveFrom(source: Path, options: Set[CopyOption] = Set()): Path =
     Files.move(source, path, options.toArray:_*)
+
   def moveTo(target: Path, options: Set[CopyOption] = Set()): Path =
     Files.move(path, target, options.toArray:_*)
 
@@ -55,20 +67,26 @@ class FilesCategory(path: Path){
   def	isReadable: Boolean = Files.isReadable(path)
   def	isWritable: Boolean = Files.isWritable(path)
 
+  // Byte
   def readAllBytes: Array[Byte] = Files.readAllBytes(path)
+
   /** @see java.nio.file.Files#write(Path, byte[], OpenOption*) */
   def writeBytes(bytes: Array[Byte], options: Set[OpenOption] = Set()): Path =
     Files.write(path, bytes, options.toArray:_*)
 
+  // InputStream/OutputStream
   def newInputStream(options: Set[OpenOption] = Set()): InputStream =
     Files.newInputStream(path, options.toArray:_*)
+
   def	newOutputStream(options: Set[OpenOption] = Set()): OutputStream =
     Files.newOutputStream(path, options.toArray:_*)
 
+  // ByteChannel
   def	newByteChannel
     (options: Set[OpenOption] = Set(), attributes: Set[FileAttribute[_]] = Set()): SeekableByteChannel =
     Files.newByteChannel(path, options, attributes.toArray:_*)
 
+  // Seq[String]
   def readAllLines(charset: Charset = StandardCharsets.UTF_8): Seq[String] =
     Files.readAllLines(path, charset)
 
@@ -76,8 +94,10 @@ class FilesCategory(path: Path){
     (lines: Seq[String], charset: Charset = StandardCharsets.UTF_8, options: Set[OpenOption] = Set()): Path =
     Files.write(path, lines, charset, options.toArray:_*)
 
+  // BufferedReader/BufferedWriter
   def	newBufferedReader(charset: Charset = StandardCharsets.UTF_8): BufferedReader =
     Files.newBufferedReader(path, charset)
+
   def	newBufferedWriter
     (charset: Charset = StandardCharsets.UTF_8, options: Set[OpenOption] = Set()): BufferedWriter =
     Files.newBufferedWriter(path, charset, options.toArray:_*)
@@ -97,19 +117,13 @@ class FilesCategory(path: Path){
 
   def size: Long = Files.size(path)
 
+  // lastModified
   def lastModifiedTime: FileTime = Files.getLastModifiedTime(path)
   def getLastModifiedTime(options: Set[LinkOption] = Set()): FileTime = Files.getLastModifiedTime(path)
   def lastModifiedTime_= (fileTime: FileTime): Path = Files.setLastModifiedTime(path, fileTime)
   def lastModifiedTime_= (time: Long): Path = lastModifiedTime_=(FileTime.fromMillis(time))
-  def lastModifiedTime_= (instant: java.time.Instant): Path =
-    lastModifiedTime_=(GluinoPath.convertInstantToFileTime(instant))
-  def lastModifiedTime_= (zdt: ZonedDateTime): Path =
-    lastModifiedTime_=(GluinoPath.convertZonedDateTimeToFileTime(zdt))
-  def lastModifiedTime_= (odt: OffsetDateTime): Path =
-    lastModifiedTime_=(GluinoPath.convertOffsetDateTimeToFileTime(odt))
-  def lastModifiedTime_= (date: java.util.Date): Path =
-    lastModifiedTime_=(GluinoPath.convertDateToFileTime(date))
 
+  // Owner
   def owner: UserPrincipal = Files.getOwner(path)
   def	getOwner(options: Set[LinkOption] = Set()): UserPrincipal = Files.getOwner(path, options.toArray:_*)
   def owner_=(owner: UserPrincipal): Path = Files.setOwner(path, owner)

@@ -1,10 +1,9 @@
 package org.waman.gluino.nio
 
-import java.net.URI
-import java.nio.file.{Paths, Path, Files}
+import java.nio.file.{Files, Path, Paths}
+import java.time.{ZoneId, ZonedDateTime}
 
 import org.scalatest.{FlatSpec, Matchers}
-import java.util.function.BiConsumer
 
 class GluinoPathSpec extends FlatSpec with Matchers with GluinoPath{
 
@@ -39,4 +38,13 @@ class GluinoPathSpec extends FlatSpec with Matchers with GluinoPath{
 //    val file = Files.createTempFile(null, null, "rwxrwxrwx")
 //    println(Files.getPosixFilePermissions(file))
 //  }
+
+  "lastModified = " should "update lastModified attribute of a file with ZonedDateTime object" in {
+    val path = Files.createTempFile(null, null)
+    val time0 = path.lastModifiedTime
+
+    val zdt = ZonedDateTime.of(2015, 10, 1, 0, 0, 0, 0, ZoneId.systemDefault)
+    path.lastModifiedTime = zdt
+    path.lastModifiedTime should not equal time0
+  }
 }
