@@ -5,6 +5,8 @@ import java.nio.file._
 import java.nio.file.attribute._
 import java.time.{Instant, OffsetDateTime, ZoneId, ZonedDateTime}
 
+import scala.collection.JavaConversions._
+
 trait GluinoPath {
 
   val tmpdir: Path = Paths.get(System.getProperty("java.io.tmpdir"))
@@ -57,6 +59,14 @@ trait GluinoPath {
 
   implicit def convertDateToFileTime(date: java.util.Date): FileTime =
     FileTime.fromMillis(date.getTime)
+
+
+  //***** Conversion java.util.Stream/DirectoryStream to Stream *****
+  implicit def convertJavaStreamToStream[E](stream: java.util.stream.Stream[E]): Stream[E] =
+    stream.iterator.toStream
+
+  implicit def convertDirectoryStreamToStream[E](directoryStream: DirectoryStream[E]): Stream[E] =
+    directoryStream.iterator.toStream
 }
 
 object GluinoPath extends GluinoPath

@@ -1,11 +1,10 @@
 package org.waman.gluino.nio
 
-import java.io.{BufferedWriter, BufferedReader, OutputStream, InputStream}
+import java.io.{BufferedReader, BufferedWriter, InputStream, OutputStream}
 import java.nio.channels.SeekableByteChannel
-import java.nio.charset.{StandardCharsets, Charset}
+import java.nio.charset.{Charset, StandardCharsets}
 import java.nio.file._
 import java.nio.file.attribute._
-import java.time.{OffsetDateTime, ZonedDateTime}
 
 import scala.collection.JavaConversions
 import scala.collection.JavaConversions._
@@ -102,10 +101,32 @@ class FilesCategory(path: Path){
     (charset: Charset = StandardCharsets.UTF_8, options: Set[OpenOption] = Set()): BufferedWriter =
     Files.newBufferedWriter(path, charset, options.toArray:_*)
 
-  //    def Stream[String]	lines(path: Path, charset: Charset = StandardCharsets.UTF_8)
-  //    def Stream[Path]	list(dir: Path)
-  //    def Stream[Path]	find(Path start, int maxDepth, BiPredicate[Path,BasicFileAttributes] matcher, FileVisitOption* options)
+  // Stream
+  def lines(consumer: Stream[String] => Unit): Unit = {
+    lines()(consumer)
+  }
 
+  def	lines(charset: Charset = StandardCharsets.UTF_8)(consumer: Stream[String] => Unit): Unit = {
+    val lines = Files.lines(path, charset)
+    val stream = GluinoPath.convertJavaStreamToStream(lines)
+    try{
+      consumer(stream)
+    }finally{
+      if(lines != null)
+        lines.close()
+    }
+  }
+
+  def	list(consumer: Stream[Path] => Unit): Unit = {
+    val l = Files.list(path)
+    val stream = GluinoPath.convertJavaStreamToStream(l)
+    try{
+      consumer(stream)
+    }finally{
+      if(l != null)
+        l.close()
+    }
+  }
 
   //***** Attributes *****
   def isExecutable: Boolean = Files.isExecutable(path)
@@ -132,44 +153,86 @@ class FilesCategory(path: Path){
   def groupOwner_=(group: String): Path =
     Files.setOwner(path, FileSystems.getDefault.getUserPrincipalLookupService.lookupPrincipalByGroupName(group))
 
+  // Posix File Persmission
   def posixFilePermissions(options: Set[LinkOption] = Set()): Set[PosixFilePermission] =
     Files.getPosixFilePermissions(path, options.toArray:_*).toSet
   def posixFilePermissions_=(permissions: Set[PosixFilePermission]): Path =
     Files.setPosixFilePermissions(path, permissions)
 
+  // File Attribute
   def getAttribute(attribute: String, options: Set[LinkOption] = Set()): Any =
     Files.getAttribute(path, attribute, options.toArray:_*)
+
   def setAttribute(attribute: String, value: Any, options: Set[LinkOption] = Set()): Path =
     Files.setAttribute(path, attribute, value, options.toArray:_*)
+
   def readAttributes(attributes: String, options: Set[LinkOption] = Set()): Map[String, Any] =
     JavaConversions.mapAsScalaMap(Files.readAttributes(path, attributes, options.toArray:_*)).toMap
+
   /** @see readAttributes(Class, LinkOption*) */
   def readAttribute[A <: BasicFileAttributes]
     (attributeType: Class[A], options: Set[LinkOption] = Set()): A =
     Files.readAttributes(path, attributeType, options.toArray:_*)
+
   def getFileAttributeView[V <: FileAttributeView](attributeType: Class[V], options: Set[LinkOption] = Set()): V =
     Files.getFileAttributeView(path, attributeType, options.toArray:_*)
 
 
   //***** Directory Stream *****
-//  def withDirectoryStream(consumer: DirectoryStream[Path] => Unit) = try {
-//    Files.newDirectoryStream(path).iterator().forEachRemaining(new java.util.function.Consumer[Path]() {
-//      override def accept(t: Path): Unit = ???
-//    })
-//  }catch{
-//
-//  }
-  //    def DirectoryStream[Path]	newDirectoryStream(dir: Path)
-  //    def DirectoryStream[Path]	newDirectoryStream(dir: Path, DirectoryStream.Filter[? super Path] filter)
-  //    def DirectoryStream[Path]	newDirectoryStream(dir: Path, String glob)
+  /** @see Files#newDirectoryStream() */
+  def	withDirectoryStream(consumer: DirectoryStream[Path] => Unit): Unit =
+    consume(Files.newDirectoryStream(path), consumer)
+
+  def	withDirectoryStream
+    (filter: DirectoryStream.Filter[_ >: Path])(consumer: DirectoryStream[Path] => Unit): Unit =
+    consume(Files.newDirectoryStream(path, filter), consumer)
+
+  def	withDirectoryStream(glob: String)(consumer: DirectoryStream[Path] => Unit): Unit =
+    consume(Files.newDirectoryStream(path, glob), consumer)
+
+  private def consume(dirStream: DirectoryStream[Path], consumer: DirectoryStream[Path] => Unit): Unit =
+    try{
+      consumer(dirStream)
+    }finally{
+      if(dirStream != null)
+        dirStream.close()
+    }
 
 
   //***** walk file tree *****
   def walkFileTree
     (options: Set[FileVisitOption] = Set(), maxDepth: Int = Integer.MAX_VALUE, visitor: FileVisitor[_ >: Path]): Path =
     Files.walkFileTree(path, options, maxDepth, visitor)
-//  def Stream[Path]	walk(Path start, FileVisitOption* options)
-//  def Stream[Path]	walk(Path start, int maxDepth, FileVisitOption* options)
+
+  def find(matcher: (Path, BasicFileAttributes) => Boolean, maxDepth: Int = Integer.MAX_VALUE, options: Set[FileVisitOption] = Set())
+          (consumer: Stream[Path] => Unit): Unit = {
+    val jStream = Files.find(path, maxDepth, new BiPredicateAdapter(matcher), options.toArray: _*)
+    val stream = GluinoPath.convertJavaStreamToStream(jStream)
+    try{
+      consumer(stream)
+    }finally{
+      if(jStream != null)
+        jStream.close()
+    }
+  }
+
+  private class BiPredicateAdapter[A, B](f: (A, B) => Boolean) extends java.util.function.BiPredicate[A, B]{
+    override def test(a: A, b: B): Boolean = f(a, b)
+  }
+
+  def walk(consumer: Stream[Path] => Unit): Unit = walk()(consumer)
+
+  def walk(maxDepth: Int = Integer.MAX_VALUE, options: Set[FileVisitOption] = Set())
+          (consumer: Stream[Path] => Unit):Unit = {
+    val jStream = Files.walk(path, maxDepth, options.toArray: _*)
+    val stream = GluinoPath.convertJavaStreamToStream(jStream)
+    try{
+      consumer(stream)
+    }finally{
+      if(jStream != null)
+        jStream.close()
+    }
+  }
 
 
   //***** File System etc. *****
