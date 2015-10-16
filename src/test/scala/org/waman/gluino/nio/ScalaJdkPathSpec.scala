@@ -5,6 +5,7 @@ import java.nio.file.{Files, Paths}
 
 import org.scalatest.{Matchers, FlatSpec}
 import scala.collection.JavaConversions._
+import scala.collection.mutable
 
 class ScalaJdkPathSpec extends FlatSpec with Matchers with GluinoPath{
 
@@ -35,6 +36,20 @@ class ScalaJdkPathSpec extends FlatSpec with Matchers with GluinoPath{
 
     // verify
     Files.readAllLines(target, UTF_8)(0) shouldBe "gluino"
+  }
+
+  "foreachLine" should "iterate lines of the specified file content" in {
+    // setup
+    val path = Files.createTempFile(null, null)
+    Files.write(path, List("first line.", "second line.", "third line."))
+    var lines = mutable.ListBuffer[String]()
+
+    // exercise
+    path.eachLine(lines += _)
+
+    // verify
+    lines should contain theSameElementsInOrderAs
+      List("first line.", "second line.", "third line.")
   }
 
   "Files#newInputStream" should "not return BufferedInputStream" in {

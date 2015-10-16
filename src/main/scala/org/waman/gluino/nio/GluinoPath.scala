@@ -4,6 +4,8 @@ import java.net.URI
 import java.nio.file._
 import java.nio.file.attribute._
 
+import org.waman.gluino.io.AppendableConverter
+
 import scala.collection.JavaConversions._
 
 trait GluinoPath extends AttributeConverter with AppendableConverter{
@@ -26,7 +28,7 @@ trait GluinoPath extends AttributeConverter with AppendableConverter{
 
 
   //***** Path Wrappers *****
-  implicit def convertPathToPathWrapper(path: Path): PathWrapper = new PathWrapper(path)
+  implicit def wrapPath(path: Path): PathWrapper = new PathWrapper(path)
   implicit def convertPathToScalaJdkPath(path: Path): ScalaJdkPath = new ScalaJdkPath(path)
   implicit def convertPathToFilesCategory(path: Path): FilesCategory = new FilesCategory(path)
 

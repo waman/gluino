@@ -2,14 +2,16 @@ package org.waman.gluino.nio
 
 import java.io.{BufferedReader, BufferedWriter, InputStream, OutputStream}
 import java.nio.channels.SeekableByteChannel
-import java.nio.charset.{Charset, StandardCharsets}
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets.UTF_8
 import java.nio.file._
 import java.nio.file.attribute._
 
-import scala.collection.JavaConversions
+import org.waman.gluino.function.GluinoFunction
+
 import scala.collection.JavaConversions._
 
-class FilesCategory(path: Path){
+class FilesCategory(path: Path) extends GluinoFunction{
 
   //***** Creation *****
   def createFile(attributes: Set[FileAttribute[_]] = Set()): Path =
@@ -38,8 +40,10 @@ class FilesCategory(path: Path){
 
   //***** Operation *****
   // exist/delete
-  def exists(options: Set[LinkOption] = Set()): Boolean = Files.exists(path, options.toArray:_*)
-  def	notExists(options: Set[LinkOption] = Set()): Boolean = Files.notExists(path, options.toArray:_*)
+  def exists: Boolean = Files.exists(path)
+  def exists(options: Set[LinkOption]): Boolean = Files.exists(path, options.toArray:_*)
+  def notExists: Boolean = Files.notExists(path)
+  def	notExists(options: Set[LinkOption]): Boolean = Files.notExists(path, options.toArray:_*)
   def delete(): Unit = Files.delete(path)
   def	deleteIfExists(): Boolean = Files.deleteIfExists(path)
 
@@ -59,7 +63,7 @@ class FilesCategory(path: Path){
   def moveTo(target: Path, options: Set[CopyOption] = Set()): Path =
     Files.move(path, target, options.toArray:_*)
 
-  def readSymbolicLink: Path = Files.readSymbolicLink(path)
+  def readSymbolicLink(): Path = Files.readSymbolicLink(path)
 
 
   //***** Read/Write *****
@@ -67,7 +71,8 @@ class FilesCategory(path: Path){
   def	isWritable: Boolean = Files.isWritable(path)
 
   // Byte
-  def readAllBytes: Array[Byte] = Files.readAllBytes(path)
+  @Deprecated
+  def readAllBytes(): Array[Byte] = Files.readAllBytes(path)
 
   /** @see java.nio.file.Files#write(Path, byte[], OpenOption*) */
   def writeBytes(bytes: Array[Byte], options: Set[OpenOption] = Set()): Path =
@@ -86,19 +91,20 @@ class FilesCategory(path: Path){
     Files.newByteChannel(path, options, attributes.toArray:_*)
 
   // Seq[String]
-  def readAllLines(charset: Charset = StandardCharsets.UTF_8): Seq[String] =
+  @Deprecated
+  def readAllLines(charset: Charset = UTF_8): Seq[String] =
     Files.readAllLines(path, charset)
 
   def write
-    (lines: Seq[String], charset: Charset = StandardCharsets.UTF_8, options: Set[OpenOption] = Set()): Path =
+    (lines: Seq[String], charset: Charset = UTF_8, options: Set[OpenOption] = Set()): Path =
     Files.write(path, lines, charset, options.toArray:_*)
 
   // BufferedReader/BufferedWriter
-  def	newBufferedReader(charset: Charset = StandardCharsets.UTF_8): BufferedReader =
+  def	newBufferedReader(charset: Charset = UTF_8): BufferedReader =
     Files.newBufferedReader(path, charset)
 
   def	newBufferedWriter
-    (charset: Charset = StandardCharsets.UTF_8, options: Set[OpenOption] = Set()): BufferedWriter =
+    (charset: Charset = UTF_8, options: Set[OpenOption] = Set()): BufferedWriter =
     Files.newBufferedWriter(path, charset, options.toArray:_*)
 
   // Stream
@@ -106,7 +112,7 @@ class FilesCategory(path: Path){
     lines()(consumer)
   }
 
-  def	lines(charset: Charset = StandardCharsets.UTF_8)(consumer: Stream[String] => Unit): Unit = {
+  def	lines(charset: Charset = UTF_8)(consumer: Stream[String] => Unit): Unit = {
     val lines = Files.lines(path, charset)
     val stream = GluinoPath.convertJavaStreamToStream(lines)
     try{
@@ -117,23 +123,15 @@ class FilesCategory(path: Path){
     }
   }
 
-  def	list(consumer: Stream[Path] => Unit): Unit = {
-    val l = Files.list(path)
-    val stream = GluinoPath.convertJavaStreamToStream(l)
-    try{
-      consumer(stream)
-    }finally{
-      if(l != null)
-        l.close()
-    }
-  }
-
   //***** Attributes *****
+  def isRegularFile: Boolean = Files.isRegularFile(path)
+  def isRegularFile(options: Set[LinkOption]): Boolean = Files.isRegularFile(path, options.toArray:_*)
+  def isDirectory: Boolean = Files.isDirectory(path)
+  def	isDirectory(options: Set[LinkOption]): Boolean = Files.isDirectory(path, options.toArray:_*)
+
   def isExecutable: Boolean = Files.isExecutable(path)
   def isHidden: Boolean = Files.isHidden(path)
   def isSameFile(path2: Path): Boolean = Files.isSameFile(path, path2)
-  def	isDirectory(options: Set[LinkOption] = Set()): Boolean = Files.isDirectory(path, options.toArray:_*)
-  def isRegularFile(options: Set[LinkOption] = Set()): Boolean = Files.isRegularFile(path, options.toArray:_*)
   def isSymbolicLink: Boolean = Files.isSymbolicLink(path)
 
   def size: Long = Files.size(path)
@@ -167,7 +165,7 @@ class FilesCategory(path: Path){
     Files.setAttribute(path, attribute, value, options.toArray:_*)
 
   def readAttributes(attributes: String, options: Set[LinkOption] = Set()): Map[String, Any] =
-    JavaConversions.mapAsScalaMap(Files.readAttributes(path, attributes, options.toArray:_*)).toMap
+    mapAsScalaMap(Files.readAttributes(path, attributes, options.toArray:_*)).toMap
 
   /** @see readAttributes(Class, LinkOption*) */
   def readAttribute[A <: BasicFileAttributes]
@@ -198,6 +196,17 @@ class FilesCategory(path: Path){
         dirStream.close()
     }
 
+  def	list(consumer: Stream[Path] => Unit): Unit = {
+    val l = Files.list(path)
+    val stream = GluinoPath.convertJavaStreamToStream(l)
+    try{
+      consumer(stream)
+    }finally{
+      if(l != null)
+        l.close()
+    }
+  }
+
 
   //***** walk file tree *****
   def walkFileTree
@@ -206,7 +215,7 @@ class FilesCategory(path: Path){
 
   def find(matcher: (Path, BasicFileAttributes) => Boolean, maxDepth: Int = Integer.MAX_VALUE, options: Set[FileVisitOption] = Set())
           (consumer: Stream[Path] => Unit): Unit = {
-    val jStream = Files.find(path, maxDepth, new BiPredicateAdapter(matcher), options.toArray: _*)
+    val jStream = Files.find(path, maxDepth, matcher, options.toArray: _*)
     val stream = GluinoPath.convertJavaStreamToStream(jStream)
     try{
       consumer(stream)
@@ -214,10 +223,6 @@ class FilesCategory(path: Path){
       if(jStream != null)
         jStream.close()
     }
-  }
-
-  private class BiPredicateAdapter[A, B](f: (A, B) => Boolean) extends java.util.function.BiPredicate[A, B]{
-    override def test(a: A, b: B): Boolean = f(a, b)
   }
 
   def walk(consumer: Stream[Path] => Unit): Unit = walk()(consumer)

@@ -1,4 +1,4 @@
-package org.waman.gluino.nio
+package org.waman.gluino.io
 
 import java.io._
 
