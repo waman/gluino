@@ -14,28 +14,28 @@ import scala.collection.JavaConversions._
 class FilesCategory(path: Path) extends GluinoFunction{
 
   //***** Creation *****
-  def createFile(attributes: Set[FileAttribute[_]] = Set()): Path =
-    Files.createFile(path, attributes.toArray:_*)
+  def createFile(attributes: Seq[FileAttribute[_]] = Nil): Path =
+    Files.createFile(path, attributes:_*)
 
-  def createDirectory(attributes: Set[FileAttribute[_]] = Set()): Path =
-    Files.createDirectory(path, attributes.toArray:_*)
+  def createDirectory(attributes: Seq[FileAttribute[_]] = Nil): Path =
+    Files.createDirectory(path, attributes:_*)
 
-  def createDirectories(attributes: Set[FileAttribute[_]] = Set()): Path =
-    Files.createDirectories(path, attributes.toArray:_*)
+  def createDirectories(attributes: Seq[FileAttribute[_]] = Nil): Path =
+    Files.createDirectories(path, attributes:_*)
 
   // temp-file
   def createTempFile
-    (prefix: String = null, suffix: String = null, attributes: Set[FileAttribute[_]] = Set()): Path =
-    Files.createTempFile(path, prefix, suffix, attributes.toArray:_*)
+    (prefix: String = null, suffix: String = null, attributes: Seq[FileAttribute[_]] = Nil): Path =
+    Files.createTempFile(path, prefix, suffix, attributes:_*)
 
-  def createTempDirectory(prefix: String = null, attributes: Set[FileAttribute[_]] = Set()): Path =
-    Files.createTempDirectory(path, prefix, attributes.toArray:_*)
+  def createTempDirectory(prefix: String = null, attributes: Seq[FileAttribute[_]] = Nil): Path =
+    Files.createTempDirectory(path, prefix, attributes:_*)
 
   // links
   def createLink(target: Path): Path = Files.createLink(path, target)
 
-  def createSymbolicLink(target: Path, attributes: Set[FileAttribute[_]] = Set()) =
-    Files.createSymbolicLink(path, target, attributes.toArray:_*)
+  def createSymbolicLink(target: Path, attributes: Seq[FileAttribute[_]] = Nil) =
+    Files.createSymbolicLink(path, target, attributes:_*)
 
 
   //***** Operation *****
@@ -87,8 +87,8 @@ class FilesCategory(path: Path) extends GluinoFunction{
 
   // ByteChannel
   def	newByteChannel
-    (options: Set[OpenOption] = Set(), attributes: Set[FileAttribute[_]] = Set()): SeekableByteChannel =
-    Files.newByteChannel(path, options, attributes.toArray:_*)
+    (options: Set[OpenOption] = Set(), attributes: Seq[FileAttribute[_]] = Nil): SeekableByteChannel =
+    Files.newByteChannel(path, options, attributes:_*)
 
   // Seq[String]
   @Deprecated
