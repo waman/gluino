@@ -11,11 +11,16 @@ similar to that of GDK (Groovy JDK).
 
 ## nio
 #### Standard Usage
-
+Standard usage of Gluino Path extension is to mixin `GluinoPath` or
+to import its member:
 ```
 import org.waman.gluino.nio.GluinoPath
+// or
+// import org.waman.gluino.nio.Gluino._
+// without mixining GluinoPath
 
 class MyApp extends App with GluinoPath {
+
   path("path/to/some/file.txt").withWriter{ writer =>
     writer.write("first line.")
     writer.write("second line.")

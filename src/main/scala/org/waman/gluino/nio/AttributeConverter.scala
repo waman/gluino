@@ -19,11 +19,14 @@ trait AttributeConverter {
   implicit def convertFileTimeToZonedDateTime(fileTime: FileTime): ZonedDateTime =
     convertFileTimeToInstant(fileTime).atZone(ZoneId.systemDefault())
 
-  implicit def convertZonedDateTimeToFileTime(zdt: ZonedDateTime): FileTime =
-    convertInstantToFileTime(zdt.toInstant)
+//  implicit def convertZonedDateTimeToFileTime(zdt: ZonedDateTime): FileTime =
+//    convertInstantToFileTime(zdt.toInstant)
+//
+//  implicit def convertOffsetDateTimeToFileTime(odt: OffsetDateTime): FileTime =
+//    convertInstantToFileTime(odt.toInstant)
 
-  implicit def convertOffsetDateTimeToFileTime(odt: OffsetDateTime): FileTime =
-    convertInstantToFileTime(odt.toInstant)
+  implicit def convertInstantialToFileTime(instantial: { def toInstant(): Instant}): FileTime =
+    convertInstantToFileTime(instantial.toInstant())
 
   // java.util.Date
   implicit def convertFileTimeToDate(fileTime: FileTime): java.util.Date =

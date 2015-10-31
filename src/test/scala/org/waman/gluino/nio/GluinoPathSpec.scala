@@ -6,10 +6,26 @@ import org.waman.gluino.GluinoCustomSpec
 
 class GluinoPathSpec extends GluinoCustomSpec with GluinoPath{
 
-  "Path Creation" - {
+  "***** Temporal File/Directory *****" - {
 
-    "convertStringToPath" - {
+  }
 
+  "***** Path Creation *****" - {
+
+    "path() methods should" - {
+
+      "convert a string representing a path to Path object" in {
+        path("path/to/some/file.txt") should equal(Paths.get("path/to/some/file.txt"))
+      }
+
+      "convert sequence of strings representing a path to Path object" in {
+        path("path", "to", "some", "file.txt") should equal(Paths.get("path/to/some/file.txt"))
+      }
+
+      "convert uri representing a path to Path object" in pending
+    }
+
+    "convertStringToPath() method should" - {
       "implicitly convert a string representing a path to Path object" in {
         __Exercise__
         val path: Path = "path/to/some/file.txt"
@@ -18,8 +34,8 @@ class GluinoPathSpec extends GluinoCustomSpec with GluinoPath{
       }
     }
 
-    "convertSeqToPath" - {
-      "implicitly convert sequence of string representing a path to Path object" in {
+    "convertSeqToPath() method should" - {
+      "implicitly convert Seq[String] representing a path to Path object" in {
         __Exercise__
         val path: Path = Seq("path", "to", "some", "file.txt")
         __Verify__
@@ -27,22 +43,14 @@ class GluinoPathSpec extends GluinoCustomSpec with GluinoPath{
       }
     }
 
-    //  "convertUriToPath" should "implicitly convert a string representing a path to Path object" in {
-    //    val path: Path = new URI("path/to/some/file.txt")
-    //
-    //    path should equal (Paths.get("path/to/some/file.txt"))
-    //  }
-
-  }
-
-  "/" - {
-    "resolve the child path" in {
-      __SetUp__
-      val path = Paths.get("path/to/some/dir")
-      __Exercise__
-      val child = path / "child.txt"
-      __Verify__
-      child should equal (Paths.get("path/to/some/dir/child.txt"))
+    "convertUriToPath() method should" - {
+      "implicitly convert a string representing a path to Path object" in pending
     }
   }
+
+  "***** Path Wrappers *****" - {
+
+  }
+
+  "***** Conversion of DirectoryStream to Stream *****"
 }

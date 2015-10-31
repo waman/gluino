@@ -114,9 +114,8 @@ class FilesCategory(path: Path) extends GluinoFunction{
 
   def	lines(charset: Charset = UTF_8)(consumer: Stream[String] => Unit): Unit = {
     val lines = Files.lines(path, charset)
-    val stream = GluinoPath.convertJavaStreamToStream(lines)
     try{
-      consumer(stream)
+      consumer(lines)
     }finally{
       if(lines != null)
         lines.close()
@@ -198,9 +197,8 @@ class FilesCategory(path: Path) extends GluinoFunction{
 
   def	list(consumer: Stream[Path] => Unit): Unit = {
     val l = Files.list(path)
-    val stream = GluinoPath.convertJavaStreamToStream(l)
     try{
-      consumer(stream)
+      consumer(l)
     }finally{
       if(l != null)
         l.close()
@@ -215,13 +213,12 @@ class FilesCategory(path: Path) extends GluinoFunction{
 
   def find(matcher: (Path, BasicFileAttributes) => Boolean, maxDepth: Int = Integer.MAX_VALUE, options: Set[FileVisitOption] = Set())
           (consumer: Stream[Path] => Unit): Unit = {
-    val jStream = Files.find(path, maxDepth, matcher, options.toArray: _*)
-    val stream = GluinoPath.convertJavaStreamToStream(jStream)
+    val stream = Files.find(path, maxDepth, matcher, options.toArray: _*)
     try{
       consumer(stream)
     }finally{
-      if(jStream != null)
-        jStream.close()
+      if(stream != null)
+        stream.close()
     }
   }
 
@@ -229,13 +226,12 @@ class FilesCategory(path: Path) extends GluinoFunction{
 
   def walk(maxDepth: Int = Integer.MAX_VALUE, options: Set[FileVisitOption] = Set())
           (consumer: Stream[Path] => Unit):Unit = {
-    val jStream = Files.walk(path, maxDepth, options.toArray: _*)
-    val stream = GluinoPath.convertJavaStreamToStream(jStream)
+    val stream = Files.walk(path, maxDepth, options.toArray: _*)
     try{
       consumer(stream)
     }finally{
-      if(jStream != null)
-        jStream.close()
+      if(stream != null)
+        stream.close()
     }
   }
 

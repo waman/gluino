@@ -10,6 +10,7 @@ import scala.collection.JavaConversions._
 
 trait GluinoPath extends AttributeConverter with AppendableConverter{
 
+  //***** Temporal File/Directory *****
   val tmpdirPath: Path = Paths.get(GluinoIO.tmpdir)
   
   def createTempFile
@@ -22,9 +23,12 @@ trait GluinoPath extends AttributeConverter with AppendableConverter{
 
 
   //***** Path Creation *****
-  implicit def convertStringToPath(path: String): Path = Paths.get(path)
-  implicit def convertSeqToPath(path: Seq[String]): Path = Paths.get(path.head, path.tail:_*)
-  implicit def convertUriToPath(uri: URI): Path = Paths.get(uri)
+  def path(s: String): Path = Paths.get(s)
+  def path(seq: String*): Path = Paths.get(seq.head, seq.tail:_*)
+  def path(uri: URI): Path = Paths.get(uri)
+  implicit def convertStringToPath(s: String): Path = path(s)
+  implicit def convertSeqToPath(seq: Seq[String]): Path = path(seq:_*)
+  implicit def convertUriToPath(uri: URI): Path = path(uri)
 
 
   //***** Path Wrappers *****
@@ -33,10 +37,7 @@ trait GluinoPath extends AttributeConverter with AppendableConverter{
   implicit def convertPathToFilesCategory(path: Path): FilesCategory = new FilesCategory(path)
 
 
-  //***** Conversion java.util.Stream/DirectoryStream to Stream *****
-  implicit def convertJavaStreamToStream[E](stream: java.util.stream.Stream[E]): Stream[E] =
-    stream.iterator.toStream
-
+  //***** Conversion of DirectoryStream to Stream *****
   implicit def convertDirectoryStreamToStream[E](directoryStream: DirectoryStream[E]): Stream[E] =
     directoryStream.iterator.toStream
 }
