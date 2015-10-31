@@ -7,15 +7,26 @@ aim to add utility methods to
 * java.util.regex
 similar to that of GDK (Groovy JDK).
 
-This project is Groovy extension module,so **automatically** adds methods to already existing classes and interfaces (even Java standard API).
+## java.io
 
-#### java.io
+## nio
+#### Standard Usage
 
-#### nio
+```
+import org.waman.gluino.nio.GluinoPath
 
-#### Date and Calender
+class MyApp extends App with GluinoPath {
+  path("path/to/some/file.txt").withWriter{ writer =>
+    writer.write("first line.")
+    writer.write("second line.")
+    writer.write("third line.")
+  }
+}
+```
 
-#### Java8 Date and Time API
+## Date and Calender
 
-#### java.util.regex
+## Java8 Date and Time API
+
+## java.util.regex
 
