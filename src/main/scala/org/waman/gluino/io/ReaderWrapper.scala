@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.util.matching.Regex
 
-class ReaderWrapper(reader: BufferedReader){
+class ReaderWrapper private (private[io] val reader: BufferedReader){
 
   def withReader(consumer: BufferedReader => Unit): Unit = try{
     consumer(reader)
@@ -36,7 +36,7 @@ class ReaderWrapper(reader: BufferedReader){
   //***** lines *****
   def readLines(): Seq[String] = {
     var lines = mutable.LinearSeq[String]()
-    eachLine(lines += _)
+    eachLine(lines + _)
     lines.toSeq
   }
 

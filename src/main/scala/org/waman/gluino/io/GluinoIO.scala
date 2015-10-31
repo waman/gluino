@@ -13,5 +13,7 @@ trait GluinoIO{
 }
 
 object GluinoIO{
+
+  val tmpdir: String = System.getProperty("java.io.tmpdir")
   val lineSeparator: String = System.getProperty("line.sep")
 }

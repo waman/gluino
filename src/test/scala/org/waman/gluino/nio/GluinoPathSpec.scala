@@ -1,36 +1,48 @@
 package org.waman.gluino.nio
 
-import java.nio.file.{Files, Path, Paths}
-import java.time.{ZoneId, ZonedDateTime}
-import org.scalatest.{FlatSpec, Matchers}
-import scala.collection.JavaConversions._
+import java.nio.file.{Path, Paths}
 
-class GluinoPathSpec extends FlatSpec with Matchers with GluinoPath{
+import org.waman.gluino.GluinoCustomSpec
 
-  "convertStringToPath" should "implicitly convert a string representing a path to Path object" in {
-    val path: Path = "path/to/some/file.txt"
+class GluinoPathSpec extends GluinoCustomSpec with GluinoPath{
 
-    path should equal (Paths.get("path/to/some/file.txt"))
+  "Path Creation" - {
+
+    "convertStringToPath" - {
+
+      "implicitly convert a string representing a path to Path object" in {
+        __Exercise__
+        val path: Path = "path/to/some/file.txt"
+        __Verify__
+        path should equal(Paths.get("path/to/some/file.txt"))
+      }
+    }
+
+    "convertSeqToPath" - {
+      "implicitly convert sequence of string representing a path to Path object" in {
+        __Exercise__
+        val path: Path = Seq("path", "to", "some", "file.txt")
+        __Verify__
+        path should equal (Paths.get("path/to/some/file.txt"))
+      }
+    }
+
+    //  "convertUriToPath" should "implicitly convert a string representing a path to Path object" in {
+    //    val path: Path = new URI("path/to/some/file.txt")
+    //
+    //    path should equal (Paths.get("path/to/some/file.txt"))
+    //  }
+
   }
 
-  "convertSeqToPath" should "implicitly convert sequence of string representing a path to Path object" in {
-    val path: Path = Seq("path", "to", "some", "file.txt")
-
-    path should equal (Paths.get("path/to/some/file.txt"))
-  }
-
-//  "convertUriToPath" should "implicitly convert a string representing a path to Path object" in {
-//    val path: Path = new URI("path/to/some/file.txt")
-//
-//    path should equal (Paths.get("path/to/some/file.txt"))
-//  }
-
-  "/" should "resolve the child path" in {
-    //setup
-    val path = Paths.get("path/to/some/dir")
-    // exercise
-    val child = path / "child.txt"
-    // verify
-    child should equal (Paths.get("path/to/some/dir/child.txt"))
+  "/" - {
+    "resolve the child path" in {
+      __SetUp__
+      val path = Paths.get("path/to/some/dir")
+      __Exercise__
+      val child = path / "child.txt"
+      __Verify__
+      child should equal (Paths.get("path/to/some/dir/child.txt"))
+    }
   }
 }

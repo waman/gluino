@@ -2,7 +2,7 @@ package org.waman.gluino.io
 
 import java.io.{BufferedWriter, Writer}
 
-class WriterWrapper(writer: BufferedWriter){
+class WriterWrapper private (private[io] val writer: BufferedWriter){
 
   def withWriter(consumer: BufferedWriter => Unit): Unit =
     try {

@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="04fdf3ea-2091-491b-880f-2592d225098d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/function/GluinoFunction.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoIO.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/InputStreamWrapper.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/OutputStreamWrapper.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/PrintWriterWrapper.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ReaderWrapper.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ScalaJdkFile.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ScalaJdkIO.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala" />
-      <change type="MOVED" beforePath="C:\waman\gluino\src\main\scala\org\waman\gluino\nio\AppendableConverter.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/AppendableConverter.scala" />
-      <change type="MOVED" beforePath="C:\waman\gluino\src\main\scala\org\waman\gluino\nio\Outputtable.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/Outputtable.scala" />
-      <change type="MOVED" beforePath="C:\waman\gluino\src\main\scala\org\waman\gluino\nio\Writable.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/Writable.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala" />
+    <list default="true" id="04fdf3ea-2091-491b-880f-2592d225098d" name="Default" comment="Add line read/write method to Path and Add wrapper class to Input/OutputStream and Reader/Writer.">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/FourPhaseInformer.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoIOSpec.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/SBT__org_scala_lang_scala_reflect_2_11_5_jar.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/SBT__org_scalamock_scalamock_core_2_11_3_2_2_jar.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/SBT__org_scalamock_scalamock_scalatest_support_2_11_3_2_2_jar.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoIO.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoIO.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/GluinoPath.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/GluinoPath.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/ScalaJdkPath.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/ScalaJdkPath.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/ScalaJdkPathSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/ScalaJdkPathSpec.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/GluinoPathSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/GluinoPathSpec.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/InputStreamWrapper.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/InputStreamWrapper.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/OutputStreamWrapper.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/OutputStreamWrapper.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/PrintWriterWrapper.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/PrintWriterWrapper.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ReaderWrapper.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ReaderWrapper.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="gluino.iws" />
@@ -43,69 +44,51 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ScalaJdkPath.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/ScalaJdkPath.scala">
+      <file leaf-file-name="GluinoIO.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoIO.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="26" column="11" selection-start-line="26" selection-start-column="11" selection-end-line="26" selection-end-column="11" />
-              <folding>
-                <element signature="e#30#46#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ScalaJdkIO.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ScalaJdkIO.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="40" column="6" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
-              <folding>
-                <element signature="e#29#45#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ReaderWrapper.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ReaderWrapper.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="3" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
-              <folding>
-                <element signature="e#29#76#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WriterWrapper.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
+              <caret line="6" column="15" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ScalaJdkFile.scala" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ScalaJdkFile.scala">
+      <file leaf-file-name="build.sbt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.sbt">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5208333">
-              <caret line="10" column="37" selection-start-line="10" selection-start-column="37" selection-end-line="10" selection-end-column="37" />
-              <folding>
-                <element signature="e#29#45#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0">
+              <caret line="37" column="1" selection-start-line="37" selection-start-column="1" selection-end-line="37" selection-end-column="1" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GluinoFile.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala">
+      <file leaf-file-name="ReaderWrapperSpec.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <caret line="30" column="3" selection-start-line="7" selection-start-column="66" selection-end-line="30" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WriterWrapperSpec.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.8588957">
+              <caret line="17" column="46" selection-start-line="17" selection-start-column="46" selection-end-line="17" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GluinoIOSpec.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoIOSpec.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="42" column="16" selection-start-line="42" selection-start-column="16" selection-end-line="42" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -132,15 +115,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/regex/GluinoRegex.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/regex/GluinoRegexSpec.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/NioSpec.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/FilesCategorySpex.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FileAttributeConverter.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala" />
-        <option value="$PROJECT_DIR$/src/test/java/FilesStreamTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/FindSample.java" />
         <option value="$PROJECT_DIR$/src/test/java/CopySample.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/waman/gluino/nio/SimplePathVisitor.java" />
@@ -155,7 +129,6 @@
         <option value="$PROJECT_DIR$/src/test/java/FileAttributeModifier.java" />
         <option value="$PROJECT_DIR$/target/sample/main/java/org/waman/gluino/nio/SimpleFileVisitor.java" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/ScalaJdkNio.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/GluinoPathSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/FilesCategorySpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/ScalaJdkPath.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/Outputable.scala" />
@@ -165,24 +138,34 @@
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/AppendableConverter.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/AttributeConverter.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/function/GluinoFunction.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/G.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/GluinoPath.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/BufferedReader.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/BufferedReaderWrapper.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/BufferedWriterWrapper.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/OutputStreamWrapper.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/PrintWriterWrapper.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/ScalaJdkPathSpec.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/InputStreamWrapper.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/AppendableConverter.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoIO.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ReaderWrapper.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ScalaJdkIO.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/ScalaJdkPath.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ScalaJdkFile.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoIO.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/GluinoPath.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/FourStepTest.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/FourStepInformer.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/FourPhaseInformer.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/GluinoPathSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/PrintWriterWrapper.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/InputStreamWrapperSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ReaderWrapper.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/InputStreamWrapper.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/OutputStreamWrapper.scala" />
+        <option value="$PROJECT_DIR$/build.sbt" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoIOSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala" />
       </list>
     </option>
   </component>
@@ -313,6 +296,36 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -411,154 +424,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ReaderWrapper.scala" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ReaderWrapper$" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$TypeDefinitionTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ReaderWrapper.scala" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ReaderWrapper" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$TypeDefinitionTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GluinoFile.scala" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GluinoFile.scala" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GluinoFile" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$TypeDefinitionTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="function" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -583,9 +448,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -600,83 +465,83 @@
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
   </component>
-  <component name="RunManager" selected="ScalaTest.ScalaJdkPathSpec.BufferedReader should append to path&#10;append(Array[Byte]) should write bytes to Writer with UTF-8 encoding&#10;foreachLine should iterate lines of the specified file content&#10;Files#newInputStream should not return BufferedInputStream">
-    <configuration default="false" name="ScalaJdkPathSpec.newInputStream should return BufferedInputStream" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+  <component name="RunManager" selected="ScalaTest.WriterWrapperSpec">
+    <configuration default="false" name="GluinoIOSpec.implicit conversions Reader is implicitly converted to ReaderWrapper" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <extension name="scalaCoverage" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.nio.ScalaJdkPathSpec" />
+      <setting name="path" value="org.waman.gluino.io.GluinoIOSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="newInputStream should return BufferedInputStream" />
+      <setting name="testName" value="implicit conversions Reader is implicitly converted to ReaderWrapper" />
       <setting name="testKind" value="Test name" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="ScalaJdkPathSpec.append(Array[Byte]) should write bytes to Writer with UTF-8 encoding" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+    <configuration default="false" name="GluinoIOSpec.implicit conversions Reader is wrapped directly by ReaderWrapper" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <extension name="scalaCoverage" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.nio.ScalaJdkPathSpec" />
+      <setting name="path" value="org.waman.gluino.io.GluinoIOSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="append(Array[Byte]) should write bytes to Writer with UTF-8 encoding" />
+      <setting name="testName" value="implicit conversions Reader is wrapped directly by ReaderWrapper" />
       <setting name="testKind" value="Test name" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="ScalaJdkPathSpec.BufferedReader should append to path&#10;append(Array[Byte]) should write bytes to Writer with UTF-8 encoding&#10;Files#newInputStream should not return BufferedInputStream" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+    <configuration default="false" name="GluinoIOSpec.implicit conversions PrintWriter is implicitly converted to PrintWriterWrapper" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <extension name="scalaCoverage" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.nio.ScalaJdkPathSpec" />
+      <setting name="path" value="org.waman.gluino.io.GluinoIOSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="BufferedReader should append to path&#10;append(Array[Byte]) should write bytes to Writer with UTF-8 encoding&#10;Files#newInputStream should not return BufferedInputStream" />
+      <setting name="testName" value="implicit conversions PrintWriter is implicitly converted to PrintWriterWrapper" />
       <setting name="testKind" value="Test name" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="ScalaJdkPathSpec.foreachLine should iterate lines of the specified file content" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+    <configuration default="false" name="ReaderWrapperSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <extension name="scalaCoverage" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.nio.ScalaJdkPathSpec" />
+      <setting name="path" value="org.waman.gluino.io.ReaderWrapperSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="foreachLine should iterate lines of the specified file content" />
-      <setting name="testKind" value="Test name" />
+      <setting name="testName" value="" />
+      <setting name="testKind" value="Class" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="ScalaJdkPathSpec.BufferedReader should append to path&#10;append(Array[Byte]) should write bytes to Writer with UTF-8 encoding&#10;foreachLine should iterate lines of the specified file content&#10;Files#newInputStream should not return BufferedInputStream" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+    <configuration default="false" name="WriterWrapperSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <extension name="scalaCoverage" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.nio.ScalaJdkPathSpec" />
+      <setting name="path" value="org.waman.gluino.io.WriterWrapperSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="BufferedReader should append to path&#10;append(Array[Byte]) should write bytes to Writer with UTF-8 encoding&#10;foreachLine should iterate lines of the specified file content&#10;Files#newInputStream should not return BufferedInputStream" />
-      <setting name="testKind" value="Test name" />
+      <setting name="testName" value="" />
+      <setting name="testKind" value="Class" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
@@ -877,24 +742,24 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="ScalaTest.ScalaJdkPathSpec.newInputStream should return BufferedInputStream" />
-      <item index="1" class="java.lang.String" itemvalue="ScalaTest.ScalaJdkPathSpec.append(Array[Byte]) should write bytes to Writer with UTF-8 encoding" />
-      <item index="2" class="java.lang.String" itemvalue="ScalaTest.ScalaJdkPathSpec.BufferedReader should append to path&#10;append(Array[Byte]) should write bytes to Writer with UTF-8 encoding&#10;Files#newInputStream should not return BufferedInputStream" />
-      <item index="3" class="java.lang.String" itemvalue="ScalaTest.ScalaJdkPathSpec.foreachLine should iterate lines of the specified file content" />
-      <item index="4" class="java.lang.String" itemvalue="ScalaTest.ScalaJdkPathSpec.BufferedReader should append to path&#10;append(Array[Byte]) should write bytes to Writer with UTF-8 encoding&#10;foreachLine should iterate lines of the specified file content&#10;Files#newInputStream should not return BufferedInputStream" />
+      <item index="0" class="java.lang.String" itemvalue="ScalaTest.GluinoIOSpec.implicit conversions Reader is implicitly converted to ReaderWrapper" />
+      <item index="1" class="java.lang.String" itemvalue="ScalaTest.GluinoIOSpec.implicit conversions Reader is wrapped directly by ReaderWrapper" />
+      <item index="2" class="java.lang.String" itemvalue="ScalaTest.GluinoIOSpec.implicit conversions PrintWriter is implicitly converted to PrintWriterWrapper" />
+      <item index="3" class="java.lang.String" itemvalue="ScalaTest.ReaderWrapperSpec" />
+      <item index="4" class="java.lang.String" itemvalue="ScalaTest.WriterWrapperSpec" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="ScalaTest.ScalaJdkPathSpec.BufferedReader should append to path&#10;append(Array[Byte]) should write bytes to Writer with UTF-8 encoding&#10;foreachLine should iterate lines of the specified file content&#10;Files#newInputStream should not return BufferedInputStream" />
-        <item index="1" class="java.lang.String" itemvalue="ScalaTest.ScalaJdkPathSpec.foreachLine should iterate lines of the specified file content" />
-        <item index="2" class="java.lang.String" itemvalue="ScalaTest.ScalaJdkPathSpec.BufferedReader should append to path&#10;append(Array[Byte]) should write bytes to Writer with UTF-8 encoding&#10;Files#newInputStream should not return BufferedInputStream" />
-        <item index="3" class="java.lang.String" itemvalue="ScalaTest.ScalaJdkPathSpec.append(Array[Byte]) should write bytes to Writer with UTF-8 encoding" />
-        <item index="4" class="java.lang.String" itemvalue="ScalaTest.ScalaJdkPathSpec.newInputStream should return BufferedInputStream" />
+        <item index="0" class="java.lang.String" itemvalue="ScalaTest.WriterWrapperSpec" />
+        <item index="1" class="java.lang.String" itemvalue="ScalaTest.ReaderWrapperSpec" />
+        <item index="2" class="java.lang.String" itemvalue="ScalaTest.GluinoIOSpec.implicit conversions PrintWriter is implicitly converted to PrintWriterWrapper" />
+        <item index="3" class="java.lang.String" itemvalue="ScalaTest.GluinoIOSpec.implicit conversions Reader is wrapped directly by ReaderWrapper" />
+        <item index="4" class="java.lang.String" itemvalue="ScalaTest.GluinoIOSpec.implicit conversions Reader is implicitly converted to ReaderWrapper" />
       </list>
     </recent_temporary>
   </component>
   <component name="SbtLocalSettings">
-    <option name="lastUpdateTimestamp" value="1443584563112" />
+    <option name="lastUpdateTimestamp" value="1445059778625" />
     <option name="availableProjects">
       <map>
         <entry>
@@ -927,7 +792,7 @@
         <entry key="$USER_HOME$/workspace/scala/scalajs-test" value="1442930177606" />
         <entry key="$USER_HOME$/workspace/scala/scalatest-test" value="1430397471616" />
         <entry key="$PROJECT_DIR$/../conformal" value="1442173220999" />
-        <entry key="$PROJECT_DIR$" value="1443584334392" />
+        <entry key="$PROJECT_DIR$" value="1445059709682" />
         <entry key="$PROJECT_DIR$/../orbifold" value="1443221450348" />
         <entry key="$PROJECT_DIR$/../scalatest-test" value="1433725126648" />
       </map>
@@ -989,23 +854,33 @@
       <option name="project" value="LOCAL" />
       <updated>1444806574278</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Add line read/write method to Path and Add wrapper class to Input/OutputStream and Reader/Writer.">
+      <created>1444969283542</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1444969283542</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Change Set to Seq of FileAttributes in method signature in createXxxx() methods.">
+      <created>1445867625833</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1445867625833</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="22" width="1382" height="754" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33656958" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="SBT" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32847896" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29773462" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4223301" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32847896" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22913505" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1013,12 +888,14 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33656958" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27831715" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1043,7 +920,9 @@
     <MESSAGE value="Add Path extensions related to java stream methods in Files" />
     <MESSAGE value="Add samples of java stream related methods in Files" />
     <MESSAGE value="Add some methods of ScalaJdkPath, Scala version of GDK method extension." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add some methods of ScalaJdkPath, Scala version of GDK method extension." />
+    <MESSAGE value="Add line read/write method to Path and Add wrapper class to Input/OutputStream and Reader/Writer." />
+    <MESSAGE value="Change Set to Seq of FileAttributes in method signature in createXxxx() methods." />
+    <option name="LAST_COMMIT_MESSAGE" value="Change Set to Seq of FileAttributes in method signature in createXxxx() methods." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1054,42 +933,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/GluinoPath.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="29" column="67" selection-start-line="29" selection-start-column="67" selection-end-line="29" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="39" selection-start-line="8" selection-start-column="39" selection-end-line="8" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="219" column="41" selection-start-line="219" selection-start-column="41" selection-end-line="219" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/GluinoPathSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="78" column="0" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/GluinoPath.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="68" column="27" selection-start-line="68" selection-start-column="27" selection-end-line="68" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1212,13 +1055,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.sbt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="29" column="2" selection-start-line="29" selection-start-column="2" selection-end-line="29" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/regex/GluinoRegexSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.15625">
@@ -1261,13 +1097,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/GluinoPathSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5451448">
-          <caret line="19" column="3" selection-start-line="19" selection-start-column="3" selection-end-line="19" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.idea/dictionaries/higashida.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2044293">
@@ -1296,37 +1125,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="6.4735947">
-          <caret line="190" column="67" selection-start-line="190" selection-start-column="67" selection-end-line="190" selection-end-column="67" />
-          <folding>
-            <element signature="e#30#104#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/function/GluinoFunction.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.4770017">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/GluinoPath.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6132879">
-          <caret line="24" column="72" selection-start-line="24" selection-start-column="72" selection-end-line="24" selection-end-column="72" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/PrintWriterWrapper.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23850085">
-          <caret line="7" column="48" selection-start-line="7" selection-start-column="48" selection-end-line="7" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1334,7 +1136,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2044293">
           <caret line="6" column="1" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1342,9 +1143,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.4088586">
           <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
-          <folding>
-            <element signature="e#30#76#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1352,67 +1150,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.21465077">
           <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/InputStreamWrapper.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.26385224">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding>
-            <element signature="e#29#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/OutputStreamWrapper.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47229552">
-          <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/AppendableConverter.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5804749">
-          <caret line="11" column="76" selection-start-line="11" selection-start-column="76" selection-end-line="11" selection-end-column="76" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoIO.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7915567">
-          <caret line="15" column="60" selection-start-line="15" selection-start-column="60" selection-end-line="15" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ReaderWrapper.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="3" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
-          <folding>
-            <element signature="e#29#76#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1420,9 +1157,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="26" column="11" selection-start-line="26" selection-start-column="11" selection-end-line="26" selection-end-column="11" />
-          <folding>
-            <element signature="e#30#46#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1430,19 +1164,137 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="40" column="6" selection-start-line="40" selection-start-column="6" selection-end-line="40" selection-end-column="6" />
-          <folding>
-            <element signature="e#29#45#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ScalaJdkFile.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5208333">
-          <caret line="10" column="37" selection-start-line="10" selection-start-column="37" selection-end-line="10" selection-end-column="37" />
-          <folding>
-            <element signature="e#29#45#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="31" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="42" selection-start-line="9" selection-start-column="42" selection-end-line="9" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/FourPhaseInformer.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.28368795">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1891253">
+          <caret line="4" column="76" selection-start-line="4" selection-start-column="76" selection-end-line="4" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/GluinoPath.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.17035775">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/AppendableConverter.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/GluinoPathSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.3686747">
+          <caret line="16" column="31" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.28433734">
+          <caret line="6" column="49" selection-start-line="6" selection-start-column="49" selection-end-line="6" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ReaderWrapper.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33493975">
+          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/InputStreamWrapper.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21108179">
+          <caret line="6" column="24" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/OutputStreamWrapper.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20844327">
+          <caret line="4" column="25" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/PrintWriterWrapper.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4353562">
+          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoIO.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="15" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.sbt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="37" column="1" selection-start-line="37" selection-start-column="1" selection-end-line="37" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoIOSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="42" column="16" selection-start-line="42" selection-start-column="16" selection-end-line="42" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="3" selection-start-line="7" selection-start-column="66" selection-end-line="30" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8588957">
+          <caret line="17" column="46" selection-start-line="17" selection-start-column="46" selection-end-line="17" selection-end-column="46" />
+          <folding />
         </state>
       </provider>
     </entry>

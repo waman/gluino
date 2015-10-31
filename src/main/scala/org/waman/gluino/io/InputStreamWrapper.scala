@@ -4,7 +4,7 @@ import java.io.InputStream
 
 import scala.annotation.tailrec
 
-class InputStreamWrapper(input: InputStream){
+class InputStreamWrapper(private[io] val inputStream: InputStream){
 
   def eachByte(consumer: Byte => Unit): Unit = withInputStream{ input =>
     @tailrec
@@ -19,8 +19,8 @@ class InputStreamWrapper(input: InputStream){
   }
 
   def withInputStream(consumer: InputStream => Unit): Unit = try{
-    consumer(input)
+    consumer(inputStream)
   }finally{
-    input.close()
+    inputStream.close()
   }
 }

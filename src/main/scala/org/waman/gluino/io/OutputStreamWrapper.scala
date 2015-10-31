@@ -2,12 +2,12 @@ package org.waman.gluino.io
 
 import java.io.OutputStream
 
-class OutputStreamWrapper(output: OutputStream){
+class OutputStreamWrapper(private[io] val outputStream: OutputStream){
 
   def withOutputStream(consumer: OutputStream => Unit): Unit = try{
-    consumer(output)
+    consumer(outputStream)
   }finally{
-    output.flush()
-    output.close()
+    outputStream.flush()
+    outputStream.close()
   }
 }
