@@ -1,10 +1,11 @@
 package org.waman.gluino.io
 
+import scala.language.implicitConversions
 import java.io.File
 
 trait GluinoFile extends AppendableConverter{
 
-  val tmpdirFile: File = new File(GluinoIO.tmpdir)
+  val tempDir: File = new File(tmpdir)
 
 //  def createTempFile
 //  (dir: Path = tmpdir, prefix: String = null, suffix: String = null): File =

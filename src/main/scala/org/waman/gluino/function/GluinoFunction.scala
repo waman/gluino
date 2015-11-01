@@ -1,7 +1,8 @@
 package org.waman.gluino.function
 
-import java.util.{function => juf}
+import scala.language.implicitConversions
 import scala.collection.JavaConversions._
+import java.util.{function => juf}
 
 trait GluinoFunction {
 

@@ -1,5 +1,12 @@
 package org.waman.gluino
 
-import org.scalatest.{Matchers, FreeSpec}
+import java.nio.file.Files
 
-class GluinoCustomSpec extends FreeSpec with Matchers with FourPhaseInformer
+import org.scalatest.{FreeSpec, Matchers}
+
+class GluinoCustomSpec extends FreeSpec with Matchers with FourPhaseInformer{
+
+  trait TempFileFixture{
+    val path = Files.createTempFile(null, null)
+  }
+}

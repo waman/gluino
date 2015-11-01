@@ -1,5 +1,6 @@
 package org.waman.gluino.io
 
+import scala.language.implicitConversions
 import java.io.{BufferedReader, InputStream, OutputStream, Writer}
 
 trait AppendableConverter extends GluinoIO{

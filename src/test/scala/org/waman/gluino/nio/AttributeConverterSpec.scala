@@ -44,6 +44,11 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         __Verify__
         sut should equal (fileTime)
       }
+
+      "should implicitly convert to FileTime" in new TempFileFixture {
+        __Verify__
+        "java.nio.file.Files.setLastModifiedTime(path, instant)" should compile
+      }
     }
 
     "ZonedDateTime" - {
@@ -67,6 +72,11 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         __Verify__
         sut should equal (fileTime)
       }
+
+      "should implicitly convert to FileTime" in new TempFileFixture {
+        __Verify__
+        "java.nio.file.Files.setLastModifiedTime(path, zdt)" should compile
+      }
     }
 
     "OffsetDateTime" - {
@@ -77,6 +87,10 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
+      "should implicitly convert to FileTime" in new TempFileFixture {
+        __Verify__
+        "java.nio.file.Files.setLastModifiedTime(path, odt)" should compile
+      }
     }
 
     "Date" - {
@@ -92,6 +106,13 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         val sut = convertDateToFileTime(date)
         __Verify__
         sut should equal (fileTime)
+      }
+
+      "should implicitly convert to FileTime" in new TempFileFixture {
+        __SetUp__
+        val date = new java.util.Date()
+        __Verify__
+        "java.nio.file.Files.setLastModifiedTime(path, date)" should compile
       }
     }
   }

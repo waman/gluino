@@ -1,8 +1,12 @@
 package org.waman.gluino.io
 
+import scala.language.implicitConversions
 import java.io._
 
 trait GluinoIO{
+
+  val tmpdir: String = System.getProperty("java.io.tmpdir")
+  val lineSep: String = System.getProperty("line.sep")
 
   implicit def wrapInputStream(input: InputStream): InputStreamWrapper = new InputStreamWrapper(input)
   implicit def wrapOutputStream(output: OutputStream): OutputStreamWrapper = new OutputStreamWrapper(output)
@@ -12,8 +16,4 @@ trait GluinoIO{
   implicit def wrapPrintWriter(writer: PrintWriter): PrintWriterWrapper = new PrintWriterWrapper(writer)
 }
 
-object GluinoIO{
-
-  val tmpdir: String = System.getProperty("java.io.tmpdir")
-  val lineSeparator: String = System.getProperty("line.sep")
-}
+object GluinoIO extends GluinoIO

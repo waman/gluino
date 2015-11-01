@@ -1,7 +1,10 @@
 package org.waman.gluino.nio
 
-import java.nio.file.attribute.{FileTime, PosixFilePermissions, PosixFilePermission, FileAttribute}
-import java.time.{OffsetDateTime, ZoneId, ZonedDateTime, Instant}
+import scala.language.implicitConversions
+import scala.language.reflectiveCalls
+
+import java.nio.file.attribute.{FileAttribute, FileTime, PosixFilePermission, PosixFilePermissions}
+import java.time.{Instant, ZoneId, ZonedDateTime}
 
 trait AttributeConverter {
 

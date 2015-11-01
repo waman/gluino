@@ -4,21 +4,22 @@ import java.net.URI
 import java.nio.file._
 import java.nio.file.attribute._
 
-import org.waman.gluino.io.{GluinoIO, AppendableConverter}
+import org.waman.gluino.io.AppendableConverter
 
 import scala.collection.JavaConversions._
+import scala.language.implicitConversions
 
 trait GluinoPath extends AttributeConverter with AppendableConverter{
 
   //***** Temporal File/Directory *****
-  val tmpdirPath: Path = Paths.get(GluinoIO.tmpdir)
+  val tempDir: Path = Paths.get(tmpdir)
   
   def createTempFile
-    (dir: Path = tmpdirPath, prefix: String = null, suffix: String = null, attributes: Set[FileAttribute[_]] = Set()): Path =
+    (dir: Path = tempDir, prefix: String = null, suffix: String = null, attributes: Set[FileAttribute[_]] = Set()): Path =
     Files.createTempFile(dir, prefix, suffix, attributes.toArray:_*)
 
   def createTempDirectory
-    (dir: Path = tmpdirPath, prefix: String = null, attributes: Set[FileAttribute[_]] = Set()): Path =
+    (dir: Path = tempDir, prefix: String = null, attributes: Set[FileAttribute[_]] = Set()): Path =
     Files.createTempDirectory(dir, prefix, attributes.toArray:_*)
 
 

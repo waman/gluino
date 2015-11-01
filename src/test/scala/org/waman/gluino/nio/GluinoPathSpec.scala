@@ -52,5 +52,7 @@ class GluinoPathSpec extends GluinoCustomSpec with GluinoPath{
 
   }
 
-  "***** Conversion of DirectoryStream to Stream *****"
+  "***** Conversion of DirectoryStream to Stream *****" - {
+
+  }
 }

@@ -1,5 +1,6 @@
 package org.waman.gluino.io
 
+import scala.language.implicitConversions
 import java.io._
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets._
