@@ -1,7 +1,5 @@
 package org.waman.gluino.io
 
-import java.nio.file.Files
-
 import org.waman.gluino.GluinoCustomSpec
 
 class AppendableConverterSpec extends GluinoCustomSpec{

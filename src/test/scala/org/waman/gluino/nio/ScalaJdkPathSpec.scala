@@ -1,12 +1,6 @@
 package org.waman.gluino.nio
 
-import java.nio.charset.StandardCharsets.UTF_8
-import java.nio.file.{Files, Paths}
-
-import org.scalatest.{Matchers, FlatSpec}
 import org.waman.gluino.GluinoCustomSpec
-import scala.collection.JavaConversions._
-import scala.collection.mutable
 
 class ScalaJdkPathSpec extends GluinoCustomSpec{
 

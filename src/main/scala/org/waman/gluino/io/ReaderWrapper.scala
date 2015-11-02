@@ -15,12 +15,6 @@ class ReaderWrapper private (private[io] val reader: BufferedReader){
   }
 
   //***** text (String) *****
-  def text: String = {
-    var sb = new mutable.StringBuilder()
-    eachChar(sb append _)
-    sb.toString()
-  }
-
   def eachChar(consumer: Char => Unit): Unit = withReader{ reader =>
     @tailrec
     def consumeChar(ch: Int): Unit = ch match {
@@ -31,6 +25,12 @@ class ReaderWrapper private (private[io] val reader: BufferedReader){
     }
 
     consumeChar(reader.read())
+  }
+
+  def text: String = {
+    var sb = new mutable.StringBuilder()
+    eachChar(sb append _)
+    sb.toString()
   }
 
   //***** lines *****

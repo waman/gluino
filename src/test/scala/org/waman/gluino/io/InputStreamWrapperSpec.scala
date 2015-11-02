@@ -1,14 +1,13 @@
 package org.waman.gluino.io
 
-import java.io.{InputStream, FileInputStream}
+import java.io.InputStream
 import java.nio.file.Files
 
-import org.scalamock.scalatest.MockFactory
 import org.waman.gluino.GluinoCustomSpec
 
-class InputStreamWrapperSpec extends GluinoCustomSpec with MockFactory with GluinoIO{
+class InputStreamWrapperSpec extends GluinoCustomSpec with GluinoIO{
 
-  trait InputStreamFixture extends TempFileFixture{
+  trait InputStreamFixture extends FileFixture{
     val is = Files.newInputStream(path)
   }
 

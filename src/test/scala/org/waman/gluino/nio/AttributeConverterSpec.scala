@@ -45,7 +45,7 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" in new TempFileFixture {
+      "should implicitly convert to FileTime" in new FileFixture {
         __Verify__
         "java.nio.file.Files.setLastModifiedTime(path, instant)" should compile
       }
@@ -73,7 +73,7 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" in new TempFileFixture {
+      "should implicitly convert to FileTime" in new FileFixture {
         __Verify__
         "java.nio.file.Files.setLastModifiedTime(path, zdt)" should compile
       }
@@ -87,7 +87,7 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" in new TempFileFixture {
+      "should implicitly convert to FileTime" in new FileFixture {
         __Verify__
         "java.nio.file.Files.setLastModifiedTime(path, odt)" should compile
       }
@@ -108,7 +108,7 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" in new TempFileFixture {
+      "should implicitly convert to FileTime" in new FileFixture {
         __SetUp__
         val date = new java.util.Date()
         __Verify__

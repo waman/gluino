@@ -1,12 +1,10 @@
 package org.waman.gluino.io
 
 import java.io._
-import java.nio.file.Files
 
-import org.scalamock.scalatest.MockFactory
 import org.waman.gluino.GluinoCustomSpec
 
-class GluinoIOSpec extends GluinoCustomSpec with GluinoIO with MockFactory{
+class GluinoIOSpec extends GluinoCustomSpec with GluinoIO{
 
   "implicit conversions" - {
 

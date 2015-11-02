@@ -1,12 +1,10 @@
 package org.waman.gluino.io
 
 import java.io.{BufferedReader, Reader}
-import java.nio.file.Files
 
-import org.scalamock.scalatest.MockFactory
 import org.waman.gluino.GluinoCustomSpec
 
-class ReaderWrapperSpec extends GluinoCustomSpec with MockFactory with GluinoIO{
+class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
 
   "***** Factory method *****" - {
 
@@ -31,10 +29,6 @@ class ReaderWrapperSpec extends GluinoCustomSpec with MockFactory with GluinoIO{
     }
   }
   
-  trait ReaderFixture extends TempFileFixture{
-    val reader = Files.newBufferedReader(path)
-  }
-  
   "withReader() method should" - {
     "close reader after use" in {
       __SetUp__
@@ -45,4 +39,16 @@ class ReaderWrapperSpec extends GluinoCustomSpec with MockFactory with GluinoIO{
       __Verify__
     }
   }
+
+//  "***** text *****" - {
+//    "eachChar() method iterate each character of File content" in new ReaderFixture{
+//      var sum = 0
+//      reader.eachChar(c => sum += c.asInstanceOf[Int])
+//      sum should equal (contentAsString.foldLeft(0)((s, c) => s + c.asInstanceOf[Int]))
+//    }
+//
+//    "text method return file content as String" in new ReaderFixture{
+//      reader.text should be (contentAsString)
+//    }
+//  }
 }

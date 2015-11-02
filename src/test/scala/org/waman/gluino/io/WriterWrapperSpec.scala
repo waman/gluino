@@ -3,10 +3,9 @@ package org.waman.gluino.io
 import java.io.{BufferedWriter, Writer}
 import java.nio.file.Files
 
-import org.scalamock.scalatest.MockFactory
 import org.waman.gluino.GluinoCustomSpec
 
-class WriterWrapperSpec extends GluinoCustomSpec with MockFactory with GluinoIO{
+class WriterWrapperSpec extends GluinoCustomSpec with GluinoIO{
 
   "factory method" - {
 
@@ -31,12 +30,8 @@ class WriterWrapperSpec extends GluinoCustomSpec with MockFactory with GluinoIO{
     }
   }
 
-  trait WriterFixture extends TempFileFixture{
-    val writer = Files.newBufferedWriter(path)
-  }
-
   "withWriter() method should" - {
-    "close writer after use" in {
+    "flush and close writer after use" in {
       __SetUp__
       val writer = mock[Writer]
       (writer.flush _).expects()
@@ -45,5 +40,9 @@ class WriterWrapperSpec extends GluinoCustomSpec with MockFactory with GluinoIO{
       writer.withWriter{ writer => }
       __Verify__
     }
+  }
+
+  trait WriterFixture extends FileFixture{
+    val writer = Files.newBufferedWriter(path)
   }
 }
