@@ -11,13 +11,10 @@ import scala.collection.JavaConversions._
 
 class GluinoCustomSpec extends FreeSpec with Matchers with MockFactory with FourPhaseInformer{
 
-  trait FileFixture{
-    val path = Files.createTempFile(null, null)
-    val file = path.toFile
-  }
-
+  //***** Fixtures *****
+  // content
   val content = List("first line.", "second line.", "third line.")
-  val contentAsString = content.mkString(GluinoIO.lineSep)
+  val contentAsString = content.mkString(GluinoIO.lineSeparator) + GluinoIO.lineSeparator
 
   lazy val readOnlyPath = createReadOnlyFile()
   lazy val readOnlyFile = readOnlyPath.toFile
@@ -29,8 +26,13 @@ class GluinoCustomSpec extends FreeSpec with Matchers with MockFactory with Four
     if(path.getFileSystem.supportedFileAttributeViews() contains "acl"){
       null // TODO
     }
-    
+
     path
+  }
+
+  trait FileFixture{
+    val path = Files.createTempFile(null, null)
+    val file = path.toFile
   }
   
   trait FileWithContentFixture extends FileFixture{
@@ -61,6 +63,7 @@ class GluinoCustomSpec extends FreeSpec with Matchers with MockFactory with Four
     val writer = Files.newBufferedReader(path)
   }
 
+  //***** Custom Matchers *****
   def closed = BeMatcher{ io: Any =>
     val exec: () => Any = io match {
       case reader: Reader => reader.ready

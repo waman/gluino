@@ -5,8 +5,8 @@ import java.io._
 
 trait GluinoIO{
 
+  val lineSeparator: String = System.getProperty("line.separator")
   val tmpdir: String = System.getProperty("java.io.tmpdir")
-  val lineSep: String = System.getProperty("line.sep")
 
   implicit def wrapInputStream(input: InputStream): InputStreamWrapper = new InputStreamWrapper(input)
   implicit def wrapOutputStream(output: OutputStream): OutputStreamWrapper = new OutputStreamWrapper(output)

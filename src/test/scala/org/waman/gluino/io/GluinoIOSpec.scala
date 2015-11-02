@@ -6,6 +6,20 @@ import org.waman.gluino.GluinoCustomSpec
 
 class GluinoIOSpec extends GluinoCustomSpec with GluinoIO{
 
+  "Constants" - {
+    "line separator should be set" in {
+      if(System.getProperty("os.name").toLowerCase contains "windows"){
+        GluinoIO.lineSeparator should equal ("\r\n")
+      }else{
+        GluinoIO.lineSeparator should equal ("\n")
+      }
+    }
+
+    "temp should be set" in {
+      GluinoIO.tmpdir should not be null
+    }
+  }
+
   "implicit conversions" - {
 
     "InputStream is implicitly converted to InputStreamWrapper" in {
