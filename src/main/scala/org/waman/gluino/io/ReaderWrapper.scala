@@ -28,18 +28,12 @@ class ReaderWrapper private (private[io] val reader: BufferedReader){
   }
 
   def text: String = {
-    var sb = new mutable.StringBuilder()
-    eachChar(sb append _)
+    var sb = new mutable.StringBuilder
+    eachChar(sb += _)
     sb.toString()
   }
 
   //***** lines *****
-  def readLines(): Seq[String] = {
-    var lines = mutable.LinearSeq[String]()
-    eachLine(lines + _)
-    lines.toSeq
-  }
-
   def eachLine(consumer: String => Unit): Unit = withReader { reader =>
     @tailrec
     def consumeLine(line: String): Unit = line match {
@@ -75,6 +69,12 @@ class ReaderWrapper private (private[io] val reader: BufferedReader){
 
   def filterLine(writer: Writer)(filter: String => Boolean): Unit =
     filterLine(filter).writeTo(writer)
+
+  def readLines(): Seq[String] = {
+    val lines = new mutable.MutableList[String]
+    eachLine(lines += _)
+    lines.toSeq
+  }
 }
 
 object ReaderWrapper{

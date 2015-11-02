@@ -37,7 +37,7 @@ class WriterWrapperSpec extends GluinoCustomSpec with GluinoIO{
       (writer.flush _).expects()
       (writer.close _).expects()
       __Exercise__
-      writer.withWriter{ writer => }
+      writer.withWriter{ w => }
       __Verify__
     }
   }

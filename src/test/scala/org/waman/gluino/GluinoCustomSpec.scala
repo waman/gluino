@@ -1,8 +1,10 @@
 package org.waman.gluino
 
+import java.io.{Writer, Reader, IOException}
 import java.nio.file.{Path, Files}
 
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.matchers.{MatchResult, BeMatcher}
 import org.scalatest.{FreeSpec, Matchers}
 import org.waman.gluino.io.GluinoIO
 import scala.collection.JavaConversions._
@@ -57,5 +59,17 @@ class GluinoCustomSpec extends FreeSpec with Matchers with MockFactory with Four
 
   trait WriterWithContentFixture extends FileWithContentFixture{
     val writer = Files.newBufferedReader(path)
+  }
+
+  def closed = BeMatcher{ io: Any =>
+    val exec: () => Any = io match {
+      case reader: Reader => reader.ready
+      case writer: Writer => writer.flush
+    }
+    val ex = the [IOException] thrownBy { exec() }
+    MatchResult(
+      ex.getMessage == "Stream closed",
+      "Stream is not closed",
+      "Stream is closed")
   }
 }

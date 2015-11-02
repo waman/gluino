@@ -4,6 +4,8 @@ import java.io.{BufferedReader, Reader}
 
 import org.waman.gluino.GluinoCustomSpec
 
+import scala.collection.mutable
+
 class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
 
   "***** Factory method *****" - {
@@ -35,7 +37,7 @@ class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
       val reader = mock[Reader]
       (reader.close _).expects()
       __Exercise__
-      reader.withReader{ reader => }
+      reader.withReader{ r => }
       __Verify__
     }
   }
@@ -51,4 +53,39 @@ class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
 //      reader.text should be (contentAsString)
 //    }
 //  }
+
+    "***** lines *****" - {
+      "eachLines() method iterate each character of File content" - {
+        "read lines one by one"  in new ReaderFixture{
+          __Exercise__
+          val sut = new mutable.ListBuffer[String]
+          reader.eachLine(sut += _)
+          __Verify__
+          sut should contain theSameElementsInOrderAs content
+        }
+
+        "close the reader after use" in new ReaderFixture{
+          __Exercise__
+          reader.eachLine{ line => }
+          __Verify__
+          reader should be (closed)
+        }
+      }
+
+      "readLines() method should" - {
+        "read all lines in File" in new ReaderFixture{
+          __Exercise__
+          val sut = reader.readLines()
+          __Verify__
+          sut should contain theSameElementsInOrderAs content
+        }
+
+        "close the reader after use" in new ReaderFixture{
+          __Exercise__
+          reader.readLines()
+          __Verify__
+          reader should be (closed)
+        }
+      }
+    }
 }
