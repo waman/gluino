@@ -17,7 +17,7 @@ class WriterWrapper private (private[io] val writer: BufferedWriter){
     writer.write(GluinoIO.lineSeparator)
   }
 
-  def writeLines(lines: Seq[String]): Unit = lines.foreach(writer.write)
+  def writeLines(lines: Seq[String]): Unit = lines.foreach(writeLine)
 
   def append(input: Writable): Unit = input.writeTo(writer)
   def <<(input: Writable): WriterWrapper = { append(input); this }

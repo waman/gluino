@@ -2,19 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="04fdf3ea-2091-491b-880f-2592d225098d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/ImplicitConversion.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/higashida.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/higashida.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/AppendableConverter.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/AppendableConverter.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomMatcherSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomMatcherSpec.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/AppendableConverterSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/AppendableConverterSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoIOSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoIOSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/InputStreamWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/InputStreamWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/OutputStreamWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/OutputStreamWrapperSpec.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/AttributeConverterSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/AttributeConverterSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/GluinoPathSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/GluinoPathSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala" />
     </list>
     <ignored path="gluino.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,50 +37,18 @@
         <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="106" column="22" selection-start-line="106" selection-start-column="22" selection-end-line="106" selection-end-column="22" />
+              <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GluinoCustomMatcherSpec.scala" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GluinoCustomMatcherSpec.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomMatcherSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="5" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.09558824">
+              <caret line="2" column="55" selection-start-line="2" selection-start-column="55" selection-end-line="2" selection-end-column="55" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AppendableConverter.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/AppendableConverter.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WriterWrapper.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AppendableConverterSpec.scala" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/AppendableConverterSpec.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.18872549">
-              <caret line="82" column="43" selection-start-line="82" selection-start-column="43" selection-end-line="82" selection-end-column="43" />
-              <folding>
-                <element signature="e#29#55#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -132,7 +95,6 @@
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/regex/GluinoRegexSpec.scala" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/regex/GluinoRegex.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/function/GluinoFunction.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala" />
@@ -146,7 +108,6 @@
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/PrintWriterWrapper.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/PrintWriterWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/ScalaJdkPathSpec.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ReaderWrapper.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoIO.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/InputStreamWrapperSpec.scala" />
@@ -157,11 +118,13 @@
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/GluinoPathSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WritableSpec.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/AppendableConverter.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomMatcherSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/AppendableConverterSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala" />
       </list>
     </option>
   </component>
@@ -204,6 +167,8 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -384,8 +349,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -400,11 +363,11 @@
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
   </component>
-  <component name="RunManager" selected="ScalaTest.AppendableConverterSpec">
-    <configuration default="false" name="AppendableConverterSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+  <component name="RunManager" selected="ScalaTest.WriterWrapperSpec.WriterWrapper#append() method should not close the writer after use&#10;WriterWrapper#append() method should append the specified lines to the writer">
+    <configuration default="false" name="ReaderWrapperSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.io.AppendableConverterSpec" />
+      <setting name="path" value="org.waman.gluino.io.ReaderWrapperSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
@@ -416,61 +379,61 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="AppendableConverterSpec.Outputtable Outputtable by Array[Byte] should not close the output stream after outputTo()" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+    <configuration default="false" name="WriterWrapperSpec.&lt;&lt; operator should append the specified lines to the writer" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.io.AppendableConverterSpec" />
+      <setting name="path" value="org.waman.gluino.io.WriterWrapperSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="Outputtable Outputtable by Array[Byte] should not close the output stream after outputTo()" />
+      <setting name="testName" value="&lt;&lt; operator should append the specified lines to the writer" />
       <setting name="testKind" value="Test name" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="GluinoCustomMatcherSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+    <configuration default="false" name="WriterWrapperSpec.&lt;&lt; operator should sequentially append the specified Writables to the writer" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.GluinoCustomMatcherSpec" />
+      <setting name="path" value="org.waman.gluino.io.WriterWrapperSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="" />
-      <setting name="testKind" value="Class" />
-      <setting name="showProgressMessages" value="true" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="false" name="GluinoCustomMatcherSpec.closed BeMatcher should verify the output stream to be closed" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.GluinoCustomMatcherSpec" />
-      <setting name="package" value="" />
-      <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="closed BeMatcher should verify the output stream to be closed" />
+      <setting name="testName" value="&lt;&lt; operator should sequentially append the specified Writables to the writer" />
       <setting name="testKind" value="Test name" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="GluinoCustomMatcherSpec.closed BeMatcher should test" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+    <configuration default="false" name="WriterWrapperSpec.&lt;&lt; operator should append the specified Writable to the writer" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.GluinoCustomMatcherSpec" />
+      <setting name="path" value="org.waman.gluino.io.WriterWrapperSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="closed BeMatcher should test" />
+      <setting name="testName" value="&lt;&lt; operator should append the specified Writable to the writer" />
+      <setting name="testKind" value="Test name" />
+      <setting name="showProgressMessages" value="true" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="WriterWrapperSpec.WriterWrapper#append() method should not close the writer after use&#10;WriterWrapper#append() method should append the specified lines to the writer" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="gluino" />
+      <setting name="path" value="org.waman.gluino.io.WriterWrapperSpec" />
+      <setting name="package" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <setting name="searchForTest" value="Across module dependencies" />
+      <setting name="testName" value="WriterWrapper#append() method should not close the writer after use&#10;WriterWrapper#append() method should append the specified lines to the writer" />
       <setting name="testKind" value="Test name" />
       <setting name="showProgressMessages" value="true" />
       <envs />
@@ -765,19 +728,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="ScalaTest.AppendableConverterSpec" />
-      <item index="1" class="java.lang.String" itemvalue="ScalaTest.AppendableConverterSpec.Outputtable Outputtable by Array[Byte] should not close the output stream after outputTo()" />
-      <item index="2" class="java.lang.String" itemvalue="ScalaTest.GluinoCustomMatcherSpec" />
-      <item index="3" class="java.lang.String" itemvalue="ScalaTest.GluinoCustomMatcherSpec.closed BeMatcher should verify the output stream to be closed" />
-      <item index="4" class="java.lang.String" itemvalue="ScalaTest.GluinoCustomMatcherSpec.closed BeMatcher should test" />
+      <item index="0" class="java.lang.String" itemvalue="ScalaTest.ReaderWrapperSpec" />
+      <item index="1" class="java.lang.String" itemvalue="ScalaTest.WriterWrapperSpec.&lt;&lt; operator should append the specified lines to the writer" />
+      <item index="2" class="java.lang.String" itemvalue="ScalaTest.WriterWrapperSpec.&lt;&lt; operator should sequentially append the specified Writables to the writer" />
+      <item index="3" class="java.lang.String" itemvalue="ScalaTest.WriterWrapperSpec.&lt;&lt; operator should append the specified Writable to the writer" />
+      <item index="4" class="java.lang.String" itemvalue="ScalaTest.WriterWrapperSpec.WriterWrapper#append() method should not close the writer after use&#10;WriterWrapper#append() method should append the specified lines to the writer" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="ScalaTest.AppendableConverterSpec" />
-        <item index="1" class="java.lang.String" itemvalue="ScalaTest.GluinoCustomMatcherSpec" />
-        <item index="2" class="java.lang.String" itemvalue="ScalaTest.GluinoCustomMatcherSpec.closed BeMatcher should test" />
-        <item index="3" class="java.lang.String" itemvalue="ScalaTest.GluinoCustomMatcherSpec.closed BeMatcher should verify the output stream to be closed" />
-        <item index="4" class="java.lang.String" itemvalue="ScalaTest.AppendableConverterSpec.Outputtable Outputtable by Array[Byte] should not close the output stream after outputTo()" />
+        <item index="0" class="java.lang.String" itemvalue="ScalaTest.WriterWrapperSpec.WriterWrapper#append() method should not close the writer after use&#10;WriterWrapper#append() method should append the specified lines to the writer" />
+        <item index="1" class="java.lang.String" itemvalue="ScalaTest.WriterWrapperSpec.&lt;&lt; operator should append the specified Writable to the writer" />
+        <item index="2" class="java.lang.String" itemvalue="ScalaTest.WriterWrapperSpec.&lt;&lt; operator should sequentially append the specified Writables to the writer" />
+        <item index="3" class="java.lang.String" itemvalue="ScalaTest.WriterWrapperSpec.&lt;&lt; operator should append the specified lines to the writer" />
+        <item index="4" class="java.lang.String" itemvalue="ScalaTest.ReaderWrapperSpec" />
       </list>
     </recent_temporary>
   </component>
@@ -937,39 +900,45 @@
       <option name="project" value="LOCAL" />
       <updated>1446472072773</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Add tests for AppendableConverter">
+      <created>1446621043497</created>
+      <option name="number" value="00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1446621043497</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="AppendableConverterSpec - 2015.11.04 at 16h 08m 46s.xml">
-      <configuration name="AppendableConverterSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="AppendableConverterSpec - 2015.11.04 at 16h 09m 24s.xml">
-      <configuration name="AppendableConverterSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="GluinoCustomMatcherSpec - 2015.11.04 at 15h 53m 12s.xml">
+    <history-entry file="GluinoCustomMatcherSpec - 2015.11.04 at 21h 57m 24s.xml">
       <configuration name="GluinoCustomMatcherSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="GluinoCustomMatcherSpec - 2015.11.04 at 16h 05m 10s.xml">
-      <configuration name="GluinoCustomMatcherSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="GluinoCustomMatcherSpec - 2015.11.04 at 16h 05m 47s.xml">
-      <configuration name="GluinoCustomMatcherSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="GluinoCustomMatcherSpec_closed_BeMatcher_should_test - 2015.11.04 at 15h 39m 13s.xml">
-      <configuration name="GluinoCustomMatcherSpec.closed BeMatcher should test" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="GluinoCustomMatcherSpec_closed_BeMatcher_should_test - 2015.11.04 at 15h 39m 56s.xml">
-      <configuration name="GluinoCustomMatcherSpec.closed BeMatcher should test" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="GluinoCustomMatcherSpec_closed_BeMatcher_should_test - 2015.11.04 at 15h 40m 21s.xml">
-      <configuration name="GluinoCustomMatcherSpec.closed BeMatcher should test" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
     <history-entry file="GluinoCustomMatcherSpec_closed_BeMatcher_should_test - 2015.11.04 at 15h 41m 01s.xml">
       <configuration name="GluinoCustomMatcherSpec.closed BeMatcher should test" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
     <history-entry file="GluinoCustomMatcherSpec_closed_BeMatcher_should_test - 2015.11.04 at 15h 41m 54s.xml">
       <configuration name="GluinoCustomMatcherSpec.closed BeMatcher should test" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="ReaderWrapperSpec - 2015.11.04 at 21h 57m 49s.xml">
+      <configuration name="ReaderWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="ReaderWrapperSpec - 2015.11.04 at 22h 04m 16s.xml">
+      <configuration name="ReaderWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="WriterWrapperSpec_WriterWrapper#append()_method_should_not_close_the_writer_after_use_WriterWrapper#append()_method_should_append_the_specified_lines_to_the_writer - 2015.11.04 at 22h 56m 38s.xml">
+      <configuration name="WriterWrapperSpec.WriterWrapper#append() method should not close the writer after use&#10;WriterWrapper#append() method should append the specified lines to the writer" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="WriterWrapperSpec____operator_should_append_the_specified_Writable_to_the_writer - 2015.11.04 at 22h 50m 46s.xml">
+      <configuration name="WriterWrapperSpec.&lt;&lt; operator should append the specified Writable to the writer" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="WriterWrapperSpec____operator_should_append_the_specified_lines_to_the_writer - 2015.11.04 at 22h 15m 23s.xml">
+      <configuration name="WriterWrapperSpec.&lt;&lt; operator should append the specified lines to the writer" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="WriterWrapperSpec____operator_should_sequentially_append_the_specified_Writables_to_the_writer - 2015.11.04 at 22h 17m 37s.xml">
+      <configuration name="WriterWrapperSpec.&lt;&lt; operator should sequentially append the specified Writables to the writer" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="WriterWrapperSpec____operator_should_sequentially_append_the_specified_Writables_to_the_writer - 2015.11.04 at 22h 20m 47s.xml">
+      <configuration name="WriterWrapperSpec.&lt;&lt; operator should sequentially append the specified Writables to the writer" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
@@ -984,7 +953,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2884927" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37925446" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.363047" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30794165" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2511381" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1032,7 +1001,8 @@
     <MESSAGE value="Add tests of stream closing in loan patterns." />
     <MESSAGE value="Add tests for Reader#readLines etc." />
     <MESSAGE value="Add tests for Reader#eachChar etc." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add tests for Reader#eachChar etc." />
+    <MESSAGE value="Add tests for AppendableConverter" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add tests for AppendableConverter" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1242,13 +1212,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="34" selection-start-line="32" selection-start-column="34" selection-end-line="32" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/OutputStreamWrapperSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.13651878">
@@ -1337,13 +1300,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.8430034">
           <caret line="56" column="48" selection-start-line="56" selection-start-column="48" selection-end-line="56" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.24914676">
-          <caret line="206" column="56" selection-start-line="206" selection-start-column="56" selection-end-line="206" selection-end-column="56" />
           <folding />
         </state>
       </provider>
@@ -1352,7 +1308,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.733333">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1360,23 +1315,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7204969">
           <caret line="370" column="0" selection-start-line="370" selection-start-column="0" selection-end-line="370" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="106" column="22" selection-start-line="106" selection-start-column="22" selection-end-line="106" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomMatcherSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="5" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1388,21 +1326,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala">
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
+          <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/AppendableConverterSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18872549">
-          <caret line="82" column="43" selection-start-line="82" selection-start-column="43" selection-end-line="82" selection-end-column="43" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="146" column="43" selection-start-line="146" selection-start-column="43" selection-end-line="146" selection-end-column="43" />
           <folding>
             <element signature="e#29#55#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="4.650568">
+          <caret line="167" column="7" selection-start-line="167" selection-start-column="7" selection-end-line="167" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/WriterWrapper.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44751382">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3480663">
+          <caret line="78" column="20" selection-start-line="78" selection-start-column="20" selection-end-line="78" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomMatcherSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.09558824">
+          <caret line="2" column="55" selection-start-line="2" selection-start-column="55" selection-end-line="2" selection-end-column="55" />
+          <folding />
         </state>
       </provider>
     </entry>

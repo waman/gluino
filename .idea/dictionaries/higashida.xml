@@ -6,6 +6,7 @@
       <w>outputtable</w>
       <w>scalamock</w>
       <w>tempdir</w>
+      <w>writables</w>
     </words>
   </dictionary>
 </component>

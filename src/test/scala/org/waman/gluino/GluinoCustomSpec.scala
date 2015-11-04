@@ -65,7 +65,7 @@ class GluinoCustomSpec extends FreeSpec with Matchers with MockFactory with Four
   }
 
   trait WriterFixture extends DestFileFixture{
-    val output = Files.newBufferedWriter(destPath)
+    val writer = Files.newBufferedWriter(destPath)
   }
 
   // OutputStream, Writer with content

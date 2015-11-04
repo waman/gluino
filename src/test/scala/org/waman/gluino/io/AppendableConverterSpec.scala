@@ -127,9 +127,9 @@ class AppendableConverterSpec extends GluinoCustomSpec with AppendableConverter{
         __SetUp__
         val w = convertStringToWritable("fourth line.")
         __Exercise__
-        w.writeTo(output)
+        w.writeTo(writer)
         __Verify__
-        output should be (opened)
+        writer should be (opened)
       }
 
       "be appended to file content by Writable#writeTo()" in new WriterWithContentFixture {
@@ -150,9 +150,9 @@ class AppendableConverterSpec extends GluinoCustomSpec with AppendableConverter{
         __SetUp__
         val w = convertBufferedReaderToWritable(reader)
         __Exercise__
-        w.writeTo(output)
+        w.writeTo(writer)
         __Verify__
-        output should be (opened)
+        writer should be (opened)
       }
 
       "be appended to file content by Writable#writeTo()" in new ReaderWriterWithContentFixture {

@@ -42,14 +42,14 @@ class GluinoCustomMatcherSpec extends GluinoCustomSpec{
 
     "verify the writer to be closed" in new WriterFixture {
       __Exercise__
-      output.close()
+      writer.close()
       __Verify__
-      output should be (closed)
+      writer should be (closed)
     }
 
     "verify the writer not to be closed" in new WriterFixture {
       __Verify__
-      output should not be closed
+      writer should not be closed
     }
   }
 }

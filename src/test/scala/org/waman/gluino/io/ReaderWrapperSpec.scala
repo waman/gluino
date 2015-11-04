@@ -159,46 +159,39 @@ class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
 
     "filterLine(String => Boolean) method should" - {
 
-      "close the reader after use" in new ReaderFixture{
-        new WriterFixture {
-          __Exercise__
-          val writable = reader.filterLine{ _ => true }
-          writable.writeTo(output)
-          __Verify__
-          reader should be (closed)
-        }
+      "close the reader after use" in new ReaderWriterFixture{
+        __Exercise__
+        val writable = reader.filterLine{ _ => true }
+        writable.writeTo(writer)
+        __Verify__
+        reader should be (closed)
       }
 
-      "filter line and write down to the specified writer" in new ReaderFixture{
-        new WriterFixture {
-          __Exercise__
-          val writable = reader.filterLine(_ contains "second")
-          writable.writeTo(output)
-          __Verify__
-          Files.readAllLines(destPath).loneElement should equal ("second line.")
-        }
+      "filter line and write down to the specified writer" in new ReaderWriterFixture{
+        __Exercise__
+        val writable = reader.filterLine(_ contains "second")
+        writable.writeTo(writer)
+        writer.close()
+        __Verify__
+        Files.readAllLines(destPath).loneElement should equal ("second line.")
       }
     }
 
     "filterLine(Writer)(String => Boolean) method should" - {
 
-      "close the reader after use" in new ReaderFixture{
-        new WriterFixture{
-          __Exercise__
-          reader.filterLine(output){ _ => true }
-          __Verify__
-          reader should be (closed)
-        }
+      "close the reader after use" in new ReaderWriterFixture{
+        __Exercise__
+        reader.filterLine(writer){ _ => true }
+        __Verify__
+        reader should be (closed)
       }
 
-      "filter line and write down to the specified writer" in new ReaderFixture{
-        new WriterFixture{
-          __Exercise__
-          reader.filterLine(output)(_ contains "second")
-          val sut = Files.readAllLines(destPath)
-          __Verify__
-          sut.loneElement should equal ("second line.")
-        }
+      "filter line and write down to the specified writer" in new ReaderWriterFixture{
+        __Exercise__
+        reader.filterLine(writer)(_ contains "second")
+        writer.close()
+        __Verify__
+        Files.readAllLines(destPath).loneElement should equal ("second line.")
       }
     }
 

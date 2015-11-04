@@ -1,13 +1,13 @@
 package org.waman.gluino.io
 
 import java.io.{BufferedWriter, Writer}
-import java.nio.file.Files
+import java.nio.file.{Path, Files}
 
 import org.waman.gluino.GluinoCustomSpec
 
-class WriterWrapperSpec extends GluinoCustomSpec with GluinoIO{
+class WriterWrapperSpec extends GluinoCustomSpec with AppendableConverter{
 
-  "factory method" - {
+  "***** Factory method *****" - {
 
     "the Writer is retained directly by wrapper if an instance of BufferedWriter" in {
       __SetUp__
@@ -31,18 +31,112 @@ class WriterWrapperSpec extends GluinoCustomSpec with GluinoIO{
   }
 
   "withWriter() method should" - {
+
     "flush and close writer after use" in {
       __SetUp__
       val writer = mock[Writer]
       (writer.flush _).expects()
       (writer.close _).expects()
       __Exercise__
-      writer.withWriter{ w => }
+      writer.withWriter{ _ => }
       __Verify__
     }
   }
 
-  trait WriterFixture extends FileFixture{
-    val writer = Files.newBufferedWriter(path)
+  "writeLine() method should" - {
+
+    "not close the writer after use" in new WriterFixture {
+      __Exercise__
+      writer.writeLine("first line.")
+      __Verify__
+      writer should be (opened)
+    }
+
+    "write down the specified line to the writer" in new WriterWithContentFixture {
+      __Exercise__
+      writer.writeLine("fourth line.")
+      writer.flush()
+      writer.close()
+      __Verify__
+      Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+        (content :+ "fourth line.")
+    }
   }
+
+  "writeLines(Seq[String]) method should" - {
+
+    "not close the writer after use" in new WriterFixture {
+      __Exercise__
+      writer.writeLines(Seq("first line.", "second line."))
+      __Verify__
+      writer should be (opened)
+    }
+
+    "write down the specified lines to the writer" in new WriterWithContentFixture {
+      __Exercise__
+      writer.writeLines(Seq("fourth line.", "fifth line."))
+      writer.flush()
+      writer.close()
+      __Verify__
+      Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+        (content :+ "fourth line.")
+    }
+  }
+
+  "WriterWrapper#append() method should" - {
+    // WriterWrapper#append() is not implicitly applied due to overloading
+
+    "not close the writer after use" in new WriterFixture {
+      __SetUp__
+      val wrapped = wrapWriter(writer)
+      __Exercise__
+      wrapped.append("first line.")
+      __Verify__
+      writer should be (opened)
+    }
+
+    "append the specified lines to the writer" in new WriterWithContentFixture {
+      __SetUp__
+      val wrapped = wrapWriter(writer)
+      __Exercise__
+      wrapped.append("fourth line.")
+      writer.flush()
+      writer.close()
+      __Verify__
+      text(destPath) should contain theSameElementsInOrderAs
+        (contentAsString + "fourth line.")
+    }
+  }
+
+  "<< operator should" - {
+
+    "not close the writer after use" in new WriterFixture {
+      __Exercise__
+      writer << "first line."
+      __Verify__
+      writer should be (opened)
+    }
+
+    "append the specified Writable to the writer" in new WriterWithContentFixture {
+      __Exercise__
+      writer << "fourth line."
+      writer.flush()
+      writer.close()
+      __Verify__
+      text(destPath) should contain theSameElementsInOrderAs
+        (contentAsString + "fourth line.")
+    }
+
+    "sequentially append the specified Writables to the writer" in new WriterWithContentFixture {
+      __Exercise__
+      writer << "fourth " << "line."
+      writer.flush()
+      writer.close()
+      __Verify__
+      text(destPath) should contain theSameElementsInOrderAs
+        (content :+ "fourth line.")
+    }
+  }
+
+  def text(path: Path): String = new String(Files.readAllBytes(path))
 }
