@@ -1,20 +1,25 @@
 package org.waman.gluino
 
-import java.io.{Writer, Reader, IOException}
-import java.nio.file.{Path, Files}
+import java.io._
+import java.nio.file.{StandardOpenOption, Files, Path}
 
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.matchers.{MatchResult, BeMatcher}
+import org.scalatest.matchers.{BeMatcher, MatchResult}
 import org.scalatest.{FreeSpec, Matchers}
 import org.waman.gluino.io.GluinoIO
+import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
+
 import scala.collection.JavaConversions._
 
 class GluinoCustomSpec extends FreeSpec with Matchers with MockFactory with FourPhaseInformer{
 
+  //***** Utility methods *****
+  def convertImplicitly[T](t: T) = t
+
   //***** Fixtures *****
   // content
   val content = List("first line.", "second line.", "third line.")
-  val contentAsString = content.mkString(GluinoIO.lineSeparator) + GluinoIO.lineSeparator
+  val contentAsString = content.map(_ + sep).mkString
 
   lazy val readOnlyPath = createReadOnlyFile()
   lazy val readOnlyFile = readOnlyPath.toFile
@@ -30,6 +35,7 @@ class GluinoCustomSpec extends FreeSpec with Matchers with MockFactory with Four
     path
   }
 
+  // File, Path
   trait FileFixture{
     val path = Files.createTempFile(null, null)
     val file = path.toFile
@@ -39,40 +45,67 @@ class GluinoCustomSpec extends FreeSpec with Matchers with MockFactory with Four
     Files.write(path, content)
   }
 
+  // InputStream, Reader
   trait InputStreamFixture{
     val input = Files.newInputStream(readOnlyPath)
-  }
-
-  trait outputStreamFixture extends FileFixture{
-    val output = Files.newOutputStream(path)
-  }
-
-  trait outputStreamWithContentFixture extends FileWithContentFixture{
-    val output = Files.newOutputStream(path)
   }
 
   trait ReaderFixture{
     val reader = Files.newBufferedReader(readOnlyPath)
   }
 
-  trait WriterFixture extends FileFixture{
-    val writer = Files.newBufferedReader(path)
+  // OutputStream, Writer
+  trait DestFileFixture{
+    val destPath = Files.createTempFile(null, null)
+    val destFile = destPath.toFile
   }
 
-  trait WriterWithContentFixture extends FileWithContentFixture{
-    val writer = Files.newBufferedReader(path)
+  trait OutputStreamFixture extends DestFileFixture{
+    val output = Files.newOutputStream(destPath)
   }
+
+  trait WriterFixture extends DestFileFixture{
+    val output = Files.newBufferedWriter(destPath)
+  }
+
+  // OutputStream, Writer with content
+  trait DestFileWithContentFixture extends DestFileFixture{
+    Files.write(destPath, content)
+  }
+
+  trait OutputStreamWithContentFixture extends DestFileWithContentFixture{
+    val output = Files.newOutputStream(destPath, StandardOpenOption.APPEND)
+  }
+
+  trait WriterWithContentFixture extends DestFileWithContentFixture{
+    val writer = Files.newBufferedWriter(destPath, StandardOpenOption.APPEND)
+  }
+
+  // InputStream/OutputStream, Reader/Writer
+  trait IOStreamFixture extends InputStreamFixture with OutputStreamFixture
+  trait IOStreamWithContentFixture extends InputStreamFixture with OutputStreamWithContentFixture
+  trait ReaderWriterFixture extends ReaderFixture with WriterFixture
+  trait ReaderWriterWithContentFixture extends ReaderFixture with WriterWithContentFixture
 
   //***** Custom Matchers *****
-  def closed = BeMatcher{ io: Any =>
+  def opened = BeMatcher{ io: Any =>
     val exec: () => Any = io match {
+      case input : InputStream  => input.available
+      case output: OutputStream => () => { output.write(GluinoIO.lineSeparator.getBytes) }
       case reader: Reader => reader.ready
       case writer: Writer => writer.flush
     }
-    val ex = the [IOException] thrownBy { exec() }
-    MatchResult(
-      ex.getMessage == "Stream closed",
-      "Stream is not closed",
-      "Stream is closed")
+
+    val isOpened = try {
+      exec()
+      true
+    }catch{
+      case ex: IOException => false
+    }
+    MatchResult(isOpened,
+      "Stream closed",
+      "Stream opened")
   }
+
+  def closed = not(opened)
 }

@@ -4,7 +4,7 @@ import java.nio.file.attribute.FileTime
 import java.nio.file.attribute.PosixFilePermission._
 import java.time.{Instant, OffsetDateTime, ZoneId, ZonedDateTime}
 
-import org.waman.gluino.GluinoCustomSpec
+import org.waman.gluino.{ImplicitConversion, GluinoCustomSpec}
 
 class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
 
@@ -45,9 +45,11 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" in new FileFixture {
+      "should implicitly convert to FileTime" taggedAs ImplicitConversion in {
         __Verify__
-        "java.nio.file.Files.setLastModifiedTime(path, instant)" should compile
+        noException should be thrownBy {
+          convertImplicitly[FileTime](instant)
+        }
       }
     }
 
@@ -73,9 +75,11 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" in new FileFixture {
+      "should implicitly convert to FileTime" taggedAs ImplicitConversion in {
         __Verify__
-        "java.nio.file.Files.setLastModifiedTime(path, zdt)" should compile
+        noException should be thrownBy {
+          convertImplicitly[FileTime](zdt)
+        }
       }
     }
 
@@ -87,9 +91,11 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" in new FileFixture {
+      "should implicitly convert to FileTime" taggedAs ImplicitConversion in {
         __Verify__
-        "java.nio.file.Files.setLastModifiedTime(path, odt)" should compile
+        noException should be thrownBy {
+          convertImplicitly[FileTime](odt)
+        }
       }
     }
 
@@ -108,11 +114,11 @@ class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" in new FileFixture {
-        __SetUp__
-        val date = new java.util.Date()
+      "should implicitly convert to FileTime" taggedAs ImplicitConversion in new DateFixture{
         __Verify__
-        "java.nio.file.Files.setLastModifiedTime(path, date)" should compile
+        noException should be thrownBy{
+          convertImplicitly[FileTime](date)
+        }
       }
     }
   }

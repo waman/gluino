@@ -2,7 +2,7 @@ package org.waman.gluino.io
 
 import java.io._
 
-import org.waman.gluino.GluinoCustomSpec
+import org.waman.gluino.{ImplicitConversion, GluinoCustomSpec}
 
 class GluinoIOSpec extends GluinoCustomSpec with GluinoIO{
 
@@ -22,39 +22,49 @@ class GluinoIOSpec extends GluinoCustomSpec with GluinoIO{
 
   "implicit conversions" - {
 
-    "InputStream is implicitly converted to InputStreamWrapper" in {
+    "InputStream is implicitly converted to InputStreamWrapper" taggedAs ImplicitConversion in {
       __SetUp__
       val is = mock[InputStream]
       __Verify__
-      "val wrapped: InputStreamWrapper = is" should compile
+      noException should be thrownBy{
+        convertImplicitly[InputStreamWrapper](is)
+      }
     }
 
-    "OutputStream is implicitly converted to OutputStreamWrapper" in {
+    "OutputStream is implicitly converted to OutputStreamWrapper" taggedAs ImplicitConversion in {
       __SetUp__
       val os = mock[OutputStream]
       __Verify__
-      "val wrapped: OutputStreamWrapper = os" should compile
+      noException should be thrownBy {
+        convertImplicitly[OutputStreamWrapper](os)
+      }
     }
 
-    "Reader is implicitly converted to ReaderWrapper" in {
+    "Reader is implicitly converted to ReaderWrapper" taggedAs ImplicitConversion in {
       __SetUp__
       val reader = mock[Reader]
       __Verify__
-      "val wrapped: ReaderWrapper = reader" should compile
+      noException should be thrownBy {
+        convertImplicitly[ReaderWrapper](reader)
+      }
     }
 
-    "Writer is implicitly converted to WriterWrapper" in {
+    "Writer is implicitly converted to WriterWrapper" taggedAs ImplicitConversion in {
       __SetUp__
       val writer = mock[Writer]
       __Verify__
-      "val wrapped: WriterWrapper = writer" should compile
+      noException should be thrownBy {
+        convertImplicitly[WriterWrapper](writer)
+      }
     }
 
-    "PrintWriter is implicitly converted to PrintWriterWrapper" in {
+    "PrintWriter is implicitly converted to PrintWriterWrapper" taggedAs ImplicitConversion in {
       __SetUp__
       val pw = new PrintWriter(mock[Writer])
       __Verify__
-      "val wrapped: PrintWriterWrapper = pw" should compile
+      noException should be thrownBy {
+        convertImplicitly[PrintWriterWrapper](pw)
+      }
     }
   }
 }

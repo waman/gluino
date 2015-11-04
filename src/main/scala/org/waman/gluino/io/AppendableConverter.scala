@@ -23,7 +23,7 @@ trait AppendableConverter extends GluinoIO{
   }
 
   implicit def convertBufferedReaderToWritable(reader: BufferedReader): Writable = new Writable{
-    override def writeTo(writer: Writer): Unit = reader.eachLine(line => writer write line)
-                                              // make arg explicit for overloading eachLine
+    override def writeTo(writer: Writer): Unit = reader.eachLine(line => writer.writeLine(line))
+                                              // make arg explicit for eachLine() overloading
   }
 }

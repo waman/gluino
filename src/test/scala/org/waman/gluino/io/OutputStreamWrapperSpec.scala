@@ -1,15 +1,10 @@
 package org.waman.gluino.io
 
 import java.io.OutputStream
-import java.nio.file.Files
 
 import org.waman.gluino.GluinoCustomSpec
 
 class OutputStreamWrapperSpec extends GluinoCustomSpec with GluinoIO{
-  
-  trait OutputStreamFixture extends FileFixture{
-    val os = Files.newOutputStream(path)
-  }
 
   "withOutputStream() method should" - {
     "flush and close stream after use" in {
