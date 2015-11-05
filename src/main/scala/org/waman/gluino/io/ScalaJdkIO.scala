@@ -9,8 +9,6 @@ import scala.util.matching.Regex
 
 trait ScalaJdkIO[P <: ScalaJdkIO[P]] extends GluinoIO{ p: P =>
 
-  implicit def convertStringToCharset(charset: String): Charset = Charset.forName(charset)
-
   //***** Byte array, Byte stream *****
   // bytes
   def bytes: Array[Byte]

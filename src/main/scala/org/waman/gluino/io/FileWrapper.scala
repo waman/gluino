@@ -5,7 +5,7 @@ import java.nio.charset.Charset
 
 import scala.collection.mutable
 
-class ScalaJdkFile(file: File) extends ScalaJdkIO[ScalaJdkFile]{
+class FileWrapper(file: File) extends ScalaJdkIO[FileWrapper]{
 
   // Byte array, Byte stream
   override def bytes: Array[Byte] = {

@@ -1,13 +1,14 @@
 package org.waman.gluino.io
 
 import java.io._
+import java.nio.charset.{StandardCharsets, Charset}
 
 import org.waman.gluino.{ImplicitConversion, GluinoCustomSpec}
 
 class GluinoIOSpec extends GluinoCustomSpec with GluinoIO{
 
   "Constants" - {
-    "line separator should be set" in {
+    "lineSeparator should be a line separator of OS" in {
       if(System.getProperty("os.name").toLowerCase contains "windows"){
         GluinoIO.lineSeparator should equal ("\r\n")
       }else{
@@ -22,7 +23,28 @@ class GluinoIOSpec extends GluinoCustomSpec with GluinoIO{
 
   "implicit conversions" - {
 
-    "InputStream is implicitly converted to InputStreamWrapper" taggedAs ImplicitConversion in {
+    "convertStringToCharset() method should" - {
+
+      "implicitly convert the specified String to Charset" taggedAs ImplicitConversion in {
+        __Verify__
+        noException should be thrownBy {
+          convertImplicitly[Charset]("UTF-8")
+        }
+      }
+
+      "convert the specified String to Charset returned by Charset#forName" in {
+        __Verify__
+        convertStringToCharset("UTF-8") should equal (StandardCharsets.UTF_8)
+        convertStringToCharset("ISO-2022-JP") should equal (Charset.forName("ISO-2022-JP"))
+      }
+
+      "convert String 'default' to os-default Charset" in {
+        __Verify__
+        convertStringToCharset("default") should equal (Charset.defaultCharset)
+      }
+    }
+
+    "InputStream should implicitly converted to InputStreamWrapper" taggedAs ImplicitConversion in {
       __SetUp__
       val is = mock[InputStream]
       __Verify__
@@ -31,7 +53,7 @@ class GluinoIOSpec extends GluinoCustomSpec with GluinoIO{
       }
     }
 
-    "OutputStream is implicitly converted to OutputStreamWrapper" taggedAs ImplicitConversion in {
+    "OutputStream should implicitly converted to OutputStreamWrapper" taggedAs ImplicitConversion in {
       __SetUp__
       val os = mock[OutputStream]
       __Verify__
@@ -40,7 +62,7 @@ class GluinoIOSpec extends GluinoCustomSpec with GluinoIO{
       }
     }
 
-    "Reader is implicitly converted to ReaderWrapper" taggedAs ImplicitConversion in {
+    "Reader should implicitly converted to ReaderWrapper" taggedAs ImplicitConversion in {
       __SetUp__
       val reader = mock[Reader]
       __Verify__
@@ -49,7 +71,7 @@ class GluinoIOSpec extends GluinoCustomSpec with GluinoIO{
       }
     }
 
-    "Writer is implicitly converted to WriterWrapper" taggedAs ImplicitConversion in {
+    "Writer should implicitly converted to WriterWrapper" taggedAs ImplicitConversion in {
       __SetUp__
       val writer = mock[Writer]
       __Verify__
@@ -58,7 +80,7 @@ class GluinoIOSpec extends GluinoCustomSpec with GluinoIO{
       }
     }
 
-    "PrintWriter is implicitly converted to PrintWriterWrapper" taggedAs ImplicitConversion in {
+    "PrintWriter should implicitly converted to PrintWriterWrapper" taggedAs ImplicitConversion in {
       __SetUp__
       val pw = new PrintWriter(mock[Writer])
       __Verify__

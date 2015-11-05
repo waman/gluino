@@ -15,7 +15,7 @@ trait GluinoFile extends AppendableConverter{
 //  (dir: Path = tmpdir, prefix: String = null, attributes: Set[FileAttribute[_]] = Set()): Path =
 //    Files.createTempDirectory(dir, prefix, attributes.toArray:_*)
 
-  implicit def convertFileToScalaJdkFile(file: File): ScalaJdkFile = new ScalaJdkFile(file)
+  implicit def convertFileToScalaJdkFile(file: File): FileWrapper = new FileWrapper(file)
 }
 
 object GluinoFile extends GluinoFile
