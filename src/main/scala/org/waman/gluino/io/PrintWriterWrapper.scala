@@ -2,13 +2,8 @@ package org.waman.gluino.io
 
 import java.io.PrintWriter
 
-class PrintWriterWrapper(private[io] val writer: PrintWriter){
+class PrintWriterWrapper(private[io] val printWriter: PrintWriter)
+  extends PrintWriterWrapperLike[PrintWriterWrapper]{
 
-  /** do not close stream */
-  def withPrintWriter(consumer: PrintWriter => Unit): Unit =
-    try{
-      consumer(writer)
-    }finally{
-      writer.flush()
-    }
+  override protected def getPrintWriter: PrintWriter = printWriter
 }

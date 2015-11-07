@@ -2,7 +2,10 @@ package org.waman.gluino.io
 
 import java.io.{BufferedReader, Reader}
 
-class ReaderWrapper private (val reader: BufferedReader) extends ReaderWrapperLike
+class ReaderWrapper private (private[io] val reader: BufferedReader) extends ReaderWrapperLike{
+
+  override protected def getReader: BufferedReader = reader
+}
 
 object ReaderWrapper{
 

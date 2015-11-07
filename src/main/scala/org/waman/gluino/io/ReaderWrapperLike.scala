@@ -6,15 +6,18 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.util.matching.Regex
 
-trait ReaderWrapperLike {
+trait ReaderWrapperLike extends GluinoIO{
 
-  protected def reader: BufferedReader
+  protected def getReader: BufferedReader
 
   //***** withReader *****
-  def withReader(consumer: BufferedReader => Unit): Unit = try{
-    consumer(reader)
-  }finally{
-    reader.close()
+  def withReader(consumer: BufferedReader => Unit): Unit = {
+    val reader = getReader
+    try{
+      consumer(reader)
+    }finally{
+      reader.close()
+    }
   }
 
   //***** text (String) *****
@@ -31,8 +34,8 @@ trait ReaderWrapperLike {
   }
 
   def transformChar(writer: Writer)(map: Char => Char): Unit =
-    WriterWrapper(writer).withWriter{ writer =>
-      eachChar(c => writer.write(map(c)))
+    writer.withWriter{ w =>
+      eachChar(c => w.write(map(c)))
     }
 
   def text: String = {
@@ -76,19 +79,19 @@ trait ReaderWrapperLike {
   }
 
   def filterLine(writer: Writer)(filter: String => Boolean): Unit =
-    WriterWrapper(writer).withWriter{ writer =>
-      filterLine(filter).writeTo(writer)
+    writer.withWriter{ w =>
+      filterLine(filter).writeTo(w)
     }
 
   def transformLine(writer: Writer)(map: String => String): Unit =
-    WriterWrapper(writer).withWriter{ writer =>
+    writer.withWriter{ w =>
       eachLine{ line =>
-        writer.write(map(line))
-        writer.write(GluinoIO.lineSeparator)
+        w.write(map(line))
+        w.write(GluinoIO.lineSeparator)
       }
     }
 
-  def readLines(): Seq[String] = {
+  def readLines: Seq[String] = {
     val lines = new mutable.MutableList[String]
     eachLine(lines += _)
     lines.toSeq

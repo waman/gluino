@@ -1,21 +1,24 @@
 package org.waman.gluino.io
 
-import java.io.{InputStreamReader, InputStream, BufferedReader, Writer}
-import java.nio.charset.{StandardCharsets, Charset}
+import java.io._
+import java.nio.charset.Charset
 
 import scala.annotation.tailrec
+import scala.collection.mutable
 import scala.util.matching.Regex
 
-trait InputStreamWrapperLike extends ReaderWrapperLike{
+trait InputStreamWrapperLike extends GluinoIO with ReaderWrapperLike{
 
-  val implicitCharset: Charset = StandardCharsets.UTF_8
-  protected def inputStream: InputStream
+  protected def getInputStream: InputStream
 
   //***** withInputStream *****
-  def withInputStream(consumer: InputStream => Unit): Unit = try{
-    consumer(inputStream)
-  }finally{
-    inputStream.close()
+  def withInputStream(consumer: InputStream => Unit): Unit = {
+    val is = getInputStream
+    try{
+      consumer(is)
+    }finally{
+      is.close()
+    }
   }
 
   //***** Byte *****
@@ -31,41 +34,67 @@ trait InputStreamWrapperLike extends ReaderWrapperLike{
     consumeByte(input.read())
   }
 
+  def bytes: Array[Byte] = {
+    var bytes = mutable.MutableList[Byte]()
+    eachByte(bytes += _)
+    bytes.toArray
+  }
+
+  //***** Object Stream *****
+  def newObjectInputStream: ObjectInputStream = new ObjectInputStream(getInputStream)
+  def newObjectInputStream(classLoader: ClassLoader): ObjectInputStream = ???
+
+  def withObjectInputStream(consumer: ObjectInputStream => Unit): Unit =
+    withObjectInputStream(newObjectInputStream, consumer)
+
+  def withObjectInputStream(classLoader: ClassLoader)(consumer: ObjectInputStream => Unit): Unit =
+    withObjectInputStream(newObjectInputStream(classLoader), consumer)
+
+  private def withObjectInputStream(ois: ObjectInputStream, consumer: ObjectInputStream => Unit): Unit =
+    try{
+      consumer(ois)
+    }finally{
+      ois.close()
+    }
+
   //***** Reader factory/accessor *****
-  protected def newReaderWrapper(charset: Charset): ReaderWrapper =
-    ReaderWrapper(createBufferedReader(charset))
+  override protected def getReader: BufferedReader = newReader(defaultCharset)
 
-  override protected def reader: BufferedReader = createBufferedReader(implicitCharset)
+  def newReader(charset: Charset): BufferedReader =
+    new BufferedReader(new InputStreamReader(getInputStream, charset))
 
-  private def createBufferedReader(charset: Charset): BufferedReader =
-    new BufferedReader(new InputStreamReader(inputStream, charset))
-
-  //***** ReaderWrapperLike method with Charset *****
+  //+++++ ReaderWrapperLike method with Charset +++++
   //***** withReader *****
   def withReader(charset: Charset)(consumer: (BufferedReader) => Unit): Unit =
-    newReaderWrapper(charset).withReader(consumer)
+    newReader(charset).withReader(consumer)
 
   //***** text (String) *****
   def eachChar(charset: Charset)(consumer: (Char) => Unit): Unit =
-    newReaderWrapper(charset).eachChar(consumer)
+    newReader(charset).eachChar(consumer)
 
-  def text(charset: Charset): String = newReaderWrapper(charset).text
+  def transformChar(writer: Writer, charset: Charset)(map: Char => Char): Unit =
+    newReader(charset).transformChar(writer)(map)
+
+  def text(charset: Charset): String = newReader(charset).text
 
   //***** lines *****
   def eachLine(charset: Charset)(consumer: (String) => Unit): Unit =
-    newReaderWrapper(charset).eachLine(consumer)
+    newReader(charset).eachLine(consumer)
 
   def eachLine(n0: Int, charset: Charset)(consumer: (String, Int) => Unit): Unit =
-    newReaderWrapper(charset).eachLine(n0)(consumer)
+    newReader(charset).eachLine(n0)(consumer)
 
   def splitEachLine(regex: Regex, charset: Charset)(consumer: (List[String]) => Unit): Unit =
-    newReaderWrapper(charset).splitEachLine(regex)(consumer)
+    newReader(charset).splitEachLine(regex)(consumer)
 
   def filterLine(charset: Charset)(filter: (String) => Boolean): Writable =
-    newReaderWrapper(charset).filterLine(filter)
+    newReader(charset).filterLine(filter)
 
   def filterLine(writer: Writer, charset: Charset)(filter: (String) => Boolean): Unit =
-    newReaderWrapper(charset).filterLine(writer)(filter)
+    newReader(charset).filterLine(writer)(filter)
 
-  def readLines(charset: Charset): Seq[String] = newReaderWrapper(charset).readLines()
+  def transformLine(writer: Writer, charset: Charset)(map: String => String): Unit =
+    newReader(charset).transformLine(writer)(map)
+
+  def readLines(charset: Charset): Seq[String] = newReader(charset).readLines
 }

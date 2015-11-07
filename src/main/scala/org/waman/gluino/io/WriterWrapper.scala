@@ -2,25 +2,10 @@ package org.waman.gluino.io
 
 import java.io.{BufferedWriter, Writer}
 
-class WriterWrapper private (private[io] val writer: BufferedWriter){
+class WriterWrapper private (private[io] val writer: BufferedWriter)
+    extends WriterWrapperLike[WriterWrapper]{
 
-  def withWriter(consumer: BufferedWriter => Unit): Unit =
-    try {
-      consumer(writer)
-    }finally{
-      writer.flush()
-      writer.close()
-    }
-
-  def writeLine(line: String): Unit = {
-    writer.write(line)
-    writer.write(GluinoIO.lineSeparator)
-  }
-
-  def writeLines(lines: Seq[String]): Unit = lines.foreach(writeLine)
-
-  def append(input: Writable): Unit = input.writeTo(writer)
-  def <<(input: Writable): WriterWrapper = { append(input); this }
+  override protected def getWriter: BufferedWriter = writer
 }
 
 object WriterWrapper{

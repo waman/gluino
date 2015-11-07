@@ -2,12 +2,8 @@ package org.waman.gluino.io
 
 import java.io.OutputStream
 
-class OutputStreamWrapper(private[io] val outputStream: OutputStream){
+class OutputStreamWrapper(private[io] val outputStream: OutputStream)
+    extends OutputStreamWrapperLike[OutputStreamWrapper]{
 
-  def withOutputStream(consumer: OutputStream => Unit): Unit = try{
-    consumer(outputStream)
-  }finally{
-    outputStream.flush()
-    outputStream.close()
-  }
+  override protected def getOutputStream: OutputStream = outputStream
 }

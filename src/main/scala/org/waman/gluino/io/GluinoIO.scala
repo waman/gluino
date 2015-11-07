@@ -1,6 +1,6 @@
 package org.waman.gluino.io
 
-import java.nio.charset.Charset
+import java.nio.charset.{StandardCharsets, Charset}
 
 import scala.language.implicitConversions
 import java.io._
@@ -9,6 +9,7 @@ trait GluinoIO{
 
   val lineSeparator: String = System.getProperty("line.separator")
   val tmpdir: String = System.getProperty("java.io.tmpdir")
+  val defaultCharset: Charset = StandardCharsets.UTF_8
 
   implicit def convertStringToCharset(charset: String): Charset = charset match {
     case "default" => Charset.defaultCharset

@@ -20,8 +20,8 @@ class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
       __Exercise__
       val wrapper: ReaderWrapper = ReaderWrapper(reader)
       __Verify__
-      wrapper.reader should be (a [BufferedReader])
-      wrapper.reader should be theSameInstanceAs reader
+      wrapper.getReader should be (a [BufferedReader])
+      wrapper.getReader should be theSameInstanceAs reader
     }
 
     "the Reader is wrapped by BufferedReader and then retained if not an instance of BufferedReader" in {
@@ -30,8 +30,8 @@ class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
       __Exercise__
       val wrapper = ReaderWrapper(reader)
       __Verify__
-      wrapper.reader should be (a [BufferedReader])
-      wrapper.reader should not be theSameInstanceAs (reader)
+      wrapper.getReader should be (a [BufferedReader])
+      wrapper.getReader should not be theSameInstanceAs (reader)
     }
   }
   
