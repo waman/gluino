@@ -2,9 +2,9 @@ package org.waman.gluino.io
 
 import java.io.{PrintWriter, Writer}
 
-import org.waman.gluino.GluinoCustomSpec
+import org.waman.gluino.GluinoIOCustomSpec
 
-class PrintWriterWrapperSpec extends GluinoCustomSpec with GluinoIO{
+class PrintWriterWrapperSpec extends GluinoIOCustomSpec with GluinoIO{
 
   "withPrintWriter() method should" - {
     "flush and 'not' close writer after use" in {

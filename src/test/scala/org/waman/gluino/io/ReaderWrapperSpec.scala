@@ -3,14 +3,14 @@ package org.waman.gluino.io
 import java.io.{BufferedReader, Reader}
 import java.nio.file.Files
 
-import org.waman.gluino.GluinoCustomSpec
+import org.waman.gluino.GluinoIOCustomSpec
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 import org.scalatest.LoneElement._
 
-class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
+class ReaderWrapperSpec extends GluinoIOCustomSpec with GluinoIO{
 
   "***** Factory method *****" - {
 
@@ -18,10 +18,10 @@ class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
       __SetUp__
       val reader = new BufferedReader(mock[Reader])
       __Exercise__
-      val wrapper: ReaderWrapper = ReaderWrapper(reader)
+      val wrapper = ReaderWrapper(reader)
       __Verify__
-      wrapper.getReader should be (a [BufferedReader])
-      wrapper.getReader should be theSameInstanceAs reader
+      wrapper.reader should be (a [BufferedReader])
+      wrapper.reader should be theSameInstanceAs reader
     }
 
     "the Reader is wrapped by BufferedReader and then retained if not an instance of BufferedReader" in {
@@ -30,8 +30,8 @@ class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
       __Exercise__
       val wrapper = ReaderWrapper(reader)
       __Verify__
-      wrapper.getReader should be (a [BufferedReader])
-      wrapper.getReader should not be theSameInstanceAs (reader)
+      wrapper.reader should be (a [BufferedReader])
+      wrapper.reader should not be theSameInstanceAs (reader)
     }
   }
   
@@ -43,6 +43,21 @@ class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
       __Exercise__
       reader.withReader{ _ => }
       __Verify__
+    }
+
+    "create Reader and close after use" in new ReaderFixture{
+      __SetUp__
+      val sb = new mutable.StringBuilder
+      __Exercise__
+      reader.withReader{ r =>
+        var i = r.read()
+        while(i != -1){
+          sb += i.asInstanceOf[Char]
+          i = r.read()
+        }
+      }
+      __Verify__
+      sb.toString should equal (contentAsString)
     }
   }
 
@@ -238,18 +253,18 @@ class ReaderWrapperSpec extends GluinoCustomSpec with GluinoIO{
       }
     }
 
-    "readLines() method should" - {
+    "readLines method should" - {
 
       "close the reader after use" in new ReaderFixture{
         __Exercise__
-        reader.readLines()
+        reader.readLines
         __Verify__
         reader should be (closed)
       }
 
       "read all lines in File" in new ReaderFixture{
         __Exercise__
-        val sut = reader.readLines()
+        val sut = reader.readLines
         __Verify__
         sut should contain theSameElementsInOrderAs content
       }

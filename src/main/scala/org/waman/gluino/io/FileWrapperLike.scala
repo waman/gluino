@@ -41,9 +41,14 @@ trait FileWrapperLike[T <: FileWrapperLike[T]] extends GluinoIO
     }
   }
 
-  def text_=(text: String): Unit = setText(text)
-  def setText(text: String, charset: Charset = defaultCharset) =
+  override def text: String = super.text
+  override def text(charset: Charset): String = super.text(charset)
+  def text_=(text: String): Unit = setText(text, defaultCharset)
+  def setText(text: String, charset: Charset) =
     newWriter(charset).withWriter(_.write(text))
+
+  override def readLines: Seq[String] = super.readLines
+  override def readLines(charset: Charset): Seq[String] = super.readLines(charset)
 
   override def append(input: Writable): Unit = input.writeTo(newWriter(defaultCharset, append = true))
 

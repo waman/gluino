@@ -3,9 +3,9 @@ package org.waman.gluino.io
 import java.io._
 import java.nio.charset.{StandardCharsets, Charset}
 
-import org.waman.gluino.{ImplicitConversion, GluinoCustomSpec}
+import org.waman.gluino.{ImplicitConversion, GluinoIOCustomSpec}
 
-class GluinoIOSpec extends GluinoCustomSpec with GluinoIO{
+class GluinoIOSpec extends GluinoIOCustomSpec with GluinoIO{
 
   "Constants" - {
     "lineSeparator should be a line separator of OS" in {

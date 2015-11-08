@@ -1,8 +1,8 @@
 package org.waman.gluino.regex
 
-import org.waman.gluino.GluinoCustomSpec
+import org.waman.gluino.GluinoIOCustomSpec
 
-class GluinoRegexSpec extends GluinoCustomSpec with GluinoRegex{
+class GluinoRegexSpec extends GluinoIOCustomSpec with GluinoRegex{
 
   "***** Pattern Operators *****" - {
 

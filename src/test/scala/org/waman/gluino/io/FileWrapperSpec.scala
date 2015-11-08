@@ -1,51 +1,16 @@
-package org.waman.gluino.nio
+package org.waman.gluino.io
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.Files
 
-import org.scalatest.LoneElement._
 import org.waman.gluino.GluinoIOCustomSpec
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
+import org.scalatest.LoneElement._
 
-  trait PathOperationFixture{
-    val path: PathWrapper = new PathWrapper(Paths.get("path/to/some/dir"))
-    val expectedChild: Path = Paths.get("path/to/some/dir/child.txt")
-  }
+class FileWrapperSpec extends GluinoIOCustomSpec with GluinoFile{
 
-  "/" - {
-    "resolve a child path with the specified String" in new PathOperationFixture {
-      __Exercise__
-      val child = path / "child.txt"
-      __Verify__
-      child should equal(expectedChild)
-    }
-
-    "resolve a child path with the specified Path" in new PathOperationFixture {
-      __Exercise__
-      val child = path / Paths.get("child.txt")
-      __Verify__
-      child should equal(expectedChild)
-    }
-  }
-
-  "\\" - {
-    "resolve a child path with the specified String" in new PathOperationFixture {
-      __Exercise__
-      val child = path \ "child.txt"
-      __Verify__
-      child should equal(expectedChild)
-    }
-
-    "resolve a child path with the specified Path" in new PathOperationFixture {
-      __Exercise__
-      val child = path \ Paths.get("child.txt")
-      __Verify__
-      child should equal(expectedChild)
-    }
-  }
 
   "********** Tests for methods from ReaderWrapperLike **********" - {
 
@@ -54,7 +19,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
         __SetUp__
         val sb = new mutable.StringBuilder
         __Exercise__
-        readOnlyPath.withReader{ r =>
+        readOnlyFile.withReader{ r =>
           var i = r.read()
           while(i != -1){
             sb += i.asInstanceOf[Char]
@@ -71,7 +36,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
         __SetUp__
         var sum = 0
         __Exercise__
-        readOnlyPath.eachChar(c => sum += c.asInstanceOf[Int])
+        readOnlyFile.eachChar(c => sum += c.asInstanceOf[Int])
         __Verify__
         sum should equal(contentAsString.foldLeft(0)(_ + _.asInstanceOf[Int]))
       }
@@ -79,7 +44,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
       "transformChar() method should transform each char and write down to the specified writer" in
         new WriterFixture {
           __Exercise__
-          readOnlyPath.transformChar(writer) {
+          readOnlyFile.transformChar(writer) {
             case v if "aeiou" contains v => Character.toUpperCase(v)
             case c => c
           }
@@ -90,7 +55,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
 
       "text method should return file content as String" in {
         __Verify__
-        readOnlyPath.text should be (contentAsString)
+        readOnlyFile.text should be (contentAsString)
       }
     }
 
@@ -99,7 +64,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
         __SetUp__
         val sut = new mutable.ListBuffer[String]
         __Exercise__
-        readOnlyPath.eachLine(sut += _)
+        readOnlyFile.eachLine(sut += _)
         __Verify__
         sut should contain theSameElementsInOrderAs content
       }
@@ -110,7 +75,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
           __SetUp__
           val sut = new mutable.ListBuffer[String]
           __Exercise__
-          readOnlyPath.eachLine(1)((s, n) => sut += s"""$n. $s""")
+          readOnlyFile.eachLine(1)((s, n) => sut += s"""$n. $s""")
           __Verify__
           sut should contain theSameElementsInOrderAs List(
             "1. first line.",
@@ -123,7 +88,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
           __SetUp__
           val sut = new mutable.ListBuffer[String]
           __Exercise__
-          readOnlyPath.eachLine()((s, n) => sut += s"""$n. $s""")
+          readOnlyFile.eachLine()((s, n) => sut += s"""$n. $s""")
           __Verify__
           sut should contain theSameElementsInOrderAs List(
             "0. first line.",
@@ -137,7 +102,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
         __SetUp__
         val sut = new ListBuffer[String]()
         __Exercise__
-        readOnlyPath.splitEachLine("\\s+".r)(sut ++= _)
+        readOnlyFile.splitEachLine("\\s+".r)(sut ++= _)
         __Verify__
         sut should contain theSameElementsInOrderAs
           List("first", "line.", "second", "line.", "third", "line.")
@@ -146,7 +111,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
       "filterLine(String => Boolean) method should filter line and write down to the specified writer" in
         new WriterFixture {
           __Exercise__
-          val writable = readOnlyPath.filterLine(_ contains "second")
+          val writable = readOnlyFile.filterLine(_ contains "second")
           writable.writeTo(writer)
           writer.close()
           __Verify__
@@ -156,7 +121,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
       "filterLine(Writer)(String => Boolean) method should filter line and write down to the specified writer" in
         new WriterFixture {
           __Exercise__
-          readOnlyPath.filterLine(writer)(_ contains "second")
+          readOnlyFile.filterLine(writer)(_ contains "second")
           __Verify__
           Files.readAllLines(destPath).loneElement should equal("second line.")
         }
@@ -164,7 +129,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
       "transformLine() method should transform each line and write down to the specified writer" in
         new WriterFixture {
           __Exercise__
-          readOnlyPath.transformLine(writer)(_.toUpperCase)
+          readOnlyFile.transformLine(writer)(_.toUpperCase)
           __Verify__
           Files.readAllLines(destPath) should contain theSameElementsInOrderAs
             List("FIRST LINE.", "SECOND LINE.", "THIRD LINE.")
@@ -172,7 +137,7 @@ class PathWrapperSpec extends GluinoIOCustomSpec with GluinoPath {
 
       "readLines method should read all lines in File" in {
         __Exercise__
-        val sut = readOnlyPath.readLines
+        val sut = readOnlyFile.readLines
         __Verify__
         sut should contain theSameElementsInOrderAs content
       }

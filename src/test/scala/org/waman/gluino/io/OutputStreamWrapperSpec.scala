@@ -2,9 +2,9 @@ package org.waman.gluino.io
 
 import java.io.OutputStream
 
-import org.waman.gluino.GluinoCustomSpec
+import org.waman.gluino.GluinoIOCustomSpec
 
-class OutputStreamWrapperSpec extends GluinoCustomSpec with GluinoIO{
+class OutputStreamWrapperSpec extends GluinoIOCustomSpec with GluinoIO{
 
   "withOutputStream() method should" - {
     "flush and close stream after use" in {

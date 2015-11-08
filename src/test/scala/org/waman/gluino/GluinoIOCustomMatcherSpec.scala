@@ -1,6 +1,6 @@
 package org.waman.gluino
 
-class GluinoCustomMatcherSpec extends GluinoCustomSpec{
+class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
 
   "closed BeMatcher should" - {
 

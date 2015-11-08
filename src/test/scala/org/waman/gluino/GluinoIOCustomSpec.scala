@@ -11,7 +11,7 @@ import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
 
 import scala.collection.JavaConversions._
 
-class GluinoCustomSpec extends FreeSpec with Matchers with MockFactory with FourPhaseInformer{
+class GluinoIOCustomSpec extends FreeSpec with Matchers with MockFactory with FourPhaseInformer{
 
   //***** Utility methods *****
   def convertImplicitly[T](t: T) = t
@@ -27,22 +27,7 @@ class GluinoCustomSpec extends FreeSpec with Matchers with MockFactory with Four
   def createReadOnlyFile(): Path = {
     val path = Files.createTempFile(null, null)
     Files.write(path, content)
-
-    if(path.getFileSystem.supportedFileAttributeViews() contains "acl"){
-      null // TODO
-    }
-
     path
-  }
-
-  // File, Path
-  trait FileFixture{
-    val path = Files.createTempFile(null, null)
-    val file = path.toFile
-  }
-  
-  trait FileWithContentFixture extends FileFixture{
-    Files.write(path, content)
   }
 
   // InputStream, Reader

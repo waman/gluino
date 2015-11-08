@@ -2,9 +2,9 @@ package org.waman.gluino.io
 
 import java.nio.file.Files
 
-import org.waman.gluino.{GluinoCustomSpec, ImplicitConversion}
+import org.waman.gluino.{GluinoIOCustomSpec, ImplicitConversion}
 
-class AppendableConverterSpec extends GluinoCustomSpec with AppendableConverter{
+class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverter{
 
   "Outputtable" - {
 

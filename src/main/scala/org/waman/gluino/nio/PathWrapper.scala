@@ -30,7 +30,7 @@ class PathWrapper(path: Path) extends FileWrapperLike[PathWrapper]{
   // text(String), Reader/Writer
   override def newReader(charset: Charset): BufferedReader = Files.newBufferedReader(path, charset)
 
-  override def newWriter(charset: Charset = defaultCharset, append: Boolean = false): BufferedWriter =
+  override def newWriter(charset: Charset, append: Boolean = false): BufferedWriter =
     if(append)Files.newBufferedWriter(path, charset, StandardOpenOption.APPEND)
     else Files.newBufferedWriter(path, charset)
 
@@ -38,6 +38,6 @@ class PathWrapper(path: Path) extends FileWrapperLike[PathWrapper]{
   override def readLines(charset: Charset): Seq[String] = Files.readAllLines(path, charset)
 
   override def text_= (text: String) = Files.write(path, List(text))
-  override def setText(text: String, charset: Charset = defaultCharset) =
+  override def setText(text: String, charset: Charset) =
     Files.write(path, List(text), charset)
 }

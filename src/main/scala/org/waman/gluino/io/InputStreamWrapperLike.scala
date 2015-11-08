@@ -75,6 +75,7 @@ trait InputStreamWrapperLike extends GluinoIO with ReaderWrapperLike{
   def transformChar(writer: Writer, charset: Charset)(map: Char => Char): Unit =
     newReader(charset).transformChar(writer)(map)
 
+  override def text: String = super.text
   def text(charset: Charset): String = newReader(charset).text
 
   //***** lines *****
@@ -96,5 +97,6 @@ trait InputStreamWrapperLike extends GluinoIO with ReaderWrapperLike{
   def transformLine(writer: Writer, charset: Charset)(map: String => String): Unit =
     newReader(charset).transformLine(writer)(map)
 
+  override def readLines: Seq[String] = super.readLines
   def readLines(charset: Charset): Seq[String] = newReader(charset).readLines
 }

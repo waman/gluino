@@ -2,9 +2,9 @@ package org.waman.gluino.nio
 
 import java.nio.file.{Path, Paths}
 
-import org.waman.gluino.{ImplicitConversion, GluinoCustomSpec}
+import org.waman.gluino.{ImplicitConversion, GluinoIOCustomSpec}
 
-class GluinoPathSpec extends GluinoCustomSpec with GluinoPath{
+class GluinoPathSpec extends GluinoIOCustomSpec with GluinoPath{
 
   "***** Temporal File/Directory *****" - {
 

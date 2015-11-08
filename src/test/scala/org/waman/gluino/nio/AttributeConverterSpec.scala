@@ -4,9 +4,9 @@ import java.nio.file.attribute.FileTime
 import java.nio.file.attribute.PosixFilePermission._
 import java.time.{Instant, OffsetDateTime, ZoneId, ZonedDateTime}
 
-import org.waman.gluino.{ImplicitConversion, GluinoCustomSpec}
+import org.waman.gluino.{ImplicitConversion, GluinoIOCustomSpec}
 
-class AttributeConverterSpec extends GluinoCustomSpec with AttributeConverter{
+class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
 
   "***** POSIX File Permission *****" - {
     "convertStringToPosixFilePermissionSet() method should" - {
