@@ -40,12 +40,22 @@ trait InputStreamWrapperLike extends GluinoIO with ReaderWrapperLike{
     bytes.toArray
   }
 
-  //***** Object Stream *****
+  //***** ObjectInputStream, DataInputStream *****
   def newObjectInputStream: ObjectInputStream = new ObjectInputStream(getInputStream)
+
+  private def getObjectInputStream: ObjectInputStream = {
+    val is = getInputStream
+    is match {
+      case ObjectInputStream => is
+      case _ => newObjectInputStream
+    }
+    new ObjectInputStream(getInputStream)
+  }
+
   def newObjectInputStream(classLoader: ClassLoader): ObjectInputStream = ???
 
   def withObjectInputStream(consumer: ObjectInputStream => Unit): Unit =
-    withObjectInputStream(newObjectInputStream, consumer)
+    withObjectInputStream(getObjectInputStream, consumer)
 
   def withObjectInputStream(classLoader: ClassLoader)(consumer: ObjectInputStream => Unit): Unit =
     withObjectInputStream(newObjectInputStream(classLoader), consumer)
@@ -56,6 +66,21 @@ trait InputStreamWrapperLike extends GluinoIO with ReaderWrapperLike{
     }finally{
       ois.close()
     }
+
+  def newDataInputStream: DataInputStream = new DataInputStream(getInputStream)
+
+  def withDataInputStream(consumer: DataInputStream => Unit): Unit = {
+    val is = getInputStream
+    val dis = is match{
+      case DataInputStream => is.asInstanceOf[DataInputStream]
+      case _ => new DataInputStream(is)
+    }
+    try{
+      consumer(dis)
+    }finally{
+      dis.close()
+    }
+  }
 
   //***** Reader factory/accessor *****
   override protected def getReader: BufferedReader = newReader(defaultCharset)

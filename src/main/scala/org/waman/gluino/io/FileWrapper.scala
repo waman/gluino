@@ -13,7 +13,6 @@ class FileWrapper(file: File) extends FileWrapperLike[FileWrapper]{
     override def accept(file: File, s: String): Boolean = fileName == s
   }
 
-
   //***** byte, InputStream/OutputStream *****
   override def newInputStream: InputStream =
     new BufferedInputStream(new FileInputStream(file))

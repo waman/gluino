@@ -1,6 +1,6 @@
 package org.waman.gluino.io
 
-import java.io.{PrintWriter, BufferedWriter, OutputStream, OutputStreamWriter}
+import java.io._
 import java.nio.charset.Charset
 
 trait OutputStreamWrapperLike[T <: OutputStreamWrapperLike[T]]
@@ -39,4 +39,35 @@ trait OutputStreamWrapperLike[T <: OutputStreamWrapperLike[T]]
 
   def withPrintWriter(charset: Charset)(consumer: PrintWriter => Unit): Unit =
     newPrintWriter(charset).withPrintWriter(consumer)
+
+  //***** ObjectOutputStream, DataOutputStream *****
+  def newObjectOutputStream: ObjectOutputStream = new ObjectOutputStream(getOutputStream)
+
+  def withObjectOutputStream(consumer: ObjectOutputStream => Unit): Unit = {
+    val os = getOutputStream
+    val oos = os match{
+      case ObjectOutputStream => os.asInstanceOf[ObjectOutputStream]
+      case _ => new ObjectOutputStream(os)
+    }
+    try{
+      consumer(oos)
+    }finally{
+      oos.close()
+    }
+  }
+
+  def newDataOutputStream: DataOutputStream = new DataOutputStream(getOutputStream)
+
+  def withDataOutputStream(consumer: DataOutputStream => Unit): Unit = {
+    val os = getOutputStream
+    val dos = os match{
+      case DataOutputStream => os.asInstanceOf[DataOutputStream]
+      case _ => new DataOutputStream(os)
+    }
+    try{
+      consumer(dos)
+    }finally{
+      dos.close()
+    }
+  }
 }
