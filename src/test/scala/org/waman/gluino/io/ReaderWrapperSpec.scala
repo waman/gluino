@@ -3,12 +3,11 @@ package org.waman.gluino.io
 import java.io.{BufferedReader, Reader}
 import java.nio.file.Files
 
+import org.scalatest.LoneElement._
 import org.waman.gluino.GluinoIOCustomSpec
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-
-import org.scalatest.LoneElement._
 
 class ReaderWrapperSpec extends GluinoIOCustomSpec with GluinoIO{
 
@@ -83,23 +82,27 @@ class ReaderWrapperSpec extends GluinoIOCustomSpec with GluinoIO{
 
     "transformChar() method should" - {
 
-      "close the reader and writer after use" in new ReaderWriterFixture{
-        __Exercise__
-        reader.transformChar(writer)(c => c)
-        __Verify__
-        reader should be (closed)
-        writer should be (closed)
+      "close the reader and writer after use" in new ReaderFixture{
+        new WriterFixture {
+          __Exercise__
+          reader.transformChar(writer)(c => c)
+          __Verify__
+          reader should be (closed)
+          writer should be (closed)
+        }
       }
 
-      "transform each char and write down to the specified writer" in new ReaderWriterFixture{
-        __Exercise__
-        reader.transformChar(writer){
-          case v if "aeiou" contains v => Character.toUpperCase(v)
-          case c => c
+      "transform each char and write down to the specified writer" in new ReaderFixture{
+        new WriterFixture {
+          __Exercise__
+          reader.transformChar(writer){
+            case v if "aeiou" contains v => Character.toUpperCase(v)
+            case c => c
+          }
+          __Verify__
+          Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+            List("fIrst lInE.", "sEcOnd lInE.", "thIrd lInE.")
         }
-        __Verify__
-        Files.readAllLines(destPath) should contain theSameElementsInOrderAs
-          List("fIrst lInE.", "sEcOnd lInE.", "thIrd lInE.")
       }
     }
 
@@ -198,58 +201,70 @@ class ReaderWrapperSpec extends GluinoIOCustomSpec with GluinoIO{
 
     "filterLine(String => Boolean) method should" - {
 
-      "close the reader after use" in new ReaderWriterFixture{
-        __Exercise__
-        val writable = reader.filterLine{ _ => true }
-        writable.writeTo(writer)
-        __Verify__
-        reader should be (closed)
+      "close the reader after use" in new ReaderFixture{
+        new WriterFixture {
+          __Exercise__
+          val writable = reader.filterLine{ _ => true }
+          writable.writeTo(writer)
+          __Verify__
+          reader should be (closed)
+        }
       }
 
-      "filter line and write down to the specified writer" in new ReaderWriterFixture{
-        __Exercise__
-        val writable = reader.filterLine(_ contains "second")
-        writable.writeTo(writer)
-        writer.close()
-        __Verify__
-        Files.readAllLines(destPath).loneElement should equal ("second line.")
+      "filter line and write down to the specified writer" in new ReaderFixture{
+        new WriterFixture {
+          __Exercise__
+          val writable = reader.filterLine(_ contains "second")
+          writable.writeTo(writer)
+          writer.close()
+          __Verify__
+          Files.readAllLines(destPath).loneElement should equal ("second line.")
+        }
       }
     }
 
     "filterLine(Writer)(String => Boolean) method should" - {
 
-      "close the reader and writer after use" in new ReaderWriterFixture{
-        __Exercise__
-        reader.filterLine(writer){ _ => true }
-        __Verify__
-        reader should be (closed)
-        writer should be (closed)
+      "close the reader and writer after use" in new ReaderFixture{
+        new WriterFixture {
+          __Exercise__
+          reader.filterLine(writer){ _ => true }
+          __Verify__
+          reader should be (closed)
+          writer should be (closed)
+        }
       }
 
-      "filter line and write down to the specified writer" in new ReaderWriterFixture{
-        __Exercise__
-        reader.filterLine(writer)(_ contains "second")
-        __Verify__
-        Files.readAllLines(destPath).loneElement should equal ("second line.")
+      "filter line and write down to the specified writer" in new ReaderFixture{
+        new WriterFixture {
+          __Exercise__
+          reader.filterLine(writer)(_ contains "second")
+          __Verify__
+          Files.readAllLines(destPath).loneElement should equal ("second line.")
+        }
       }
     }
 
     "transformLine() method should" - {
 
-      "close the reader and writer after use" in new ReaderWriterFixture{
-        __Exercise__
-        reader.transformLine(writer)(_.toUpperCase)
-        __Verify__
-        reader should be (closed)
-        writer should be (closed)
+      "close the reader and writer after use" in new ReaderFixture{
+        new WriterFixture {
+          __Exercise__
+          reader.transformLine(writer)(_.toUpperCase)
+          __Verify__
+          reader should be (closed)
+          writer should be (closed)
+        }
       }
 
-      "transform each line and write down to the specified writer" in new ReaderWriterFixture{
-        __Exercise__
-        reader.transformLine(writer)(_.toUpperCase)
-        __Verify__
-        Files.readAllLines(destPath) should contain theSameElementsInOrderAs
-          List("FIRST LINE.", "SECOND LINE.", "THIRD LINE.")
+      "transform each line and write down to the specified writer" in new ReaderFixture{
+        new WriterFixture{
+          __Exercise__
+          reader.transformLine(writer)(_.toUpperCase)
+          __Verify__
+          Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+            List("FIRST LINE.", "SECOND LINE.", "THIRD LINE.")
+        }
       }
     }
 

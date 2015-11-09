@@ -82,24 +82,28 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
 
     "Outputtable by InputStream should" - {
 
-      "not close the output stream after outputTo()" in new IOStreamFixture {
-        __SetUp__
-        val o = convertInputStreamToOutputtable(input)
-        __Exercise__
-        o.outputTo(output)
-        __Verify__
-        output should be (opened)
+      "not close the output stream after outputTo()" in new InputStreamFixture {
+        new OutputStreamFixture {
+          __SetUp__
+          val o = convertInputStreamToOutputtable(input)
+          __Exercise__
+          o.outputTo(output)
+          __Verify__
+          output should be (opened)
+        }
       }
 
-      "be appended to file content by Outputtable#outputTo()" in new IOStreamWithContentFixture {
-        __SetUp__
-        val o = convertInputStreamToOutputtable(input)
-        __Exercise__
-        o.outputTo(output)
-        output.close()
-        __Verify__
-        Files.readAllLines(destPath) should contain theSameElementsInOrderAs
-          (content ++ content)
+      "be appended to file content by Outputtable#outputTo()" in new InputStreamFixture {
+        new OutputStreamWithContentFixture {
+          __SetUp__
+          val o = convertInputStreamToOutputtable(input)
+          __Exercise__
+          o.outputTo(output)
+          output.close()
+          __Verify__
+          Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+            (content ++ content)
+        }
       }
     }
   }
@@ -146,24 +150,28 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
 
     "Writable by BufferedReader should" - {
 
-      "not close the writer after writeTo()" in new ReaderWriterFixture {
-        __SetUp__
-        val w = convertBufferedReaderToWritable(reader)
-        __Exercise__
-        w.writeTo(writer)
-        __Verify__
-        writer should be (opened)
+      "not close the writer after writeTo()" in new ReaderFixture {
+        new WriterFixture {
+          __SetUp__
+          val w = convertBufferedReaderToWritable(reader)
+          __Exercise__
+          w.writeTo(writer)
+          __Verify__
+          writer should be (opened)
+        }
       }
 
-      "be appended to file content by Writable#writeTo()" in new ReaderWriterWithContentFixture {
-        __SetUp__
-        val w = convertBufferedReaderToWritable(reader)
-        __Exercise__
-        w.writeTo(writer)
-        writer.close()
-        __Verify__
-        Files.readAllLines(destPath) should contain theSameElementsInOrderAs
-          (content ++ content)
+      "be appended to file content by Writable#writeTo()" in new ReaderFixture {
+        new WriterWithContentFixture {
+          __SetUp__
+          val w = convertBufferedReaderToWritable(reader)
+          __Exercise__
+          w.writeTo(writer)
+          writer.close()
+          __Verify__
+          Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+            (content ++ content)
+        }
       }
     }
   }

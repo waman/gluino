@@ -1,7 +1,8 @@
 package org.waman.gluino
 
 import java.io._
-import java.nio.file.{StandardOpenOption, Files, Path}
+import java.nio.charset.Charset
+import java.nio.file.{Files, Path, StandardOpenOption}
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.matchers.{BeMatcher, MatchResult}
@@ -66,11 +67,29 @@ class GluinoIOCustomSpec extends FreeSpec with Matchers with MockFactory with Fo
     val writer = Files.newBufferedWriter(destPath, StandardOpenOption.APPEND)
   }
 
-  // InputStream/OutputStream, Reader/Writer
-  trait IOStreamFixture extends InputStreamFixture with OutputStreamFixture
-  trait IOStreamWithContentFixture extends InputStreamFixture with OutputStreamWithContentFixture
-  trait ReaderWriterFixture extends ReaderFixture with WriterFixture
-  trait ReaderWriterWithContentFixture extends ReaderFixture with WriterWithContentFixture
+  //***** Encoded File Fixture *****
+  // content
+  val contentISO2022 = List("1行目", "2行目", "3行目")
+  val contentAsStringISO2022 = contentISO2022.map(_ + sep).mkString
+
+  lazy val ISO2022 = Charset.forName("ISO-2022-JP")
+  lazy val readOnlyPathISO2022 = createReadOnlyFileISO2022()
+  lazy val readOnlyFileISO2022 = readOnlyPathISO2022.toFile
+
+  def createReadOnlyFileISO2022(): Path = {
+    val path = Files.createTempFile(null, null)
+    Files.write(path, contentISO2022, ISO2022)
+    path
+  }
+
+  // InputStream, Reader
+  trait InputStreamISO2022Fixture{
+    val input = Files.newInputStream(readOnlyPathISO2022)
+  }
+
+  trait ReaderISO2022Fixture{
+    val reader = Files.newBufferedReader(readOnlyPathISO2022)
+  }
 
   //***** Custom Matchers *****
   def opened = BeMatcher{ io: Any =>
