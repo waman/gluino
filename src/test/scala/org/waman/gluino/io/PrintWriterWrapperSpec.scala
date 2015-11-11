@@ -2,8 +2,6 @@ package org.waman.gluino.io
 
 import java.io.{PrintWriter, Writer}
 
-import org.waman.gluino.GluinoIOCustomSpec
-
 class PrintWriterWrapperSpec extends GluinoIOCustomSpec with GluinoIO{
 
   "withPrintWriter() method should" - {

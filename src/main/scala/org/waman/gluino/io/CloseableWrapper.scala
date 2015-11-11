@@ -2,7 +2,7 @@ package org.waman.gluino.io
 
 import java.io.Closeable
 
-class CloseableWrapper(closeable: Closeable){
+class CloseableWrapper(closeable: Closeable) extends Closeable{
 
   def withCloseable(consumer: Closeable => Unit): Unit =
     try{
@@ -10,4 +10,6 @@ class CloseableWrapper(closeable: Closeable){
     }finally{
       closeable.close()
     }
+
+  override def close(): Unit = closeable.close()
 }

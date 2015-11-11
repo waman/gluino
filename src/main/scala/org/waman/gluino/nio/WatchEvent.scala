@@ -2,6 +2,7 @@ package org.waman.gluino.nio
 
 import java.nio.{file => nio}
 import nio.Path
+import scala.language.existentials
 
 class WatchEvent(event: nio.WatchEvent[_]){
 

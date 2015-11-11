@@ -1,11 +1,13 @@
 package org.waman.gluino.io
 
-import java.io.{BufferedWriter, Writer}
+import java.io.{Closeable, BufferedWriter, Writer}
 
 class WriterWrapper private (private[io] val writer: BufferedWriter)
-    extends WriterWrapperLike[WriterWrapper]{
+    extends WriterWrapperLike[WriterWrapper] with Closeable{
 
   override protected def getWriter: BufferedWriter = writer
+
+  override def close(): Unit = writer.close()
 }
 
 object WriterWrapper{

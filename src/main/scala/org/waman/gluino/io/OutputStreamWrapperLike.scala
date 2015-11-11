@@ -44,11 +44,7 @@ trait OutputStreamWrapperLike[T <: OutputStreamWrapperLike[T]]
   def newObjectOutputStream: ObjectOutputStream = new ObjectOutputStream(getOutputStream)
 
   def withObjectOutputStream(consumer: ObjectOutputStream => Unit): Unit = {
-    val os = getOutputStream
-    val oos = os match{
-      case ObjectOutputStream => os.asInstanceOf[ObjectOutputStream]
-      case _ => new ObjectOutputStream(os)
-    }
+    val oos = newObjectOutputStream
     try{
       consumer(oos)
     }finally{
@@ -59,11 +55,7 @@ trait OutputStreamWrapperLike[T <: OutputStreamWrapperLike[T]]
   def newDataOutputStream: DataOutputStream = new DataOutputStream(getOutputStream)
 
   def withDataOutputStream(consumer: DataOutputStream => Unit): Unit = {
-    val os = getOutputStream
-    val dos = os match{
-      case DataOutputStream => os.asInstanceOf[DataOutputStream]
-      case _ => new DataOutputStream(os)
-    }
+    val dos = newDataOutputStream
     try{
       consumer(dos)
     }finally{

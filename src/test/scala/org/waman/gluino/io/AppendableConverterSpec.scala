@@ -2,7 +2,7 @@ package org.waman.gluino.io
 
 import java.nio.file.Files
 
-import org.waman.gluino.{GluinoIOCustomSpec, ImplicitConversion}
+import org.waman.gluino.ImplicitConversion
 
 class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverter{
 

@@ -1,18 +1,18 @@
-package org.waman.gluino
+package org.waman.gluino.io
 
 import java.io._
 import java.nio.charset.Charset
 import java.nio.file.{Files, Path, StandardOpenOption}
 
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.matchers.{BeMatcher, MatchResult}
 import org.scalatest.{FreeSpec, Matchers}
-import org.waman.gluino.io.GluinoIO
+import org.scalatest.matchers.{BeMatcher, MatchResult}
+import org.waman.gluino.FourPhaseInformer
 import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
 
 import scala.collection.JavaConversions._
 
-class GluinoIOCustomSpec extends FreeSpec with Matchers with MockFactory with FourPhaseInformer{
+trait GluinoIOCustomSpec extends FreeSpec with Matchers with MockFactory with FourPhaseInformer{
 
   //***** Utility methods *****
   def convertImplicitly[T](t: T) = t
@@ -98,6 +98,10 @@ class GluinoIOCustomSpec extends FreeSpec with Matchers with MockFactory with Fo
       case output: OutputStream => () => { output.write(GluinoIO.lineSeparator.getBytes) }
       case reader: Reader => reader.ready
       case writer: Writer => writer.flush
+      case isw: InputStreamWrapper => isw.stream.available
+      case osw: OutputStreamWrapper => () => { osw.stream.write(GluinoIO.lineSeparator.getBytes) }
+      case rw: ReaderWrapper => rw.reader.ready
+      case ww: WriterWrapper => ww.writer.flush
     }
 
     val isOpened = try {

@@ -1,9 +1,11 @@
 package org.waman.gluino.io
 
-import java.io.OutputStream
+import java.io.{Closeable, OutputStream}
 
-class OutputStreamWrapper(private[io] val outputStream: OutputStream)
-    extends OutputStreamWrapperLike[OutputStreamWrapper]{
+class OutputStreamWrapper(private[io] val stream: OutputStream)
+    extends OutputStreamWrapperLike[OutputStreamWrapper] with Closeable{
 
-  override protected def getOutputStream: OutputStream = outputStream
+  override def close(): Unit = stream.close()
+
+  override protected def getOutputStream: OutputStream = stream
 }

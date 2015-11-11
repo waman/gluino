@@ -3,8 +3,6 @@ package org.waman.gluino.io
 import java.io.{BufferedWriter, Writer}
 import java.nio.file.{Path, Files}
 
-import org.waman.gluino.GluinoIOCustomSpec
-
 class WriterWrapperSpec extends GluinoIOCustomSpec with AppendableConverter{
 
   "***** Factory method *****" - {

@@ -4,7 +4,8 @@ import java.nio.file.attribute.FileTime
 import java.nio.file.attribute.PosixFilePermission._
 import java.time.{Instant, OffsetDateTime, ZoneId, ZonedDateTime}
 
-import org.waman.gluino.{ImplicitConversion, GluinoIOCustomSpec}
+import org.waman.gluino.ImplicitConversion
+import org.waman.gluino.io.GluinoIOCustomSpec
 
 class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
 

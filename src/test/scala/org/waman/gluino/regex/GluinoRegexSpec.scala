@@ -1,6 +1,6 @@
 package org.waman.gluino.regex
 
-import org.waman.gluino.GluinoIOCustomSpec
+import org.waman.gluino.io.GluinoIOCustomSpec
 
 class GluinoRegexSpec extends GluinoIOCustomSpec with GluinoRegex{
 

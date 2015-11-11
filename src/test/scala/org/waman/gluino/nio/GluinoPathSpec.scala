@@ -2,7 +2,8 @@ package org.waman.gluino.nio
 
 import java.nio.file.{Path, Paths}
 
-import org.waman.gluino.{ImplicitConversion, GluinoIOCustomSpec}
+import org.waman.gluino.ImplicitConversion
+import org.waman.gluino.io.GluinoIOCustomSpec
 
 class GluinoPathSpec extends GluinoIOCustomSpec with GluinoPath{
 
