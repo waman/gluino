@@ -14,8 +14,7 @@ trait AppendableConverter extends GluinoIO{
   }
 
   implicit def convertInputStreamToOutputtable(input: InputStream): Outputtable = new Outputtable{
-    override def outputTo(output: OutputStream): Unit =
-      input.eachByte(output write _)
+    override def outputTo(output: OutputStream): Unit = input.eachByte(output.write(_))
   }
 
   implicit def convertStringToWritable(text: String): Writable = new Writable{

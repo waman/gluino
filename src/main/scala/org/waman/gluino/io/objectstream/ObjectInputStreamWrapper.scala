@@ -1,0 +1,50 @@
+package org.waman.gluino.io.objectstream
+
+import java.io.{Closeable, EOFException, IOException, ObjectInputStream}
+
+import scala.annotation.tailrec
+
+trait ObjectInputStreamWrapperLike{
+
+  protected def getObjectInputStream: ObjectInputStream
+
+  def withObjectInputStream[R](consumer: ObjectInputStream => R): R = {
+    val ois = getObjectInputStream
+    try consumer(ois)
+    finally ois.close()
+  }
+
+  def eachAnyRef(consumer: AnyRef => Unit): Unit = withObjectInputStream{ ois =>
+    @tailrec
+    def readAnyRef(): Unit = {
+      consumer(ois.readObject())
+      readAnyRef()
+    }
+
+    try{
+      readAnyRef()
+    }catch{
+      case ex: EOFException =>
+      case ex: IOException => throw ex
+    }
+  }
+
+  def readAnyRefs(n: Int): Seq[AnyRef] = withObjectInputStream{ ois =>
+    @tailrec
+    def readAnyRefRecurse(seq: Seq[AnyRef], i: Int): Seq[AnyRef] = i match {
+      case 0 => seq
+      case _ => readAnyRefRecurse(seq :+ ois.readObject(), i-1)
+    }
+
+    readAnyRefRecurse(Nil, n)
+  }
+}
+
+class ObjectInputStreamWrapper(stream: ObjectInputStream)
+    extends ObjectInputStreamWrapperLike
+    with Closeable{
+
+  override protected def getObjectInputStream: ObjectInputStream = stream
+
+  override def close(): Unit = stream.close()
+}

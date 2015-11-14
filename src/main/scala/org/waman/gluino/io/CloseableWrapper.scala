@@ -4,12 +4,9 @@ import java.io.Closeable
 
 class CloseableWrapper(closeable: Closeable) extends Closeable{
 
-  def withCloseable(consumer: Closeable => Unit): Unit =
-    try{
-      consumer(closeable)
-    }finally{
-      closeable.close()
-    }
+  def withCloseable[R](consumer: Closeable => R): R =
+    try consumer(closeable)
+    finally closeable.close()
 
   override def close(): Unit = closeable.close()
 }
