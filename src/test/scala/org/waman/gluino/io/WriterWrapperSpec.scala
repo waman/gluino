@@ -1,108 +1,35 @@
 package org.waman.gluino.io
 
-import java.io.{BufferedWriter, Closeable, Writer}
+import java.io.{BufferedWriter, Writer}
 import java.nio.file.{Files, Path, StandardOpenOption}
 
+import org.scalamock.scalatest.MockFactory
 import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
+import org.waman.gluino.nio.GluinoPath
 
 import scala.collection.JavaConversions._
 
 trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
-  extends GluinoIOCustomSpec with AppendableConverter{
+  extends PrintWriterWrapperLikeSpec[T] with AppendableConverter{
 
-  def newWriterWrapperLike(dest: Path): T
+  protected def newWriterWrapperLike(path: Path): T
 
-  private trait SUT {
-    val destPath = Files.createTempFile(null, null)
-    Files.write(destPath, content)
-
-    val sut = newWriterWrapperLike(destPath)
-  }
-
-  // WriterWrapper#append() is not implicitly applied due to overloading
-  "WriterWrapper#append() method should append the specified lines to the writer" in new SUT{
-    __Exercise__
-    sut.append("fourth line.")
-    closeIfCloseable(sut)
-    __Verify__
-    text(destPath) should equal (contentAsString + "fourth line.")
-  }
-
-  "<< operator should" - {
-
-    "append the specified Writable to the writer" in new SUT {
-      __Exercise__
-      sut << "fourth line."
-      closeIfCloseable(sut)
-      __Verify__
-      text(destPath) should contain theSameElementsInOrderAs
-        (contentAsString + "fourth line.")
-    }
-
-    "sequentially append the specified Writables to the writer" in new SUT {
-      __Exercise__
-      sut << "fourth " << "line." << sep
-      closeIfCloseable(sut)
-      __Verify__
-      text(destPath) should equal (contentAsString + "fourth line." + sep)
-    }
-  }
-
-  def closeIfCloseable(any: Any): Unit = any match {
-    case c: Closeable => c.close()
-    case _ =>
-  }
-
-  def text(path: Path): String = new String(Files.readAllBytes(path))
+  override protected def newPrintWriterWrapperLike(path: Path) = newWriterWrapperLike(path)
 }
 
 trait CloseableWriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
-  extends WriterWrapperLikeSpec[T]{
+    extends WriterWrapperLikeSpec[T]
+    with CloseablePrintWriterWrapperLikeSpec[T]
 
-  private trait SUT{
-    val destPath = Files.createTempFile(null, null)
-    val sut = newWriterWrapperLike(destPath)
-  }
+class WriterWrapperSpec
+    extends CloseableWriterWrapperLikeSpec[WriterWrapper]
+    with MockFactory{
 
-  "Some methods of WriterWrapperLike trait should properly close reader after use" - {
-
-    "withWriter() method" in {
-      __SetUp__
-      val writer = mock[Writer]
-      (writer.flush _).expects()
-      (writer.close _).expects()
-      __Exercise__
-      writer.withWriter{ _ => }
-      __Verify__
-    }
-  }
-
-  "Some methods of WriterWrapperLike trait should not close reader after use" - {
-
-    /** WriterWrapper#append() is not implicitly applied due to overloading */
-    "WriterWrapper#append() method" in new SUT{
-      __Exercise__
-      sut.append("first line.")
-      __Verify__
-      sut should be (opened)
-    }
-
-    "<< operator" in new SUT{
-      __Exercise__
-      sut << "first line."
-      __Verify__
-      sut should be (opened)
-    }
-  }
-}
-
-class WriterWrapperSpec extends WriterWrapperLikeSpec[WriterWrapper]{
-
-  override def newWriterWrapperLike(dest: Path): WriterWrapper =
-    WriterWrapper(Files.newBufferedWriter(dest, StandardOpenOption.APPEND))
+  override protected def newWriterWrapperLike(path: Path): WriterWrapper =
+    WriterWrapper(Files.newBufferedWriter(path, StandardOpenOption.APPEND))
 
   private trait SUT {
-    val destPath = Files.createTempFile(null, null)
+    val destPath = GluinoPath.createTempFile()
     Files.write(destPath, content)
 
     val sut = newWriterWrapperLike(destPath)
@@ -131,40 +58,82 @@ class WriterWrapperSpec extends WriterWrapperLikeSpec[WriterWrapper]{
     }
   }
 
-  "writeLine(String) method should" - {
+  private trait MockedWriterWrapper{
+    val writer = mock[Writer]
+    inSequence {
+      (writer.flush _).expects().anyNumberOfTimes()
+      (writer.close _).expects()
+    }
+    val sut = WriterWrapper(writer)
+  }
 
-    "write down the specified line to the writer" in new SUT{
-      __Exercise__
-      sut.writeLine("fourth line.")
-      closeIfCloseable(sut)
+  "withWriter() method should" - {
+
+    "flush and close the writer after use" in new MockedWriterWrapper {
       __Verify__
-      text(destPath) should equal (contentAsString + "fourth line." + sep)
+      sut.withWriter { _ => }
     }
 
-    "close the Writer after use" in new SUT{
+    "close the writer when exception thrown" in new MockedWriterWrapper {
+      __Verify__
+      try{
+        sut.withWriter{ _ => throw new RuntimeException() }
+      }catch{
+        case ex: RuntimeException =>
+      }
+    }
+  }
+
+  "withPrintWriter() method should" - {
+
+    "flush and close writer after use" in new MockedWriterWrapper {
+      __Verify__
+      sut.withPrintWriter { _ => }
+    }
+
+    "close the writer when exception thrown" in new MockedWriterWrapper {
+      __Verify__
+      try{
+        sut.withPrintWriter{ _ => throw new RuntimeException() }
+      }catch{
+        case ex: RuntimeException =>
+      }
+    }
+  }
+
+  "writeLine(String) method should" - {
+
+    "not close the writer" in new SUT{
       __Exercise__
       sut.writeLine("first line.")
       __Verify__
       sut should be (opened)
     }
+
+    "write down the specified line to the writer" in new SUT{
+      __Exercise__
+      sut.writeLine("fourth line.")
+      sut.close()
+      __Verify__
+      text(destPath) should equal (contentAsString + "fourth line." + sep)
+    }
   }
 
   "writeLines(Seq[String]) method should" - {
 
-    "write down the specified lines to the writer" in new SUT {
-      __Exercise__
-      sut.writeLines(Seq("fourth line.", "fifth line."))
-      closeIfCloseable(sut)
-      __Verify__
-      text(destPath) should equal (contentAsString + "fourth line." + sep + "fifth line." + sep)
-    }
-
-    "close the Writer after use" in new SUT{
+    "not close the writer" in new SUT{
       __Exercise__
       sut.writeLines(Seq("first line.", "second line."))
       __Verify__
       sut should be (opened)
     }
 
+    "write down the specified lines to the writer" in new SUT {
+      __Exercise__
+      sut.writeLines(Seq("fourth line.", "fifth line."))
+      sut.close()
+      __Verify__
+      text(destPath) should equal (contentAsString + "fourth line." + sep + "fifth line." + sep)
+    }
   }
 }

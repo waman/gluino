@@ -3,9 +3,10 @@ package org.waman.gluino.io
 import java.io._
 import java.nio.charset.{StandardCharsets, Charset}
 
+import org.scalamock.scalatest.MockFactory
 import org.waman.gluino.ImplicitConversion
 
-class GluinoIOSpec extends GluinoIOCustomSpec with GluinoIO{
+class GluinoIOSpec extends GluinoIOCustomSpec with GluinoIO with MockFactory{
 
   "Constants" - {
     "lineSeparator should be a line separator of OS" in {

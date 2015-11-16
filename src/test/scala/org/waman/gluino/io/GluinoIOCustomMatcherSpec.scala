@@ -1,9 +1,11 @@
 package org.waman.gluino.io
 
+import java.io.PrintWriter
+
 
 class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
 
-  "closed BeMatcher should" - {
+  "open/closed BeMatcher should" - {
 
     "InputStream, InputStreamWrapper" - {
 
@@ -14,25 +16,25 @@ class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
         input should be (closed)
       }
 
-      "verify the InputStream not to be closed" in new InputStreamFixture {
+      "verify the InputStream to be opened" in new InputStreamFixture {
         __Verify__
-        input should not be closed
+        input should be (opened)
       }
 
       "verify the InputStreamWrapper to be closed" in new InputStreamFixture {
         __SetUp__
-        val wrapper = new InputStreamWrapper(input)
+        val wrapper = InputStreamWrapper(input)
         __Exercise__
         wrapper.close()
         __Verify__
         wrapper should be (closed)
       }
 
-      "verify the InputStreamWrapper not to be closed" in new InputStreamFixture {
+      "verify the InputStreamWrapper to be opened" in new InputStreamFixture {
         __SetUp__
-        val wrapper = new InputStreamWrapper(input)
+        val wrapper = InputStreamWrapper(input)
         __Verify__
-        wrapper should not be closed
+        wrapper should be (opened)
       }
     }
 
@@ -45,25 +47,25 @@ class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
         output should be (closed)
       }
 
-      "verify the OutputStream not to be closed" in new OutputStreamFixture {
+      "verify the OutputStream to be opened" in new OutputStreamFixture {
         __Verify__
-        output should not be closed
+        output should be (opened)
       }
 
       "verify the OutputStreamWrapper to be closed" in new OutputStreamFixture {
         __SetUp__
-        val wrapper = new OutputStreamWrapper(output)
+        val wrapper = OutputStreamWrapper(output)
         __Exercise__
         wrapper.close()
         __Verify__
         wrapper should be (closed)
       }
 
-      "verify the OutputStreamWrapper not to be closed" in new OutputStreamFixture {
+      "verify the OutputStreamWrapper to be opened" in new OutputStreamFixture {
         __SetUp__
-        val wrapper = new OutputStreamWrapper(output)
+        val wrapper = OutputStreamWrapper(output)
         __Verify__
-        wrapper should not be closed
+        wrapper should be (opened)
       }
     }
 
@@ -76,9 +78,9 @@ class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
         reader should be (closed)
       }
 
-      "verify the Reader not to be closed" in new ReaderFixture {
+      "verify the Reader to be opened" in new ReaderFixture {
         __Verify__
-        reader should not be closed
+        reader should be (opened)
       }
 
       "verify the ReaderWrapper to be closed" in new ReaderFixture {
@@ -90,9 +92,9 @@ class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
         wrapper should be (closed)
       }
 
-      "verify the ReaderWrapper not to be closed" in new ReaderFixture {
+      "verify the ReaderWrapper to be opened" in new ReaderFixture {
         __Verify__
-        ReaderWrapper(reader) should not be closed
+        ReaderWrapper(reader) should be (opened)
       }
     }
 
@@ -105,9 +107,9 @@ class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
         writer should be (closed)
       }
 
-      "verify the Writer not to be closed" in new WriterFixture {
+      "verify the Writer to be opened" in new WriterFixture {
         __Verify__
-        writer should not be closed
+        writer should be (opened)
       }
 
       "verify the WriterWrapper to be closed" in new WriterFixture {
@@ -119,9 +121,44 @@ class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
         wrapper should be (closed)
       }
 
-      "verify the WriterWrapper not to be closed" in new WriterFixture {
+      "verify the WriterWrapper to be opened" in new WriterFixture {
         __Verify__
-        WriterWrapper(writer) should not be closed
+        WriterWrapper(writer) should be (opened)
+      }
+    }
+
+    "PrintWriter, PrintWriterWrapper" - {
+
+      "verify the PrintWriter to be closed" in new WriterFixture {
+        __SetUp__
+        val pw = new PrintWriter(writer)
+        __Exercise__
+        pw.close()
+        __Verify__
+        pw should be (closed)
+      }
+
+      "verify the PrintWriter to be opened" in new WriterFixture {
+        __SetUp__
+        val pw = new PrintWriter(writer)
+        __Verify__
+        pw should be (opened)
+      }
+
+      "verify the PrintWriterWrapper to be closed" in new WriterFixture {
+        __SetUp__
+        val wrapper = PrintWriterWrapper(writer)
+        __Exercise__
+        wrapper.close()
+        __Verify__
+        wrapper should be (closed)
+      }
+
+      "verify the PrintWriterWrapper to be opened" in new WriterFixture {
+        __SetUp__
+        val wrapper = PrintWriterWrapper(writer)
+        __Verify__
+        wrapper should be (opened)
       }
     }
   }

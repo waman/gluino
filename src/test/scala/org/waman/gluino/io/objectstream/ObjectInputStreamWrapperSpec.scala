@@ -1,9 +1,9 @@
 package org.waman.gluino.io.objectstream
 
-import java.io.{ObjectInputStream, ObjectOutputStream}
-import java.math.BigDecimal
+import java.io.ObjectOutputStream
 import java.nio.file.{Files, Path}
 
+import org.scalamock.scalatest.MockFactory
 import org.waman.gluino.io.GluinoIOCustomSpec
 import org.waman.gluino.nio.GluinoPath
 
@@ -13,16 +13,19 @@ trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
 
   protected def newObjectInputStreamWrapperLike(path: Path): ObjectInputStreamWrapperLike
 
-  val contentObjects = List("first line.", new Integer(2), new BigDecimal("3"))
+  private val contentObjects = List("1", new Integer(2), BigDecimal(3))
 
-  trait SUT{
-    val path = Files.createTempFile(null, null)
+  private trait SUT{
+    val path = GluinoPath.createTempFile()
+    initFile(path)
+    val sut = newObjectInputStreamWrapperLike(path)
+  }
+
+  private def initFile(path: Path): Unit = {
     val oos = new ObjectOutputStream(Files.newOutputStream(path))
     contentObjects.foreach(oos.writeObject(_))
     oos.flush()
     oos.close()
-
-    val sut = newObjectInputStreamWrapperLike(path)
   }
 
   "withObjectInputStream() method should be able to use with the loan pattern" in new SUT{
@@ -48,24 +51,37 @@ trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
   }
 }
 
-class ObjectInputStreamWrapperSpec extends ObjectInputStreamWrapperLikeSpec with GluinoPath{
+trait CloseableObjectInputStreamWrapperLikeSpec
+    extends ObjectInputStreamWrapperLikeSpec
 
-  protected def newObjectInputStreamWrapperLike(path: Path): ObjectInputStreamWrapperLike =
-    new ObjectInputStreamWrapper(new ObjectInputStream(Files.newInputStream(path)))
+class ObjectInputStreamWrapperSpec
+    extends CloseableObjectInputStreamWrapperLikeSpec with MockFactory{
 
-  "write many kinds of primitive data" in {
-    val path = createTempFile()
-    path.withObjectOutputStream{ oos =>
-      oos << 1
-      oos << 2L
-      oos <++ 3
-      oos <# 4
-      oos <## 5
-    }
+  protected def newObjectInputStreamWrapperLike(path: Path) =
+    ObjectInputStreamWrapper(path)
 
-    path.eachByte{ b =>
-      print(b)
-      print(" ")
+  private trait SUT{
+    val path = GluinoPath.createTempFile()
+    initFile(path)
+  }
+
+  private def initFile(path: Path): Unit = {
+    val oos = new ObjectOutputStream(Files.newOutputStream(path))
+    oos.writeObject("content")
+    oos.flush()
+    oos.close()
+  }
+
+  "withObjectInputStream() method should" - {
+
+    "close the stream after use" in new SUT{
+      __SetUp__
+      val input = Files.newInputStream(path)
+      val sut = ObjectInputStreamWrapper(input)
+      __Exercise__
+      sut.withObjectInputStream { _ => }
+      __Verify__
+      input should be (closed)
     }
   }
 }

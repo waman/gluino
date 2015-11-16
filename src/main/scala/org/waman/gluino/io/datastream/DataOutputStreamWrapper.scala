@@ -1,6 +1,7 @@
 package org.waman.gluino.io.datastream
 
-import java.io.{DataOutput, DataOutputStream, Closeable}
+import java.io._
+import java.nio.file.{Files, Path}
 
 trait DataOutputStreamWrapperLike{
 
@@ -8,7 +9,6 @@ trait DataOutputStreamWrapperLike{
 
   def withDataOutputStream[R](consumer: DataOutputStream => R): R = {
     val dos = getDataOutputStream
-
     try{
       consumer(dos)
     }finally{
@@ -18,7 +18,7 @@ trait DataOutputStreamWrapperLike{
   }
 }
 
-class DataOutputStreamWrapper(stream: DataOutputStream)
+class DataOutputStreamWrapper private (stream: DataOutputStream)
     extends DataOutputStreamWrapperLike
     with DataOutputExtension[DataOutputStreamWrapper]
     with Closeable{
@@ -30,4 +30,12 @@ class DataOutputStreamWrapper(stream: DataOutputStream)
     stream.flush()
     stream.close()
   }
+}
+
+object DataOutputStreamWrapper{
+
+  def apply(dos: DataOutputStream): DataOutputStreamWrapper = new DataOutputStreamWrapper(dos)
+  def apply(os: OutputStream): DataOutputStreamWrapper = apply(new DataOutputStream(os))
+  def apply(path: Path): DataOutputStreamWrapper = apply(Files.newOutputStream(path))
+  def apply(file: File): DataOutputStreamWrapper = apply(file.toPath)
 }

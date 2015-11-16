@@ -1,6 +1,7 @@
 package org.waman.gluino.io
 
-import java.io.{Closeable, BufferedWriter, Writer, PrintWriter}
+import java.io._
+import java.nio.file.{Files, Path}
 
 trait WriterWrapperLike[T <: WriterWrapperLike[T]]
   extends GluinoIO with PrintWriterWrapperLike[T]{ self: T =>
@@ -56,4 +57,7 @@ object WriterWrapper{
     case bw: BufferedWriter => new WriterWrapper(bw)
     case _ => new WriterWrapper(new BufferedWriter(writer))
   }
+
+  def apply(path: Path): WriterWrapper = new WriterWrapper(Files.newBufferedWriter(path))
+  def apply(file: File): WriterWrapper = apply(file.toPath)
 }

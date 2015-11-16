@@ -3,13 +3,14 @@ package org.waman.gluino.io
 import java.io.{BufferedReader, Reader}
 import java.nio.file.Files
 
+import org.scalamock.scalatest.MockFactory
 import org.scalatest.LoneElement._
 
 import scala.collection.mutable
 
-trait ReaderWrapperLikeSpec[T <: ReaderWrapperLike] extends GluinoIOCustomSpec{
+trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
 
-  def newReaderWrapperLike: T
+  protected def newReaderWrapperLike: ReaderWrapperLike
 
   private trait SUT {
     val sut = newReaderWrapperLike
@@ -149,14 +150,14 @@ trait ReaderWrapperLikeSpec[T <: ReaderWrapperLike] extends GluinoIOCustomSpec{
   }
 }
 
-trait CloseableReaderWrapperLikeSpec[T <: ReaderWrapperLike]
-  extends ReaderWrapperLikeSpec[T]{
+trait CloseableReaderWrapperLikeSpec
+    extends ReaderWrapperLikeSpec with MockFactory{
 
   private trait SUT{
     val sut = newReaderWrapperLike
   }
 
-  "Methods of ReaderWrapperLike trait should properly close reader after use" - {
+  "Methods of ReaderWrapperLike trait should properly close the reader after use" - {
 
     "***** text *****" - {
       "eachChar() method" in new SUT{
@@ -249,7 +250,8 @@ trait CloseableReaderWrapperLikeSpec[T <: ReaderWrapperLike]
   }
 }
 
-class ReaderWrapperSpec extends CloseableReaderWrapperLikeSpec[ReaderWrapper] with GluinoIO{
+class ReaderWrapperSpec extends CloseableReaderWrapperLikeSpec
+    with GluinoIO with MockFactory{
 
   override def newReaderWrapperLike = ReaderWrapper(Files.newBufferedReader(readOnlyPath))
 
@@ -275,15 +277,28 @@ class ReaderWrapperSpec extends CloseableReaderWrapperLikeSpec[ReaderWrapper] wi
       wrapper.reader should not be theSameInstanceAs (reader)
     }
   }
-  
+
+  private trait MockedReaderWrapper{
+    __SetUp__
+    val reader = mock[Reader]
+    (reader.close _).expects()
+    val sut = ReaderWrapper(reader)
+  }
+
   "withReader() method should" - {
-    "close reader after use" in {
-      __SetUp__
-      val reader = mock[Reader]
-      (reader.close _).expects()
-      __Exercise__
-      reader.withReader{ _ => }
+
+    "close the reader after use" in new MockedReaderWrapper {
       __Verify__
+      sut.withReader{ _ => }
+    }
+
+    "close the reader when exception thrown" in new MockedReaderWrapper {
+      __Verify__
+      try{
+        sut.withReader{ _ => throw new RuntimeException() }
+      }catch{
+        case ex: RuntimeException =>
+      }
     }
   }
 }

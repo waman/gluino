@@ -1,6 +1,7 @@
 package org.waman.gluino.io
 
-import java.io.{Closeable, BufferedReader, Reader, Writer}
+import java.io._
+import java.nio.file.{Files, Path}
 
 import scala.annotation.tailrec
 import scala.util.matching.Regex
@@ -109,4 +110,7 @@ object ReaderWrapper{
     case br: BufferedReader => new ReaderWrapper(br)
     case _ => new ReaderWrapper(new BufferedReader(reader))
   }
+
+  def apply(path: Path): ReaderWrapper = new ReaderWrapper(Files.newBufferedReader(path))
+  def apply(file: File): ReaderWrapper = apply(file.toPath)
 }

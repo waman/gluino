@@ -1,5 +1,6 @@
 package org.waman.gluino.nio
 
+import java.io.{BufferedWriter, BufferedReader, OutputStream, InputStream}
 import java.net.URI
 import java.nio.file._
 import java.nio.file.attribute._
@@ -14,12 +15,15 @@ trait GluinoPath extends AttributeConverter with AppendableConverter{
   //***** Temporal File/Directory *****
   val tempDir: Path = Paths.get(tmpdir)
   
-  def createTempFile
-    (dir: Path = tempDir, prefix: String = null, suffix: String = null, attributes: Set[FileAttribute[_]] = Set()): Path =
+  def createTempFile(dir: Path = tempDir,
+                     prefix: String = null,
+                     suffix: String = null,
+                     attributes: Set[FileAttribute[_]] = Set()): Path =
     Files.createTempFile(dir, prefix, suffix, attributes.toArray:_*)
 
-  def createTempDirectory
-    (dir: Path = tempDir, prefix: String = null, attributes: Set[FileAttribute[_]] = Set()): Path =
+  def createTempDirectory(dir: Path = tempDir,
+                          prefix: String = null,
+                          attributes: Set[FileAttribute[_]] = Set()): Path =
     Files.createTempDirectory(dir, prefix, attributes.toArray:_*)
 
 
@@ -36,6 +40,12 @@ trait GluinoPath extends AttributeConverter with AppendableConverter{
   implicit def wrapPath(path: Path): PathWrapper = new PathWrapper(path)
   implicit def convertPathToFilesCategory(path: Path): FilesCategory = new FilesCategory(path)
 
+  //***** Conversion of Path to Stream, Reader/Writer *****
+//  implicit def convertPathToFile(path: Path): java.io.File = path.toFile
+//  implicit def convertPathToInputStream(path: Path): InputStream = Files.newInputStream(path)
+//  implicit def convertPathToOutputStream(path: Path): OutputStream = Files.newOutputStream(path)
+//  implicit def convertPathToBufferedReader(path: Path): BufferedReader = Files.newBufferedReader(path)
+//  implicit def convertPathToBufferedWriter(path: Path): BufferedWriter = Files.newBufferedWriter(path)
 
   //***** Conversion of DirectoryStream to Stream *****
   implicit def convertDirectoryStreamToStream[E](directoryStream: DirectoryStream[E]): Stream[E] =

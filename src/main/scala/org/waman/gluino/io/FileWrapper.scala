@@ -20,9 +20,6 @@ class FileWrapper(file: File) extends FileWrapperLike[FileWrapper]{
   override def newOutputStream(append: Boolean): OutputStream =
     new BufferedOutputStream(new FileOutputStream(file, append))
 
-  override def bytes_=(bytes: Array[Byte]): Unit =
-    newOutputStream().withOutputStream(_.write(bytes))
-
   //***** String(text), Reader/Writer *****
   override def newReader(charset: Charset): BufferedReader =
     new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))

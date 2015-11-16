@@ -22,24 +22,24 @@ trait GluinoIO{
   implicit def wrapCloseable(closeable: Closeable): CloseableWrapper = new CloseableWrapper(closeable)
 
   // InputStream/OutputStream
-  implicit def wrapInputStream(input: InputStream): InputStreamWrapper = new InputStreamWrapper(input)
-  implicit def wrapOutputStream(output: OutputStream): OutputStreamWrapper = new OutputStreamWrapper(output)
+  implicit def wrapInputStream(input: InputStream): InputStreamWrapper = InputStreamWrapper(input)
+  implicit def wrapOutputStream(output: OutputStream): OutputStreamWrapper = OutputStreamWrapper(output)
 
   // Reader/Writer
   implicit def wrapReader(reader: Reader): ReaderWrapper = ReaderWrapper(reader)
   implicit def wrapWriter(writer: Writer): WriterWrapper = WriterWrapper(writer)
-  implicit def wrapPrintWriter(writer: PrintWriter): PrintWriterWrapper = new PrintWriterWrapper(writer)
+  implicit def wrapPrintWriter(writer: PrintWriter): PrintWriterWrapper = PrintWriterWrapper(writer)
 
   // DataStream, ObjectStream
   implicit def wrapDataInputStream(dis: DataInputStream): DataInputStreamWrapper =
-    new DataInputStreamWrapper(dis)
+    DataInputStreamWrapper(dis)
   implicit def wrapDataOutputStream(dos: DataOutputStream): DataOutputStreamWrapper =
-    new DataOutputStreamWrapper(dos)
+    DataOutputStreamWrapper(dos)
 
   implicit def wrapObjectInputStream(ois: ObjectInputStream): ObjectInputStreamWrapper =
-    new ObjectInputStreamWrapper(ois)
+    ObjectInputStreamWrapper(ois)
   implicit def wrapObjectOutputStream(oos: ObjectOutputStream): ObjectOutputStreamWrapper =
-    new ObjectOutputStreamWrapper(oos)
+    ObjectOutputStreamWrapper(oos)
 }
 
 object GluinoIO extends GluinoIO

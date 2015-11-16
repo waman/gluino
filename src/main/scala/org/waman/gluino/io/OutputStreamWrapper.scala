@@ -2,6 +2,7 @@ package org.waman.gluino.io
 
 import java.io._
 import java.nio.charset.Charset
+import java.nio.file.{StandardOpenOption, Files, Path}
 
 import org.waman.gluino.io.datastream.DataOutputStreamWrapperLike
 import org.waman.gluino.io.objectstream.ObjectOutputStreamWrapperLike
@@ -54,14 +55,24 @@ trait OutputStreamWrapperLike[T <: OutputStreamWrapperLike[T]]
   def newDataOutputStream: DataOutputStream = new DataOutputStream(getOutputStream)
 }
 
-class OutputStreamWrapper(private[io] val stream: OutputStream)
+class OutputStreamWrapper private (private[io] val stream: OutputStream)
     extends OutputStreamWrapperLike[OutputStreamWrapper] with Closeable{
 
-  /** flush and close the inner writer. */
+  override protected def getOutputStream: OutputStream = stream
+
   override def close(): Unit = {
     stream.flush()
     stream.close()
   }
+}
 
-  override protected def getOutputStream: OutputStream = stream
+object OutputStreamWrapper{
+
+  def apply(stream: OutputStream): OutputStreamWrapper = new OutputStreamWrapper(stream)
+
+  def apply(path: Path, append: Boolean): OutputStreamWrapper =
+    if(append) apply(Files.newOutputStream(path, StandardOpenOption.APPEND))
+    else apply(Files.newOutputStream(path))
+
+  def apply(file: File, append: Boolean): OutputStreamWrapper = apply(file.toPath, append)
 }

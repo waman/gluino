@@ -6,12 +6,12 @@ trait DataOutputExtension[T <: DataOutputExtension[T]]{ self: T =>
   
   protected def getDataOutput: DataOutput
 
+  // 8-bit
   def <+(value: Boolean): T = {
     getDataOutput.writeBoolean(value)
     this
   }
 
-  // 8-bit
   def <+(value: Byte): T = {
     getDataOutput.writeByte(value)
     this
@@ -43,8 +43,8 @@ trait DataOutputExtension[T <: DataOutputExtension[T]]{ self: T =>
     this
   }
 
-  def <++(value: (Array[Char], Int, Int)): T = {
-    getDataOutput.writeChars(String.valueOf(value._1, value._2, value._3))
+  def <++(value: Array[Char], start: Int, length: Int): T = {
+    getDataOutput.writeChars(String.valueOf(value, start, length))
     this
   }
 
@@ -91,8 +91,8 @@ trait DataOutputExtension[T <: DataOutputExtension[T]]{ self: T =>
     this
   }
 
-  def <<(value: (Array[Byte], Int, Int)): T = {
-    getDataOutput.write(value._1, value._2, value._3)
+  def <<(value: Array[Byte], start: Int, length: Int): T = {
+    getDataOutput.write(value, start, length)
     this
   }
 

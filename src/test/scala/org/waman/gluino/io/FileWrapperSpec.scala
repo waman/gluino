@@ -3,14 +3,22 @@ package org.waman.gluino.io
 import java.io.File
 import java.nio.file.Path
 
-class FileWrapperSpec
-    extends ReaderWrapperLikeSpec[FileWrapper]
-    with InputStreamWrapperLikeSpec[FileWrapper]
-    with WriterWrapperLikeSpec[FileWrapper]
-    with GluinoFile{
+trait FileWrapperLikeSpec[T <: FileWrapperLike[T]]
+    extends InputStreamWrapperLikeSpec
+    with OutputStreamWrapperLikeSpec[T]{
+
+  protected def newFileWrapperLike(path: Path): T
+
+  override protected def newInputStreamWrapperLike = newFileWrapperLike(readOnlyPath)
+  override protected def newInputStreamWrapperLike_ISO2022 = newFileWrapperLike(readOnlyPathISO2022)
+
+  override protected def newOutputStreamWrapperLike(dest: Path) = newFileWrapperLike(dest)
+}
+
+class FileWrapperSpec extends FileWrapperLikeSpec[FileWrapper] with GluinoFile{
 
   trait FileOperationFixture{
-    val file: File = new File("path/to/some/dir")
+    val file = new File("path/to/some/dir")
   }
 
   "/" - {
@@ -31,10 +39,5 @@ class FileWrapperSpec
     }
   }
 
-  override def newReaderWrapperLike: FileWrapper = new FileWrapper(readOnlyFile)
-
-  override def newInputStreamWrapperLike: FileWrapper = new FileWrapper(readOnlyFile)
-  override def newInputStreamWrapperLike_ISO2022: FileWrapper = new FileWrapper(readOnlyFileISO2022)
-
-  override def newWriterWrapperLike(dest: Path): FileWrapper = new FileWrapper(dest.toFile)
+  override protected def newFileWrapperLike(path: Path) = new FileWrapper(path.toFile)
 }

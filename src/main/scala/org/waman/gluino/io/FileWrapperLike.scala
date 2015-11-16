@@ -19,7 +19,10 @@ trait FileWrapperLike[T <: FileWrapperLike[T]] extends GluinoIO
   def withOutputStreamAppend[R](consumer: OutputStream => R): R =
     newOutputStream(true).withOutputStream(consumer)
 
-  def bytes_=(bytes: Array[Byte]): Unit
+  def bytes_=(bytes: Array[Byte]): Unit =
+    newOutputStream().withOutputStream(_.write(bytes))
+
+  override def append(input: Outputtable): Unit = withOutputStreamAppend(_.append(input))
 
   //***** String, Reader/Writer *****
   def newReader(charset: Charset): BufferedReader
@@ -31,27 +34,19 @@ trait FileWrapperLike[T <: FileWrapperLike[T]] extends GluinoIO
   def withWriterAppend[R](consumer: BufferedWriter => R): R =
     withWriterAppend(defaultCharset)(consumer)
 
-  def withWriterAppend[R](charset: Charset)(consumer: BufferedWriter => R): R = {
-    val writer = newWriter(charset, append = false)
-    try{
-      consumer(writer)
-    }finally{
-      writer.flush()
-      writer.close()
-    }
-  }
+  def withWriterAppend[R](charset: Charset)(consumer: BufferedWriter => R): R =
+    newWriter(charset, append = true).withWriter(consumer)
 
   override def text: String = super.text
   override def text(charset: Charset): String = super.text(charset)
   def text_=(text: String): Unit = setText(text, defaultCharset)
-  def setText(text: String, charset: Charset) =
-    newWriter(charset).withWriter(_.write(text))
+  def setText(text: String, charset: Charset) = withWriter(_.write(text))
 
   override def readLines: Seq[String] = super.readLines
   override def readLines(charset: Charset): Seq[String] = super.readLines(charset)
 
   override def append(input: Writable): Unit =
-    newWriter(defaultCharset, append = true).withWriter(_.append(input))
+    withWriterAppend(defaultCharset)(_.append(input))
 
   //***** PrintWriter *****
   def newPrintWriter(charset: Charset, append: Boolean): PrintWriter =

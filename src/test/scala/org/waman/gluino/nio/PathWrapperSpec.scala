@@ -2,13 +2,13 @@ package org.waman.gluino.nio
 
 import java.nio.file.{Path, Paths}
 
-import org.waman.gluino.io.{WriterWrapperLikeSpec, InputStreamWrapperLikeSpec, ReaderWrapperLikeSpec}
+import org.waman.gluino.io.FileWrapperLikeSpec
 
 class PathWrapperSpec
-    extends ReaderWrapperLikeSpec[PathWrapper]
-    with InputStreamWrapperLikeSpec[PathWrapper]
-    with WriterWrapperLikeSpec[PathWrapper]
+    extends FileWrapperLikeSpec[PathWrapper]
     with GluinoPath {
+
+  override protected def newFileWrapperLike(path: Path): PathWrapper = new PathWrapper(path)
 
   trait PathOperationFixture{
     val path: Path = Paths.get("path/to/some/dir")
@@ -46,11 +46,4 @@ class PathWrapperSpec
       child should equal(expectedChild)
     }
   }
-
-  override def newReaderWrapperLike: PathWrapper = new PathWrapper(readOnlyPath)
-
-  override def newInputStreamWrapperLike: PathWrapper = new PathWrapper(readOnlyPath)
-  override def newInputStreamWrapperLike_ISO2022: PathWrapper = new PathWrapper(readOnlyPathISO2022)
-
-  override def newWriterWrapperLike(dest: Path): PathWrapper = new PathWrapper(dest)
 }

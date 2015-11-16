@@ -2,6 +2,7 @@ package org.waman.gluino.io
 
 import java.io._
 import java.nio.charset.Charset
+import java.nio.file.{Files, Path}
 
 import org.waman.gluino.io.objectstream.ObjectInputStreamWrapperLike
 
@@ -107,10 +108,18 @@ trait InputStreamWrapperLike extends GluinoIO
   def readLines(charset: Charset): Seq[String] = newReader(charset).readLines
 }
 
-class InputStreamWrapper(protected[io] val stream: InputStream)
+class InputStreamWrapper private (protected[io] val stream: InputStream)
     extends InputStreamWrapperLike with Closeable{
 
   override protected def getInputStream: InputStream = stream
 
   override def close(): Unit = stream.close()
+}
+
+object InputStreamWrapper{
+
+  def apply(stream: InputStream): InputStreamWrapper = new InputStreamWrapper(stream)
+  def apply(path: Path): InputStreamWrapper = apply(Files.newInputStream(path))
+  def apply(file: File): InputStreamWrapper = apply(file.toPath)
+
 }
