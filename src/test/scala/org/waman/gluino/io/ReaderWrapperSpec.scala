@@ -1,7 +1,7 @@
 package org.waman.gluino.io
 
 import java.io.{BufferedReader, Reader}
-import java.nio.file.Files
+import java.nio.file.{Path, Files}
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.LoneElement._
@@ -10,25 +10,50 @@ import scala.collection.mutable
 
 trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
 
-  protected def newReaderWrapperLike: ReaderWrapperLike
+  protected def newReaderWrapperLike(path: Path): ReaderWrapperLike
 
   private trait SUT {
-    val sut = newReaderWrapperLike
+    val sut = newReaderWrapperLike(readOnlyPath)
   }
 
-  "withReader() method should be able to use with the loan pattern" in new SUT{
-    __SetUp__
-    val result = new mutable.StringBuilder
-    __Exercise__
-    sut.withReader{ r =>
-      var i = r.read()
-      while(i != -1){
-        result += i.asInstanceOf[Char]
-        i = r.read()
-      }
+  "withReader() method should" - {
+
+    "close the reader after use" in new SUT {
+      __Exercise__
+      val result = sut.withReader{ r => r }
+      __Verify__
+      result should be (closed)
     }
-    __Verify__
-    result.toString should equal (contentAsString)
+
+    "close the reader when exception thrown" in new SUT {
+      __Exercise__
+      var result: Reader = null
+      try{
+        sut.withReader{ r =>
+          result = r
+          throw new RuntimeException()
+        }
+      }catch{
+        case ex: RuntimeException =>
+      }
+      __Verify__
+      result should be (closed)
+    }
+
+    "be able to use with the loan pattern" in new SUT {
+      __SetUp__
+      val result = new mutable.StringBuilder
+      __Exercise__
+      sut.withReader { r =>
+        var i = r.read()
+        while (i != -1) {
+          result += i.asInstanceOf[Char]
+          i = r.read()
+        }
+      }
+      __Verify__
+      result.toString should equal(contentAsString)
+    }
   }
 
   "***** text *****" - {
@@ -154,7 +179,7 @@ trait CloseableReaderWrapperLikeSpec
     extends ReaderWrapperLikeSpec with MockFactory{
 
   private trait SUT{
-    val sut = newReaderWrapperLike
+    val sut = newReaderWrapperLike(readOnlyPath)
   }
 
   "Methods of ReaderWrapperLike trait should properly close the reader after use" - {
@@ -253,7 +278,7 @@ trait CloseableReaderWrapperLikeSpec
 class ReaderWrapperSpec extends CloseableReaderWrapperLikeSpec
     with GluinoIO with MockFactory{
 
-  override def newReaderWrapperLike = ReaderWrapper(Files.newBufferedReader(readOnlyPath))
+  override protected def newReaderWrapperLike(path: Path) = ReaderWrapper(path)
 
   "***** Factory method *****" - {
 
@@ -275,30 +300,6 @@ class ReaderWrapperSpec extends CloseableReaderWrapperLikeSpec
       __Verify__
       wrapper.reader should be (a [BufferedReader])
       wrapper.reader should not be theSameInstanceAs (reader)
-    }
-  }
-
-  private trait MockedReaderWrapper{
-    __SetUp__
-    val reader = mock[Reader]
-    (reader.close _).expects()
-    val sut = ReaderWrapper(reader)
-  }
-
-  "withReader() method should" - {
-
-    "close the reader after use" in new MockedReaderWrapper {
-      __Verify__
-      sut.withReader{ _ => }
-    }
-
-    "close the reader when exception thrown" in new MockedReaderWrapper {
-      __Verify__
-      try{
-        sut.withReader{ _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
     }
   }
 }

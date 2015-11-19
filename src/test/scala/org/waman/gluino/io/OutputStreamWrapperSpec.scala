@@ -4,13 +4,9 @@ import java.io.OutputStream
 import java.nio.charset.Charset
 import java.nio.file.{Files, Path}
 
-import org.scalamock.scalatest.MockFactory
 import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
 import org.waman.gluino.io.datastream.{CloseableDataOutputStreamWrapperLikeSpec, DataOutputStreamWrapperLikeSpec}
 import org.waman.gluino.io.objectstream.{CloseableObjectOutputStreamWrapperLikeSpec, ObjectOutputStreamWrapperLikeSpec}
-import org.waman.gluino.nio.GluinoPath
-
-import scala.collection.JavaConversions._
 
 trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
     extends WriterWrapperLikeSpec[T]
@@ -23,15 +19,41 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
   override protected def newObjectOutputStreamWrapperLike(path: Path) = newOutputStreamWrapperLike(path)
   override protected def newDataOutputStreamWrapperLike(path: Path) = newOutputStreamWrapperLike(path)
 
-  private trait SUT {
-    val destPath = GluinoPath.createTempFile()
-    Files.write(destPath, contentISO2022, ISO2022)
-
+  private trait SUT extends DestFileFixture{
     val sut = newWriterWrapperLike(destPath)
   }
 
+  private trait SUTWithContent extends DestFileWithContentISO2022Fixture{
+    val sut = newWriterWrapperLike(destPath)
+  }
+
+  "withOutputStream() method should" - {
+
+    "close the stream after use" in new SUT {
+      __Exercise__
+      val result = sut.withOutputStream{ os => os }
+      __Verify__
+      result should be (closed)
+    }
+
+    "close the stream when exception thrown" in new SUT {
+      __Exercise__
+      var result: OutputStream = null
+      try{
+        sut.withOutputStream{ os =>
+          result = os
+          throw new RuntimeException()
+        }
+      }catch{
+        case ex: RuntimeException =>
+      }
+      __Verify__
+      result should be (closed)
+    }
+  }
+
   // OutputStreamWrapper#append() is not implicitly applied due to overloading
-  "append(Outputtable) method should append the specified bytes to the stream" in new SUT{
+  "append(Outputtable) method should append the specified bytes to the stream" in new SUTWithContent{
     __Exercise__
     sut.append("4行目".getBytes(ISO2022))
     closeIfCloseable(sut)
@@ -41,7 +63,7 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
 
   "<< operator for Outputtable should" - {
 
-    "append the specified Outputtable to the stream" in new SUT {
+    "append the specified Outputtable to the stream" in new SUTWithContent {
       __Exercise__
       sut << "4行目".getBytes(ISO2022)
       closeIfCloseable(sut)
@@ -49,7 +71,7 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
       text(destPath, ISO2022) should equal(contentAsStringISO2022 + "4行目")
     }
 
-    "sequentially append the specified Writables to the writer" in new SUT {
+    "sequentially append the specified Writables to the writer" in new SUTWithContent {
       __Exercise__
       sut << "4行目".getBytes(ISO2022) << sep.getBytes(ISO2022)
       closeIfCloseable(sut)
@@ -67,8 +89,7 @@ trait CloseableOutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
     with CloseableObjectOutputStreamWrapperLikeSpec
     with CloseableDataOutputStreamWrapperLikeSpec{
 
-  private trait SUT{
-    val destPath = GluinoPath.createTempFile()
+  private trait SUT extends DestFileFixture{
     val sut = newOutputStreamWrapperLike(destPath)
   }
 
@@ -92,123 +113,8 @@ trait CloseableOutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
 }
 
 class OutputStreamWrapperSpec
-    extends CloseableOutputStreamWrapperLikeSpec[OutputStreamWrapper]
-    with MockFactory{
+    extends CloseableOutputStreamWrapperLikeSpec[OutputStreamWrapper]{
 
   override protected def newOutputStreamWrapperLike(path: Path) =
-    OutputStreamWrapper(path, true)
-
-  private trait MockedOutputStreamWrapper{
-    val os = mock[OutputStream]
-    inSequence{
-      (os.flush _).expects().anyNumberOfTimes()
-      (os.close _).expects()
-    }
-    val sut = OutputStreamWrapper(os)
-  }
-
-  "withOutputStream() method should" - {
-
-    "flush and close the stream after use" in new MockedOutputStreamWrapper {
-      __Verify__
-      sut.withOutputStream { _ => }
-    }
-
-    "close the stream when exception thrown" in new MockedOutputStreamWrapper {
-      __Verify__
-      try{
-        sut.withOutputStream{ _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
-    }
-  }
-
-  "withWriter() method should" - {
-
-    "flush and close the stream after use" in new MockedOutputStreamWrapper {
-      __Verify__
-      sut.withWriter { _ => }
-    }
-
-    "close the stream when exception thrown" in new MockedOutputStreamWrapper {
-      __Verify__
-      try{
-        sut.withWriter{ _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
-    }
-  }
-
-  "withPrintWriter() method should" - {
-
-    "flush and close the stream after use" in new MockedOutputStreamWrapper {
-      __Verify__
-      sut.withPrintWriter { _ => }
-    }
-
-    "close the stream when exception thrown" in new MockedOutputStreamWrapper {
-      __Verify__
-      try{
-        sut.withPrintWriter{ _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
-    }
-  }
-
-  "withDataOutputStream() method should" - {
-
-    "flush and close the stream after use" in new MockedOutputStreamWrapper {
-      __Verify__
-      sut.withDataOutputStream { _ => }
-    }
-
-    "close the stream when exception thrown" in new MockedOutputStreamWrapper {
-      __Verify__
-      try{
-        sut.withDataOutputStream{ _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
-    }
-  }
-
-  "withObjectOutputStream() method should" - {
-
-    "flush and close the stream after use" in {
-      __SetUp__
-      val os = mock[OutputStream]
-      inSequence {
-        inAnyOrder {
-          (os.write(_: Array[Byte], _: Int, _: Int)).expects(*, *, *).anyNumberOfTimes()
-          (os.flush _).expects().anyNumberOfTimes()
-        }
-        (os.close _).expects()
-      }
-      val sut = OutputStreamWrapper(os)
-      __Verify__
-      sut.withObjectOutputStream { _ => }
-    }
-
-    "close the stream when exception thrown" in {
-      __SetUp__
-      val os = mock[OutputStream]
-      inSequence {
-        inAnyOrder {
-          (os.write(_: Array[Byte], _: Int, _: Int)).expects(*, *, *).anyNumberOfTimes()
-          (os.flush _).expects().anyNumberOfTimes()
-        }
-        (os.close _).expects()
-      }
-      val sut = OutputStreamWrapper(os)
-      __Verify__
-      try{
-        sut.withObjectOutputStream{ _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
-    }
-  }
+    OutputStreamWrapper(path, append = true)
 }

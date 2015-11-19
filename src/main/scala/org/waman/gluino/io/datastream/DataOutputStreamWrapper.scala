@@ -18,7 +18,7 @@ trait DataOutputStreamWrapperLike{
   }
 }
 
-class DataOutputStreamWrapper private (stream: DataOutputStream)
+class DataOutputStreamWrapper private (private[io] val stream: DataOutputStream)
     extends DataOutputStreamWrapperLike
     with DataOutputExtension[DataOutputStreamWrapper]
     with Closeable{

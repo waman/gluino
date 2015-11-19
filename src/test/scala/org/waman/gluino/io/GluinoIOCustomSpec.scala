@@ -8,6 +8,9 @@ import org.scalatest.matchers.{BeMatcher, MatchResult}
 import org.scalatest.{FreeSpec, Matchers}
 import org.waman.gluino.FourPhaseInformer
 import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
+import org.waman.gluino.io.datastream.{DataOutputStreamWrapper, DataInputStreamWrapper}
+import org.waman.gluino.io.objectstream.{ObjectInputStreamWrapper, ObjectOutputStreamWrapper}
+import org.waman.gluino.nio.GluinoPath
 
 import scala.collection.JavaConversions._
 
@@ -25,7 +28,7 @@ trait GluinoIOCustomSpec extends FreeSpec with Matchers with FourPhaseInformer{
   lazy val readOnlyFile = readOnlyPath.toFile
 
   def createReadOnlyFile(): Path = {
-    val path = Files.createTempFile(null, null)
+    val path = GluinoPath.createTempFile()
     Files.write(path, content)
     path
   }
@@ -41,7 +44,7 @@ trait GluinoIOCustomSpec extends FreeSpec with Matchers with FourPhaseInformer{
 
   // OutputStream, Writer
   trait DestFileFixture{
-    val destPath = Files.createTempFile(null, null)
+    val destPath = GluinoPath.createTempFile()
     val destFile = destPath.toFile
   }
 
@@ -81,35 +84,66 @@ trait GluinoIOCustomSpec extends FreeSpec with Matchers with FourPhaseInformer{
     path
   }
 
-  // InputStream, Reader
-  trait InputStreamISO2022Fixture{
-    val input = Files.newInputStream(readOnlyPathISO2022)
+  trait DestFileWithContentISO2022Fixture extends DestFileFixture{
+    Files.write(destPath, contentISO2022, ISO2022)
   }
 
-  trait ReaderISO2022Fixture{
-    val reader = Files.newBufferedReader(readOnlyPathISO2022)
+  //***** Object Stream *****
+  // content
+  val contentObjects = List("1", new Integer(2), BigDecimal(3))
+
+  lazy val readOnlyPathObjects = createReadOnlyPathObjects()
+  lazy val readOnlyFileObjects = readOnlyPathObjects.toFile
+
+  def createReadOnlyPathObjects(): Path = {
+    val path = GluinoPath.createTempFile()
+    val oos = new ObjectOutputStream(Files.newOutputStream(path))
+    try{
+      contentObjects.foreach(oos.writeObject(_))
+    }finally{
+      oos.flush()
+      oos.close()
+    }
+    path
+  }
+
+  trait ObjectInputStreamFixture{
+    val input = Files.newInputStream(readOnlyPathObjects)
+    val ois = new ObjectInputStream(input)
+  }
+
+  trait DestFileWithObjectsFixture{
+    val destPath = createReadOnlyPathObjects()
+    lazy val destFile = destPath.toFile
   }
 
   //***** Custom Matchers *****
   def opened = BeMatcher{ io: Any =>
     val exec: () => Any = io match {
       case pw: PrintWriter => () => {
-        pw.write(GluinoIO.lineSeparator)
+        pw.write("a")
         if(pw.checkError())throw new IOException()
       }
 
       case pww: PrintWriterWrapper => () => {
-        pww.printWriter.write(GluinoIO.lineSeparator)
+        pww.printWriter.write("a")
         if(pww.printWriter.checkError())throw new IOException()
       }
 
+      case ois: ObjectInputStream => () => { ois.readObject() }
+      case oos: ObjectOutputStream => () => { oos.writeObject("a") }
+
       case input : InputStream  => input.available
-      case output: OutputStream => () => { output.write(GluinoIO.lineSeparator.getBytes) }
+      case output: OutputStream => () => { output.write("a".getBytes) }
       case reader: Reader => reader.ready
       case writer: Writer => writer.flush
 
       case isw: InputStreamWrapper => isw.stream.available
-      case osw: OutputStreamWrapper => () => { osw.stream.write(GluinoIO.lineSeparator.getBytes) }
+      case dis: DataInputStreamWrapper => dis.stream.available
+      case osw: OutputStreamWrapper => () => { osw.stream.write("a".getBytes) }
+      case dos: DataOutputStreamWrapper => () => { dos.stream.write("a".getBytes) }
+      case ois: ObjectInputStreamWrapper => () => { ois.stream.readObject() }
+      case oos: ObjectOutputStreamWrapper => () => { oos.stream.writeObject("a") }
       case rw: ReaderWrapper => rw.reader.ready
       case ww: WriterWrapper => ww.writer.flush
     }

@@ -10,10 +10,10 @@ trait FileWrapperLike[T <: FileWrapperLike[T]] extends GluinoIO
     with ReaderWrapperLike with WriterWrapperLike[T] with PrintWriterWrapperLike[T]{ self: T =>
 
   //***** Byte, InputStream/OutputStream *****
-  def newInputStream: InputStream
+  def newInputStream(): InputStream
   def newOutputStream(append: Boolean = false): OutputStream
 
-  override protected def getInputStream: InputStream = newInputStream
+  override protected def getInputStream: InputStream = newInputStream()
   override protected def getOutputStream: OutputStream = newOutputStream(false)
 
   def withOutputStreamAppend[R](consumer: OutputStream => R): R =
@@ -42,7 +42,7 @@ trait FileWrapperLike[T <: FileWrapperLike[T]] extends GluinoIO
   def text_=(text: String): Unit = setText(text, defaultCharset)
   def setText(text: String, charset: Charset) = withWriter(_.write(text))
 
-  override def readLines: Seq[String] = super.readLines
+  override def readLines(): Seq[String] = super.readLines()
   override def readLines(charset: Charset): Seq[String] = super.readLines(charset)
 
   override def append(input: Writable): Unit =

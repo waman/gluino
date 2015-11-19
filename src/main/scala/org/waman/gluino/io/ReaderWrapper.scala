@@ -36,7 +36,7 @@ trait ReaderWrapperLike extends GluinoIO{
       eachChar(c => w.write(map(c)))
     }
 
-  def text: String = readLines.map(_ + lineSeparator).foldLeft("")(_ + _)
+  def text: String = readLines().map(_ + lineSeparator).foldLeft("")(_ + _)
 
   //***** lines *****
   def eachLine(consumer: String => Unit): Unit = withReader { reader =>
@@ -85,7 +85,7 @@ trait ReaderWrapperLike extends GluinoIO{
       }
     }
 
-  def readLines: Seq[String] = withReader{ r =>
+  def readLines(): Seq[String] = withReader{ r =>
     @tailrec
     def readLineRecurse(lines: Seq[String]): Seq[String] = r.readLine() match {
       case null => lines

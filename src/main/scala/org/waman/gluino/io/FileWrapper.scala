@@ -9,7 +9,7 @@ class FileWrapper(file: File) extends FileWrapperLike[FileWrapper]{
   def /(child: String): File = new File(file.getPath + "/" + child)
   def \(child: String): File = new File(file.getPath + "\\" + child)
 
-  private def filenameFilter(fileName: String): FilenameFilter = new FilenameFilter {
+  private def fileNameFilter(fileName: String): FilenameFilter = new FilenameFilter {
     override def accept(file: File, s: String): Boolean = fileName == s
   }
 

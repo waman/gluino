@@ -1,6 +1,6 @@
 package org.waman.gluino.io.datastream
 
-import java.io.{DataInputStream, File, InputStream}
+import java.io.{Closeable, DataInputStream, File, InputStream}
 import java.nio.file.{Files, Path}
 
 trait DataInputStreamWrapperLike {
@@ -9,15 +9,20 @@ trait DataInputStreamWrapperLike {
 
   def withDataInputStream[R](consumer: DataInputStream => R): R = {
     val dis = getDataInputStream
-
-    try consumer(dis)
-    finally dis.close()
+    try{
+      consumer(dis)
+    }finally{
+      dis.close()
+    }
   }
 }
 
-class DataInputStreamWrapper private (stream: DataInputStream) extends DataInputStreamWrapperLike{
+class DataInputStreamWrapper private (private[io] val stream: DataInputStream)
+    extends DataInputStreamWrapperLike with Closeable{
 
   override protected def getDataInputStream: DataInputStream = stream
+
+  override def close(): Unit = stream.close()
 }
 
 object DataInputStreamWrapper{

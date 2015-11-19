@@ -18,7 +18,7 @@ trait ObjectOutputStreamWrapperLike{
   }
 }
 
-class ObjectOutputStreamWrapper private (stream: ObjectOutputStream)
+class ObjectOutputStreamWrapper private (private[io] val stream: ObjectOutputStream)
     extends ObjectOutputStreamWrapperLike
     with ObjectOutputExtension[ObjectOutputStreamWrapper]{
 

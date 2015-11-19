@@ -11,7 +11,6 @@ trait ObjectInputStreamWrapperLike{
 
   def withObjectInputStream[R](consumer: ObjectInputStream => R): R = {
     val ois = getObjectInputStream
-
     try{
       consumer(ois)
     }finally{
@@ -45,7 +44,7 @@ trait ObjectInputStreamWrapperLike{
   }
 }
 
-class ObjectInputStreamWrapper private (stream: ObjectInputStream)
+class ObjectInputStreamWrapper private (private[io] val stream: ObjectInputStream)
     extends ObjectInputStreamWrapperLike with Closeable{
 
   override protected def getObjectInputStream: ObjectInputStream = stream

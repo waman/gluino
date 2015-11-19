@@ -1,7 +1,9 @@
 package org.waman.gluino.io
 
-import java.io.PrintWriter
+import java.io._
 
+import org.waman.gluino.io.datastream.{DataInputStreamWrapper, DataOutputStreamWrapper}
+import org.waman.gluino.io.objectstream.{ObjectInputStreamWrapper, ObjectOutputStreamWrapper}
 
 class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
 
@@ -28,6 +30,7 @@ class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
         wrapper.close()
         __Verify__
         wrapper should be (closed)
+        input should be (closed)
       }
 
       "verify the InputStreamWrapper to be opened" in new InputStreamFixture {
@@ -35,6 +38,85 @@ class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
         val wrapper = InputStreamWrapper(input)
         __Verify__
         wrapper should be (opened)
+        input should be (opened)
+      }
+    }
+
+    "DataInputStream, DataInputStreamWrapper" - {
+
+      "verify the DataInputStream to be closed" in new InputStreamFixture {
+        __SetUp__
+        val dis = new DataInputStream(input)
+        __Exercise__
+        dis.close()
+        __Verify__
+        dis should be (closed)
+        input should be (closed)
+      }
+
+      "verify the DataInputStream to be opened" in new InputStreamFixture {
+        __SetUp__
+        val dis = new DataInputStream(input)
+        __Verify__
+        dis should be (opened)
+        input should be (opened)
+      }
+
+      "verify the DataInputStreamWrapper to be closed" in new InputStreamFixture {
+        __SetUp__
+        val wrapper = DataInputStreamWrapper(input)
+        __Exercise__
+        wrapper.close()
+        __Verify__
+        wrapper should be (closed)
+        input should be (closed)
+      }
+
+      "verify the DataInputStreamWrapper to be opened" in new InputStreamFixture {
+        __SetUp__
+        val wrapper = DataInputStreamWrapper(input)
+        __Verify__
+        wrapper should be (opened)
+        input should be (opened)
+      }
+    }
+
+    "ObjectInputStream, ObjectInputStreamWrapper" - {
+
+      "ObjectInputStream test" in new ObjectInputStreamFixture {
+
+      }
+
+      "verify the ObjectInputStream to be closed" in new ObjectInputStreamFixture {
+        __Exercise__
+        ois.close()
+        __Verify__
+        ois should be (closed)
+        input should be (closed)
+      }
+
+      "verify the ObjectInputStream to be opened" in new ObjectInputStreamFixture {
+        __Verify__
+        ois should be (opened)
+        input should be (opened)
+      }
+
+      "verify the ObjectInputStreamWrapper to be closed" in new ObjectInputStreamFixture {
+        __SetUp__
+        val wrapper = ObjectInputStreamWrapper(ois)
+        __Exercise__
+        wrapper.close()
+        __Verify__
+        wrapper should be (closed)
+        ois should be (closed)
+      }
+
+      "verify the ObjectInputStreamWrapper to be opened" in new ObjectInputStreamFixture {
+        __SetUp__
+        val wrapper = ObjectInputStreamWrapper(ois)
+        __Verify__
+        wrapper should be (opened)
+        ois should be (opened)
       }
     }
 
@@ -66,6 +148,82 @@ class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
         val wrapper = OutputStreamWrapper(output)
         __Verify__
         wrapper should be (opened)
+      }
+    }
+
+    "DataOutputStream, DataOutputStreamWrapper" - {
+
+      "verify the DataOutputStream to be closed" in new OutputStreamFixture {
+        __SetUp__
+        val dos = new DataOutputStream(output)
+        __Exercise__
+        dos.close()
+        __Verify__
+        dos should be (closed)
+        output should be (closed)
+      }
+
+      "verify the DataOutputStream to be opened" in new OutputStreamFixture {
+        __SetUp__
+        val dos = new DataOutputStream(output)
+        __Verify__
+        dos should be (opened)
+        output should be (opened)
+      }
+
+      "verify the DataOutputStreamWrapper to be closed" in new OutputStreamFixture {
+        __SetUp__
+        val wrapper = DataOutputStreamWrapper(output)
+        __Exercise__
+        wrapper.close()
+        __Verify__
+        wrapper should be (closed)
+      }
+
+      "verify the DataOutputStreamWrapper to be opened" in new OutputStreamFixture {
+        __SetUp__
+        val wrapper = DataOutputStreamWrapper(output)
+        __Verify__
+        wrapper should be (opened)
+      }
+    }
+
+    "ObjectOutputStream, ObjectOutputStreamWrapper" - {
+
+      "verify the ObjectOutputStream to be closed" in new OutputStreamFixture {
+        __SetUp__
+        val oos = new ObjectOutputStream(output)
+        __Exercise__
+        oos.close()
+        __Verify__
+        oos should be (closed)
+        output should be (closed)
+      }
+
+      "verify the ObjectOutputStream to be opened" in new OutputStreamFixture {
+        __SetUp__
+        val dos = new ObjectOutputStream(output)
+        __Verify__
+        dos should be (opened)
+        output should be (opened)
+      }
+
+      "verify the ObjectOutputStreamWrapper to be closed" in new OutputStreamFixture {
+        __SetUp__
+        val wrapper = ObjectOutputStreamWrapper(output)
+        __Exercise__
+        wrapper.close()
+        __Verify__
+        wrapper should be (closed)
+        output should be (closed)
+      }
+
+      "verify the ObjectOutputStreamWrapper to be opened" in new OutputStreamFixture {
+        __SetUp__
+        val wrapper = ObjectOutputStreamWrapper(output)
+        __Verify__
+        wrapper should be (opened)
+        output should be (opened)
       }
     }
 

@@ -1,13 +1,11 @@
 package org.waman.gluino.io
 
-import java.io.{ObjectOutputStream, InputStream}
+import java.io.InputStream
 import java.nio.file.{Files, Path}
 
-import org.scalamock.scalatest.MockFactory
 import org.scalatest.LoneElement._
-import org.waman.gluino.io.datastream.DataInputStreamWrapperLikeSpec
-import org.waman.gluino.io.objectstream.ObjectInputStreamWrapper
-import org.waman.gluino.nio.GluinoPath
+import org.waman.gluino.io.datastream.{CloseableDataInputStreamWrapperLikeSpec, DataInputStreamWrapperLikeSpec}
+import org.waman.gluino.io.objectstream.{CloseableObjectInputStreamWrapperLikeSpec, ObjectInputStreamWrapperLikeSpec}
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -15,35 +13,61 @@ import scala.collection.mutable.ListBuffer
 trait InputStreamWrapperLikeSpec
     extends ReaderWrapperLikeSpec
     with DataInputStreamWrapperLikeSpec
+    with ObjectInputStreamWrapperLikeSpec
     with GluinoIOCustomSpec{
 
-  protected def newInputStreamWrapperLike: InputStreamWrapperLike
-  protected def newInputStreamWrapperLike_ISO2022: InputStreamWrapperLike
+  protected def newInputStreamWrapperLike(path: Path): InputStreamWrapperLike
 
-  override def newReaderWrapperLike = newInputStreamWrapperLike
-  override protected def newDataInputStreamWrapperLike(path: Path) = newInputStreamWrapperLike
+  override protected def newReaderWrapperLike(path: Path) = newInputStreamWrapperLike(path)
+  override protected def newDataInputStreamWrapperLike(path: Path) = newInputStreamWrapperLike(path)
+  override protected def newObjectInputStreamWrapperLike(path: Path) = newInputStreamWrapperLike(path)
 
   private trait SUT{
-    val sut = newInputStreamWrapperLike
+    val sut = newInputStreamWrapperLike(readOnlyPath)
   }
 
   private trait SUT_ISO2022{
-    val sut = newInputStreamWrapperLike_ISO2022
+    val sut = newInputStreamWrapperLike(readOnlyPathISO2022)
   }
 
-  "withInputStream() method should be able to use with the loan pattern" in new SUT{
-    __SetUp__
-    var sum = 0
-    __Exercise__
-    sut.withInputStream{ is =>
-      var i = is.read()
-      while(i != -1){
-        sum += i
-        i = is.read()
-      }
+  "withInputStream() method should" - {
+
+    "close the stream after use" in new SUT {
+      __Exercise__
+      val result = sut.withInputStream{ is => is }
+      __Verify__
+      result should be (closed)
     }
-    __Verify__
-    sum should equal (contentAsString.sum)
+
+    "close the stream when exception thrown" in new SUT {
+      __Exercise__
+      var result: InputStream = null
+      try{
+        sut.withInputStream{ is =>
+          result = is
+          throw new RuntimeException()
+        }
+      }catch{
+        case ex: RuntimeException =>
+      }
+      __Verify__
+      result should be (closed)
+    }
+
+    "be able to use with the loan pattern" in new SUT {
+      __SetUp__
+      var sum = 0
+      __Exercise__
+      sut.withInputStream { is =>
+        var i = is.read()
+        while (i != -1) {
+          sum += i
+          i = is.read()
+        }
+      }
+      __Verify__
+      sum should equal(contentAsString.sum)
+    }
   }
 
   "***** Bytes *****" - {
@@ -172,14 +196,15 @@ trait InputStreamWrapperLikeSpec
 trait CloseableInputStreamWrapperLikeSpec
     extends InputStreamWrapperLikeSpec
     with CloseableReaderWrapperLikeSpec
-    with MockFactory{
+    with CloseableDataInputStreamWrapperLikeSpec
+    with CloseableObjectInputStreamWrapperLikeSpec{
 
   private trait SUT{
-    val sut = newInputStreamWrapperLike
+    val sut = newInputStreamWrapperLike(readOnlyPath)
   }
 
   private trait SUT_ISO2022{
-    val sut = newInputStreamWrapperLike_ISO2022
+    val sut = newInputStreamWrapperLike(readOnlyPathISO2022)
   }
 
   "Methods of ReaderWrapperLike trait should properly close reader after use" - {
@@ -295,106 +320,7 @@ trait CloseableInputStreamWrapperLikeSpec
 }
 
 class InputStreamWrapperSpec
-    extends CloseableReaderWrapperLikeSpec
-    with CloseableInputStreamWrapperLikeSpec
-    with GluinoIO {
+    extends CloseableInputStreamWrapperLikeSpec{
 
-  override def newInputStreamWrapperLike = InputStreamWrapper(readOnlyPath)
-  override def newInputStreamWrapperLike_ISO2022 = InputStreamWrapper(readOnlyPathISO2022)
-
-  private trait MockedInputStreamWrapper{
-    val is = mock[InputStream]
-    (is.close _).expects()
-    val sut = InputStreamWrapper(is)
-  }
-
-  "withInputStream() method should" - {
-
-    "close the stream after use" in new MockedInputStreamWrapper{
-      __Verify__
-      sut.withInputStream { _ => }
-    }
-
-    "close the stream when exception thrown" in new MockedInputStreamWrapper {
-      __Verify__
-      try{
-        sut.withInputStream{ _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
-    }
-  }
-
-  "withReader() method should" - {
-
-    "close the stream after use" in new MockedInputStreamWrapper {
-      __Verify__
-      sut.withReader { _ => }
-    }
-
-    "close the stream when exception thrown" in new MockedInputStreamWrapper {
-      __Verify__
-      try{
-        sut.withReader{ _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
-    }
-  }
-
-  "withDataInputStream() method should" - {
-
-    "close the stream after use" in new MockedInputStreamWrapper {
-      __Verify__
-      sut.withDataInputStream { _ => }
-    }
-
-    "close the stream when exception thrown" in new MockedInputStreamWrapper {
-      __Verify__
-      try{
-        sut.withDataInputStream{ _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
-    }
-  }
-
-  private trait SUT{
-    val path = GluinoPath.createTempFile()
-    initFile(path)
-  }
-
-  private def initFile(path: Path): Unit = {
-    val oos = new ObjectOutputStream(Files.newOutputStream(path))
-    oos.writeObject("content")
-    oos.flush()
-    oos.close()
-  }
-
-  "withObjectInputStream() method should" - {
-
-    "close the stream after use" in new SUT{
-      __SetUp__
-      val input = Files.newInputStream(path)
-      val sut = ObjectInputStreamWrapper(input)
-      __Exercise__
-      sut.withObjectInputStream { _ => }
-      __Verify__
-      input should be (closed)
-    }
-
-    "close the stream when exception thrown" in new SUT{
-      __SetUp__
-      val input = Files.newInputStream(path)
-      val sut = ObjectInputStreamWrapper(input)
-      __Exercise__
-      try {
-        sut.withObjectInputStream { _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
-      __Verify__
-      input should be (closed)
-    }
-  }
+  override protected def newInputStreamWrapperLike(path: Path) = InputStreamWrapper(path)
 }

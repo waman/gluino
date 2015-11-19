@@ -79,10 +79,10 @@ class FilesCategory(path: Path) extends GluinoFunction{
     Files.write(path, bytes, options.toArray:_*)
 
   // InputStream/OutputStream
-  def newInputStream(options: Set[OpenOption] = Set()): InputStream =
+  def newInputStream(options: Set[OpenOption]): InputStream =
     Files.newInputStream(path, options.toArray:_*)
 
-  def	newOutputStream(options: Set[OpenOption] = Set()): OutputStream =
+  def	newOutputStream(options: Set[OpenOption]): OutputStream =
     Files.newOutputStream(path, options.toArray:_*)
 
   // ByteChannel
@@ -108,9 +108,7 @@ class FilesCategory(path: Path) extends GluinoFunction{
     Files.newBufferedWriter(path, charset, options.toArray:_*)
 
   // Stream
-  def lines(consumer: Stream[String] => Unit): Unit = {
-    lines()(consumer)
-  }
+  def lines(consumer: Stream[String] => Unit): Unit = lines()(consumer)
 
   def	lines(charset: Charset = UTF_8)(consumer: Stream[String] => Unit): Unit = {
     val lines = Files.lines(path, charset)
@@ -150,7 +148,7 @@ class FilesCategory(path: Path) extends GluinoFunction{
   def groupOwner_=(group: String): Path =
     Files.setOwner(path, FileSystems.getDefault.getUserPrincipalLookupService.lookupPrincipalByGroupName(group))
 
-  // Posix File Persmission
+  // Posix File Permissions
   def posixFilePermissions(options: Set[LinkOption] = Set()): Set[PosixFilePermission] =
     Files.getPosixFilePermissions(path, options.toArray:_*).toSet
   def posixFilePermissions_=(permissions: Set[PosixFilePermission]): Path =
@@ -178,16 +176,16 @@ class FilesCategory(path: Path) extends GluinoFunction{
   //***** Directory Stream *****
   /** @see Files#newDirectoryStream() */
   def	withDirectoryStream(consumer: DirectoryStream[Path] => Unit): Unit =
-    consume(Files.newDirectoryStream(path), consumer)
+    consumeDirectoryStream(Files.newDirectoryStream(path), consumer)
 
   def	withDirectoryStream
     (filter: DirectoryStream.Filter[_ >: Path])(consumer: DirectoryStream[Path] => Unit): Unit =
-    consume(Files.newDirectoryStream(path, filter), consumer)
+      consumeDirectoryStream(Files.newDirectoryStream(path, filter), consumer)
 
   def	withDirectoryStream(glob: String)(consumer: DirectoryStream[Path] => Unit): Unit =
-    consume(Files.newDirectoryStream(path, glob), consumer)
+    consumeDirectoryStream(Files.newDirectoryStream(path, glob), consumer)
 
-  private def consume(dirStream: DirectoryStream[Path], consumer: DirectoryStream[Path] => Unit): Unit =
+  private def consumeDirectoryStream(dirStream: DirectoryStream[Path], consumer: DirectoryStream[Path] => Unit): Unit =
     try{
       consumer(dirStream)
     }finally{
@@ -196,12 +194,11 @@ class FilesCategory(path: Path) extends GluinoFunction{
     }
 
   def	list(consumer: Stream[Path] => Unit): Unit = {
-    val l = Files.list(path)
+    val list = Files.list(path)
     try{
-      consumer(l)
+      consumer(list)
     }finally{
-      if(l != null)
-        l.close()
+      list.close()
     }
   }
 

@@ -5,9 +5,6 @@ import java.nio.file.{Files, Path, StandardOpenOption}
 
 import org.scalamock.scalatest.MockFactory
 import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
-import org.waman.gluino.nio.GluinoPath
-
-import scala.collection.JavaConversions._
 
 trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
   extends PrintWriterWrapperLikeSpec[T] with AppendableConverter{
@@ -15,6 +12,35 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
   protected def newWriterWrapperLike(path: Path): T
 
   override protected def newPrintWriterWrapperLike(path: Path) = newWriterWrapperLike(path)
+
+  private trait SUT extends DestFileFixture{
+    val sut = newWriterWrapperLike(destPath)
+  }
+
+  "withWriter() method should" - {
+
+    "close the writer after use" in new SUT {
+      __Exercise__
+      val result = sut.withWriter{ w => w }
+      __Verify__
+      result should be (closed)
+    }
+
+    "close the writer when exception thrown" in new SUT {
+      __Exercise__
+      var result: Writer = null
+      try{
+        sut.withWriter{ w =>
+          result = w
+          throw new RuntimeException()
+        }
+      }catch{
+        case ex: RuntimeException =>
+      }
+      __Verify__
+      result should be (closed)
+    }
+  }
 }
 
 trait CloseableWriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
@@ -27,13 +53,6 @@ class WriterWrapperSpec
 
   override protected def newWriterWrapperLike(path: Path): WriterWrapper =
     WriterWrapper(Files.newBufferedWriter(path, StandardOpenOption.APPEND))
-
-  private trait SUT {
-    val destPath = GluinoPath.createTempFile()
-    Files.write(destPath, content)
-
-    val sut = newWriterWrapperLike(destPath)
-  }
 
   "***** Factory method *****" - {
 
@@ -58,47 +77,8 @@ class WriterWrapperSpec
     }
   }
 
-  private trait MockedWriterWrapper{
-    val writer = mock[Writer]
-    inSequence {
-      (writer.flush _).expects().anyNumberOfTimes()
-      (writer.close _).expects()
-    }
-    val sut = WriterWrapper(writer)
-  }
-
-  "withWriter() method should" - {
-
-    "flush and close the writer after use" in new MockedWriterWrapper {
-      __Verify__
-      sut.withWriter { _ => }
-    }
-
-    "close the writer when exception thrown" in new MockedWriterWrapper {
-      __Verify__
-      try{
-        sut.withWriter{ _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
-    }
-  }
-
-  "withPrintWriter() method should" - {
-
-    "flush and close writer after use" in new MockedWriterWrapper {
-      __Verify__
-      sut.withPrintWriter { _ => }
-    }
-
-    "close the writer when exception thrown" in new MockedWriterWrapper {
-      __Verify__
-      try{
-        sut.withPrintWriter{ _ => throw new RuntimeException() }
-      }catch{
-        case ex: RuntimeException =>
-      }
-    }
+  private trait SUT extends DestFileWithContentFixture{
+    val sut = newWriterWrapperLike(destPath)
   }
 
   "writeLine(String) method should" - {

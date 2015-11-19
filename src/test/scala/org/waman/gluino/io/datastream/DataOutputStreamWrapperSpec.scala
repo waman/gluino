@@ -1,35 +1,46 @@
 package org.waman.gluino.io.datastream
 
-import java.io.OutputStream
+import java.io.DataOutputStream
 import java.nio.file.Path
 
-import org.scalamock.scalatest.MockFactory
 import org.waman.gluino.io.GluinoIOCustomSpec
 
 trait DataOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
 
   protected def newDataOutputStreamWrapperLike(path: Path): DataOutputStreamWrapperLike
-}
 
-trait CloseableDataOutputStreamWrapperLikeSpec
-    extends DataOutputStreamWrapperLikeSpec with MockFactory{
+  private trait SUT extends DestFileFixture{
+    val sut = newDataOutputStreamWrapperLike(destPath)
+  }
 
-  "Methods of DataOutputStreamWrapperLike trait should properly flush and close stream after use" - {
+  "withDataOutputStream() method should" - {
 
-    "withDataOutputStream() method" in {
-      __SetUp__
-      val os = mock[OutputStream]
-      inSequence{
-        (os.flush _).expects().anyNumberOfTimes()
-        (os.close _).expects()
-      }
-      val sut = DataOutputStreamWrapper(os)
+    "close the stream after use" in new SUT {
       __Exercise__
-      sut.withDataOutputStream { _ => }
+      val result = sut.withDataOutputStream{ dos => dos }
       __Verify__
+      result should be (closed)
+    }
+
+    "close the stream when exception thrown" in new SUT {
+      __Exercise__
+      var result: DataOutputStream = null
+      try{
+        sut.withDataOutputStream{ dos =>
+          result = dos
+          throw new RuntimeException()
+        }
+      }catch{
+        case ex: RuntimeException =>
+      }
+      __Verify__
+      result should be (closed)
     }
   }
 }
+
+trait CloseableDataOutputStreamWrapperLikeSpec
+    extends DataOutputStreamWrapperLikeSpec
 
 class DataOutputStreamWrapperSpec extends CloseableDataOutputStreamWrapperLikeSpec{
 

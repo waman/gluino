@@ -8,9 +8,9 @@ trait WriterWrapperLike[T <: WriterWrapperLike[T]]
 
   protected def getWriter: BufferedWriter
 
-  override protected def getPrintWriter: PrintWriter = newPrintWriter
+  override protected def getPrintWriter: PrintWriter = newPrintWriter()
 
-  def newPrintWriter: PrintWriter = new PrintWriter(getWriter)
+  def newPrintWriter(): PrintWriter = new PrintWriter(getWriter)
 
   def withWriter[R](consumer: BufferedWriter => R): R = {
     val writer = getWriter

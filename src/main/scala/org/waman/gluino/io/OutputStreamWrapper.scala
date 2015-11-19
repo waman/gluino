@@ -39,7 +39,7 @@ trait OutputStreamWrapperLike[T <: OutputStreamWrapperLike[T]]
     newWriter(charset).withWriter(consumer)
 
   //***** PrintWriterWrapper methods with Charset  *****
-  override def newPrintWriter: PrintWriter = newPrintWriter(defaultCharset)
+  override def newPrintWriter(): PrintWriter = newPrintWriter(defaultCharset)
 
   def newPrintWriter(charset: Charset): PrintWriter =
     new PrintWriter(newWriter(charset))
@@ -48,11 +48,11 @@ trait OutputStreamWrapperLike[T <: OutputStreamWrapperLike[T]]
     newPrintWriter(charset).withPrintWriter(consumer)
 
   //***** ObjectOutputStream, DataOutputStream *****
-  override protected def getObjectOutputStream: ObjectOutputStream = newObjectOutputStream
-  override protected def getDataOutputStream: DataOutputStream = newDataOutputStream
+  override protected def getObjectOutputStream: ObjectOutputStream = newObjectOutputStream()
+  override protected def getDataOutputStream: DataOutputStream = newDataOutputStream()
 
-  def newObjectOutputStream: ObjectOutputStream = new ObjectOutputStream(getOutputStream)
-  def newDataOutputStream: DataOutputStream = new DataOutputStream(getOutputStream)
+  def newObjectOutputStream(): ObjectOutputStream = new ObjectOutputStream(getOutputStream)
+  def newDataOutputStream(): DataOutputStream = new DataOutputStream(getOutputStream)
 }
 
 class OutputStreamWrapper private (private[io] val stream: OutputStream)

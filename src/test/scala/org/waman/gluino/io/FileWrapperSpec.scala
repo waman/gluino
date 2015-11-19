@@ -9,9 +9,7 @@ trait FileWrapperLikeSpec[T <: FileWrapperLike[T]]
 
   protected def newFileWrapperLike(path: Path): T
 
-  override protected def newInputStreamWrapperLike = newFileWrapperLike(readOnlyPath)
-  override protected def newInputStreamWrapperLike_ISO2022 = newFileWrapperLike(readOnlyPathISO2022)
-
+  override protected def newInputStreamWrapperLike(path: Path) = newFileWrapperLike(path)
   override protected def newOutputStreamWrapperLike(dest: Path) = newFileWrapperLike(dest)
 }
 

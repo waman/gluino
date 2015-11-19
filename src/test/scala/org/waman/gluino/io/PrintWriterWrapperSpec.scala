@@ -1,30 +1,51 @@
 package org.waman.gluino.io
 
-import java.io.{Closeable, PrintWriter, Writer}
-import java.nio.file.{StandardOpenOption, Files, Path}
-
-import org.waman.gluino.nio.GluinoPath
-
-import scala.collection.JavaConversions._
+import java.io.{Closeable, PrintWriter}
+import java.nio.file.{Files, Path, StandardOpenOption}
 
 import org.scalamock.scalatest.MockFactory
-
-import GluinoIO.{lineSeparator => sep}
+import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
 
 trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
     extends GluinoIOCustomSpec with AppendableConverter{
 
   protected def newPrintWriterWrapperLike(path: Path): T
 
-  private trait SUT {
-    val destPath = GluinoPath.createTempFile()
-    Files.write(destPath, content)
-
+  private trait SUT extends DestFileFixture{
     val sut = newPrintWriterWrapperLike(destPath)
   }
 
+  private trait SUTWithContent extends DestFileWithContentFixture{
+    val sut = newPrintWriterWrapperLike(destPath)
+  }
+
+  "withPrintWriter() method should" - {
+
+    "close the PrintWriter after use" in new SUT {
+      __Exercise__
+      val result = sut.withPrintWriter{ pw => pw }
+      __Verify__
+      result should be (closed)
+    }
+
+    "close the PrintWriter when exception thrown" in new SUT {
+      __Exercise__
+      var result: PrintWriter = null
+      try{
+        sut.withPrintWriter{ pw =>
+          result = pw
+          throw new RuntimeException()
+        }
+      }catch{
+        case ex: RuntimeException =>
+      }
+      __Verify__
+      result should be (closed)
+    }
+  }
+
   // PrintWriterWrapper#append() is not implicitly applied due to overloading
-  "append(Writable) method should append the specified lines to the PrintWriter" in new SUT{
+  "append(Writable) method should append the specified lines to the PrintWriter" in new SUTWithContent{
     __Exercise__
     sut.append("fourth line.")
     closeIfCloseable(sut)
@@ -34,7 +55,7 @@ trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
 
   "<< operator for Writable should" - {
 
-    "append the specified Writable to the writer" in new SUT {
+    "append the specified Writable to the writer" in new SUTWithContent {
       __Exercise__
       sut << "fourth line."
       closeIfCloseable(sut)
@@ -42,7 +63,7 @@ trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
       text(destPath) should equal (contentAsString + "fourth line.")
     }
 
-    "sequentially append the specified Writables to the writer" in new SUT {
+    "sequentially append the specified Writables to the writer" in new SUTWithContent {
       __Exercise__
       sut << "fourth " << "line." << sep
       closeIfCloseable(sut)
@@ -63,8 +84,7 @@ trait CloseablePrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
     extends PrintWriterWrapperLikeSpec[T]
     with MockFactory{
 
-  private trait SUT{
-    val destPath = GluinoPath.createTempFile()
+  private trait SUT extends DestFileFixture{
     val sut = newPrintWriterWrapperLike(destPath)
   }
 
@@ -92,35 +112,4 @@ class PrintWriterWrapperSpec
 
   override protected def newPrintWriterWrapperLike(path: Path) =
     PrintWriterWrapper(Files.newBufferedWriter(path, StandardOpenOption.APPEND))
-
-  "withPrintWriter() method should" - {
-
-    "flush and close writer after use" in {
-      __SetUp__
-      val writer = mock[Writer]
-      inSequence {
-        (writer.flush _).expects().anyNumberOfTimes()
-        (writer.close _).expects()
-      }
-      val sut = PrintWriterWrapper(writer)
-      __Verify__
-      sut.withPrintWriter { _ => }
-    }
-
-    "flush and close writer when exception thrown" in {
-      __SetUp__
-      val writer = mock[Writer]
-      inSequence {
-        (writer.flush _).expects().anyNumberOfTimes()
-        (writer.close _).expects()
-      }
-      val sut = PrintWriterWrapper(writer)
-      __Verify__
-      try {
-        sut.withPrintWriter { _ => throw new RuntimeException }
-      }catch{
-        case ex: RuntimeException =>
-      }
-    }
-  }
 }
