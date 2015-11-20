@@ -17,6 +17,10 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
     val sut = newWriterWrapperLike(destPath)
   }
 
+  private trait SUTWithContent extends DestFileWithContentFixture{
+    val sut = newWriterWrapperLike(destPath)
+  }
+
   "withWriter() method should" - {
 
     "close the writer after use" in new SUT {
@@ -39,6 +43,43 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
       }
       __Verify__
       result should be (closed)
+    }
+
+    "be able to use with the loan pattern" in new SUT{
+      __Exercise__
+      sut.withWriter { w =>
+        w.write(contentAsString)
+      }
+      __Verify__
+      text(destPath) should equal (contentAsString)
+    }
+  }
+
+  // WriterWrapper#append() is not implicitly applied due to overloading
+  "append(Writable) method should append the specified lines to the writer" in new SUTWithContent{
+    __Exercise__
+    sut.append("fourth line.")
+    closeIfCloseable(sut)
+    __Verify__
+    text(destPath) should equal (contentAsString + "fourth line.")
+  }
+
+  "<< operator for Writable (in WriterWrapper) should" - {
+
+    "append the specified Writable to the writer" in new SUTWithContent {
+      __Exercise__
+      sut << "fourth line."
+      closeIfCloseable(sut)
+      __Verify__
+      text(destPath) should equal (contentAsString + "fourth line.")
+    }
+
+    "sequentially append the specified Writables to the writer" in new SUTWithContent {
+      __Exercise__
+      sut << "fourth " << "line." << sep
+      closeIfCloseable(sut)
+      __Verify__
+      text(destPath) should equal (contentAsString + "fourth line." + sep)
     }
   }
 }
@@ -83,7 +124,7 @@ class WriterWrapperSpec
 
   "writeLine(String) method should" - {
 
-    "not close the writer" in new SUT{
+    "NOT close the writer" in new SUT{
       __Exercise__
       sut.writeLine("first line.")
       __Verify__
@@ -101,7 +142,7 @@ class WriterWrapperSpec
 
   "writeLines(Seq[String]) method should" - {
 
-    "not close the writer" in new SUT{
+    "NOT close the writer" in new SUT{
       __Exercise__
       sut.writeLines(Seq("first line.", "second line."))
       __Verify__

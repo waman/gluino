@@ -22,11 +22,9 @@ trait InputStreamWrapperLike extends GluinoIO
   //***** withInputStream *****
   def withInputStream[R](consumer: InputStream => R): R = {
     val is = getInputStream
-    try{
-      consumer(is)
-    }finally{
-      is.close()
-    }
+
+    try consumer(is)
+    finally is.close()
   }
 
   //***** Byte *****
@@ -106,8 +104,8 @@ trait InputStreamWrapperLike extends GluinoIO
   def transformLine(writer: Writer, charset: Charset)(map: String => String): Unit =
     newReader(charset).transformLine(writer)(map)
 
-  override def readLines(): Seq[String] = super.readLines()
-  def readLines(charset: Charset): Seq[String] = newReader(charset).readLines()
+  override def readLines: Seq[String] = super.readLines
+  def readLines(charset: Charset): Seq[String] = newReader(charset).readLines
 }
 
 class InputStreamWrapper private (protected[io] val stream: InputStream)
@@ -123,5 +121,4 @@ object InputStreamWrapper{
   def apply(stream: InputStream): InputStreamWrapper = new InputStreamWrapper(stream)
   def apply(path: Path): InputStreamWrapper = apply(Files.newInputStream(path))
   def apply(file: File): InputStreamWrapper = apply(file.toPath)
-
 }

@@ -10,14 +10,16 @@ trait PrintWriterWrapperLike[T <: PrintWriterWrapperLike[T]] { self: T =>
   def withPrintWriter[R](consumer: PrintWriter => R): R = {
     val pw = getPrintWriter
     try{
-      consumer(pw)
-    }finally{
+      val result = consumer(pw)
       pw.flush()
-      pw.close()
-    }
+      result
+    }finally pw.close()
   }
 
+  /** NOT close the underlying PrintWriter */
   def append(input: Writable): Unit = input.writeTo(getPrintWriter)
+
+  /** NOT close the underlying PrintWriter */
   def <<(input: Writable): T = { append(input); this }
 }
 
@@ -26,10 +28,7 @@ class PrintWriterWrapper private (private[io] val printWriter: PrintWriter)
 
   protected override def getPrintWriter: PrintWriter = printWriter
 
-  override def close(): Unit = {
-    printWriter.flush()
-    printWriter.close()
-  }
+  override def close(): Unit = printWriter.close()
 }
 
 object PrintWriterWrapper{

@@ -10,11 +10,10 @@ trait DataOutputStreamWrapperLike{
   def withDataOutputStream[R](consumer: DataOutputStream => R): R = {
     val dos = getDataOutputStream
     try{
-      consumer(dos)
-    }finally{
+      val result = consumer(dos)
       dos.flush()
-      dos.close()
-    }
+      result
+    }finally dos.close()
   }
 }
 
@@ -26,10 +25,7 @@ class DataOutputStreamWrapper private (private[io] val stream: DataOutputStream)
   override protected def getDataOutputStream: DataOutputStream = stream
   override protected def getDataOutput: DataOutput = stream
 
-  override def close(): Unit = {
-    stream.flush()
-    stream.close()
-  }
+  override def close(): Unit = stream.close()
 }
 
 object DataOutputStreamWrapper{

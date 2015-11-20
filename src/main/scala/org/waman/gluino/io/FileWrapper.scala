@@ -14,11 +14,10 @@ class FileWrapper(file: File) extends FileWrapperLike[FileWrapper]{
   }
 
   //***** byte, InputStream/OutputStream *****
-  override def newInputStream: InputStream =
-    new BufferedInputStream(new FileInputStream(file))
+  override def newInputStream: InputStream = new FileInputStream(file)
 
-  override def newOutputStream(append: Boolean): OutputStream =
-    new BufferedOutputStream(new FileOutputStream(file, append))
+  override def newOutputStream(append: Boolean = false): OutputStream =
+    new FileOutputStream(file, append)
 
   //***** String(text), Reader/Writer *****
   override def newReader(charset: Charset): BufferedReader =

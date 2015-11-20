@@ -1,10 +1,12 @@
 package org.waman.gluino.io.objectstream
 
-import java.io.ObjectOutputStream
-import java.nio.file.Path
+import java.io.{ObjectInputStream, ObjectOutputStream}
+import java.nio.file.{Files, Path}
 
 import org.scalamock.scalatest.MockFactory
 import org.waman.gluino.io.GluinoIOCustomSpec
+
+import scala.collection.mutable
 
 trait ObjectOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
 
@@ -37,6 +39,25 @@ trait ObjectOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
       __Verify__
       result should be (closed)
     }
+
+    "be able to use with the loan pattern" in new SUT{
+      __Exercise__
+      sut.withObjectOutputStream { oos =>
+        contentObjects.foreach(oos.writeObject(_))
+      }
+      __Verify__
+      objects(destPath) should contain theSameElementsInOrderAs contentObjects
+    }
+  }
+
+  def objects(path: Path): Seq[AnyRef] = {
+    val result = new mutable.MutableList[AnyRef]
+    val ois = new ObjectInputStream(Files.newInputStream(path))
+    result += ois.readObject()
+    result += ois.readObject()
+    result += ois.readObject()
+    ois.close()
+    result
   }
 }
 

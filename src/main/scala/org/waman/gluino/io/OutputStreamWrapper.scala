@@ -18,16 +18,21 @@ trait OutputStreamWrapperLike[T <: OutputStreamWrapperLike[T]]
   def withOutputStream[R](consumer: OutputStream => R): R = {
     val os = getOutputStream
     try{
-      consumer(os)
-    }finally{
+      val result = consumer(os)
       os.flush()
-      os.close()
-    }
+      result
+    }finally os.close()
   }
 
   // append, <<
   def append(input: Outputtable): Unit = input.outputTo(getOutputStream)
   def <<(input: Outputtable): T = { append(input); this }
+
+  override def append(input: Writable): Unit = {
+    val w = getWriter
+    input.writeTo(w)
+    w.flush()
+  }
 
   //***** WriterWrapper methods with Charset  *****
   override protected def getWriter: BufferedWriter = newWriter(defaultCharset)
@@ -60,19 +65,18 @@ class OutputStreamWrapper private (private[io] val stream: OutputStream)
 
   override protected def getOutputStream: OutputStream = stream
 
-  override def close(): Unit = {
-    stream.flush()
-    stream.close()
-  }
+  override def close(): Unit = stream.close()
 }
 
 object OutputStreamWrapper{
 
   def apply(stream: OutputStream): OutputStreamWrapper = new OutputStreamWrapper(stream)
 
+  def apply(path: Path): OutputStreamWrapper = apply(path, append = false)
   def apply(path: Path, append: Boolean): OutputStreamWrapper =
     if(append) apply(Files.newOutputStream(path, StandardOpenOption.APPEND))
     else apply(Files.newOutputStream(path))
 
+  def apply(file: File): OutputStreamWrapper = apply(file, append = false)
   def apply(file: File, append: Boolean): OutputStreamWrapper = apply(file.toPath, append)
 }

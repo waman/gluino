@@ -42,6 +42,15 @@ trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
       __Verify__
       result should be (closed)
     }
+
+    "be able to use with the loan pattern" in new SUT{
+      __Exercise__
+      sut.withPrintWriter { pw =>
+        pw.write(contentAsString)
+      }
+      __Verify__
+      text(destPath) should equal (contentAsString)
+    }
   }
 
   // PrintWriterWrapper#append() is not implicitly applied due to overloading
@@ -53,9 +62,9 @@ trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
     text(destPath) should equal (contentAsString + "fourth line.")
   }
 
-  "<< operator for Writable should" - {
+  "<< operator for Writable (in PrintWriterWrapper) should" - {
 
-    "append the specified Writable to the writer" in new SUTWithContent {
+    "append the specified Writable to the PrintWriter" in new SUTWithContent {
       __Exercise__
       sut << "fourth line."
       closeIfCloseable(sut)
@@ -63,7 +72,7 @@ trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
       text(destPath) should equal (contentAsString + "fourth line.")
     }
 
-    "sequentially append the specified Writables to the writer" in new SUTWithContent {
+    "sequentially append the specified Writables to the PrintWriter" in new SUTWithContent {
       __Exercise__
       sut << "fourth " << "line." << sep
       closeIfCloseable(sut)
@@ -88,7 +97,7 @@ trait CloseablePrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
     val sut = newPrintWriterWrapperLike(destPath)
   }
 
-  "Some methods of PrintWriterWrapperLike trait should not close reader after use" - {
+  "Some methods of PrintWriterWrapperLike trait should NOT close the PrintWriter after use" - {
 
     /** WriterWrapper#append() is not implicitly applied due to overloading */
     "WriterWrapper#append() method" in new SUT{

@@ -10,11 +10,10 @@ trait ObjectOutputStreamWrapperLike{
   def withObjectOutputStream[R](consumer: ObjectOutputStream => R): R = {
     val oos = getObjectOutputStream
     try{
-      consumer(oos)
-    }finally{
+      val result = consumer(oos)
       oos.flush()
-      oos.close()
-    }
+      result
+    }finally oos.close()
   }
 }
 

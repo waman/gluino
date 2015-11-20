@@ -13,20 +13,18 @@ trait ObjectInputStreamWrapperLike{
     val ois = getObjectInputStream
     try{
       consumer(ois)
-    }finally{
-      ois.close()
-    }
+    }finally ois.close()
   }
 
   def eachAnyRef(consumer: AnyRef => Unit): Unit = withObjectInputStream{ ois =>
     @tailrec
-    def readAnyRef(): Unit = {
+    def consumeAnyRefRecurse(): Unit = {
       consumer(ois.readObject())
-      readAnyRef()
+      consumeAnyRefRecurse()
     }
 
     try{
-      readAnyRef()
+      consumeAnyRefRecurse()
     }catch{
       case ex: EOFException =>
       case ex: IOException => throw ex
@@ -34,10 +32,12 @@ trait ObjectInputStreamWrapperLike{
   }
 
   def readAnyRefs(n: Int): Seq[AnyRef] = withObjectInputStream{ ois =>
+    if(n < 0) throw new IllegalArgumentException("Argument integer must be greater than or equal to 0, actual: "+n)
+
     @tailrec
-    def readAnyRefRecurse(seq: Seq[AnyRef], i: Int): Seq[AnyRef] = i match {
-      case 0 => seq
-      case _ => readAnyRefRecurse(seq :+ ois.readObject(), i-1)
+    def readAnyRefRecurse(accum: Seq[AnyRef], i: Int): Seq[AnyRef] = i match {
+      case 0 => accum
+      case _ => readAnyRefRecurse(accum :+ ois.readObject(), i-1)
     }
 
     readAnyRefRecurse(Nil, n)

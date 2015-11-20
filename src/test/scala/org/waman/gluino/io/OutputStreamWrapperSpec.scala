@@ -50,6 +50,15 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
       __Verify__
       result should be (closed)
     }
+
+    "be able to use with the loan pattern" in new SUT{
+      __Exercise__
+      sut.withOutputStream { os =>
+        os.write(contentAsStringISO2022.getBytes(ISO2022))
+      }
+      __Verify__
+      text(destPath, ISO2022) should equal (contentAsStringISO2022)
+    }
   }
 
   // OutputStreamWrapper#append() is not implicitly applied due to overloading
@@ -93,7 +102,7 @@ trait CloseableOutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
     val sut = newOutputStreamWrapperLike(destPath)
   }
 
-  "Methods of OutputStreamWrapperLike trait should not close reader after use" - {
+  "Methods of OutputStreamWrapperLike trait should NOT close reader after use" - {
 
     /** WriterWrapper#append() is not implicitly applied due to overloading */
     "OutputStreamWrapper#append() method" in new SUT{

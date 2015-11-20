@@ -11,9 +11,7 @@ trait DataInputStreamWrapperLike {
     val dis = getDataInputStream
     try{
       consumer(dis)
-    }finally{
-      dis.close()
-    }
+    }finally dis.close()
   }
 }
 

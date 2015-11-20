@@ -1,7 +1,7 @@
 package org.waman.gluino.io
 
 import scala.language.implicitConversions
-import java.io.{BufferedReader, InputStream, OutputStream, Writer}
+import java.io._
 
 trait AppendableConverter extends GluinoIO{
 
@@ -20,6 +20,9 @@ trait AppendableConverter extends GluinoIO{
   implicit def convertStringToWritable(text: String): Writable = new Writable{
     override def writeTo(writer: Writer): Unit = writer.write(text)
   }
+
+  implicit def convertReaderToWritable(reader: Reader): Writable =
+    convertBufferedReaderToWritable(new BufferedReader(reader))
 
   implicit def convertBufferedReaderToWritable(reader: BufferedReader): Writable = new Writable{
     override def writeTo(writer: Writer): Unit = reader.eachLine(line => writer.writeLine(line))

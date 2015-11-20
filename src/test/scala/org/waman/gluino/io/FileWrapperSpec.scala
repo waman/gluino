@@ -10,7 +10,7 @@ trait FileWrapperLikeSpec[T <: FileWrapperLike[T]]
   protected def newFileWrapperLike(path: Path): T
 
   override protected def newInputStreamWrapperLike(path: Path) = newFileWrapperLike(path)
-  override protected def newOutputStreamWrapperLike(dest: Path) = newFileWrapperLike(dest)
+  override protected def newOutputStreamWrapperLike(path: Path) = newFileWrapperLike(path)
 }
 
 class FileWrapperSpec extends FileWrapperLikeSpec[FileWrapper] with GluinoFile{

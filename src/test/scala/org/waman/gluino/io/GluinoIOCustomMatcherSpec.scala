@@ -83,10 +83,6 @@ class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
 
     "ObjectInputStream, ObjectInputStreamWrapper" - {
 
-      "ObjectInputStream test" in new ObjectInputStreamFixture {
-
-      }
-
       "verify the ObjectInputStream to be closed" in new ObjectInputStreamFixture {
         __Exercise__
         ois.close()

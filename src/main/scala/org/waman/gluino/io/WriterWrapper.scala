@@ -15,18 +15,17 @@ trait WriterWrapperLike[T <: WriterWrapperLike[T]]
   def withWriter[R](consumer: BufferedWriter => R): R = {
     val writer = getWriter
     try{
-      consumer(writer)
-    }finally{
+      val result = consumer(writer)
       writer.flush()
-      writer.close()
-    }
+      result
+    }finally writer.close()
   }
 
   override def append(input: Writable): Unit = input.writeTo(getWriter)
 }
 
 class WriterWrapper private (private[io] val writer: BufferedWriter)
-    extends WriterWrapperLike[WriterWrapper] with Closeable{
+    extends WriterWrapperLike[WriterWrapper] with Closeable {
 
   override protected def getWriter: BufferedWriter = writer
 
@@ -38,17 +37,13 @@ class WriterWrapper private (private[io] val writer: BufferedWriter)
 
   def writeLines(lines: Seq[String]): Unit = {
     val w = getWriter
-    lines.foreach{ line =>
+    lines.foreach { line =>
       w.write(line)
       w.write(lineSeparator)
     }
   }
 
-  /** flush and close the inner writer. */
-  override def close(): Unit = {
-    writer.flush()
-    writer.close()
-  }
+  override def close(): Unit = writer.close()
 }
 
 object WriterWrapper{

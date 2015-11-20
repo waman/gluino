@@ -15,8 +15,8 @@ trait DataInputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
     val sut = newDataInputStreamWrapperLike(destPath)
   }
 
-  private trait SUTWithContent extends SUT{
-    initFile(destPath)
+  private trait SUTWithContent extends DestFileWithDataFixture{
+    val sut = newDataInputStreamWrapperLike(destPath)
   }
 
   private def initFile(path: Path): Unit = {

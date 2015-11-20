@@ -1,7 +1,7 @@
 package org.waman.gluino.io.datastream
 
 import java.io.DataOutputStream
-import java.nio.file.Path
+import java.nio.file.{Files, Path}
 
 import org.waman.gluino.io.GluinoIOCustomSpec
 
@@ -35,6 +35,19 @@ trait DataOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
       }
       __Verify__
       result should be (closed)
+    }
+
+    "be able to use with the loan pattern" in new SUT{
+      __Exercise__
+      sut.withDataOutputStream { dos =>
+        dos.writeInt(1)
+        dos.writeLong(2L)
+        dos.writeDouble(3.0d)
+        dos.writeUTF("UTF")
+        dos.writeBytes("string")
+      }
+      __Verify__
+      Files.readAllBytes(destPath) should equal (Files.readAllBytes(readOnlyPathData))
     }
   }
 }
