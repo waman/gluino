@@ -3,17 +3,37 @@ package org.waman.gluino.io
 import java.io.File
 import java.nio.file.Path
 
-trait FileWrapperLikeSpec[T <: FileWrapperLike[T]]
+trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
     extends InputStreamWrapperLikeSpec
-    with OutputStreamWrapperLikeSpec[T]{
+    with OutputStreamWrapperLikeSpec[W]{
 
-  protected def newFileWrapperLike(path: Path): T
+  protected def newFileWrapperLike(path: Path): W
 
   override protected def newInputStreamWrapperLike(path: Path) = newFileWrapperLike(path)
   override protected def newOutputStreamWrapperLike(path: Path) = newFileWrapperLike(path)
+
+  private trait FileSUT extends DestFileFixture{
+    val sut = newFileWrapperLike(destPath)
+  }
+
+  "delete() method should" - {
+
+    "delete the file" in new FileSUT{
+      __Exercise__
+      sut.delete()
+      __Verify__
+      destPath should not (exist)
+    }
+  }
+
+  "***** File Operations through Files and/or Directory Structure *****" - {
+
+    "eachFile() method should" - {
+    }
+  }
 }
 
-class FileWrapperSpec extends FileWrapperLikeSpec[FileWrapper] with GluinoFile{
+class FileWrapperSpec extends FileWrapperLikeSpec[File, FileWrapper] with GluinoFile{
 
   trait FileOperationFixture{
     val file = new File("path/to/some/dir")

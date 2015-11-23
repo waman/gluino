@@ -3,7 +3,9 @@ package org.waman.gluino.io
 import java.io._
 import java.nio.charset.Charset
 
-class FileWrapper(file: File) extends FileWrapperLike[FileWrapper]{
+class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
+
+  override def wrap(file: File): FileWrapper = new FileWrapper(file)
 
   //***** Path Operation *****
   def /(child: String): File = new File(file.getPath + "/" + child)
@@ -25,4 +27,25 @@ class FileWrapper(file: File) extends FileWrapperLike[FileWrapper]{
 
   override def newWriter(charset: Charset, append: Boolean): BufferedWriter =
     new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), charset))
+
+  //***** File Operation *****
+  override def isFile: Boolean = file.isFile
+  override def isDirectory: Boolean = file.isDirectory
+
+//  override def rename(name: String): Boolean = file.renameTo(new File(name))
+  override def delete(): Option[IOException] = {
+    file.delete() match {
+      case true => Option.empty
+      case false =>
+        if(!file.exists())
+          Some(new FileNotFoundException(file.getAbsolutePath))
+        else
+          Some(new IOException())
+    }
+  }
+
+  override protected def getFileFilterProvider: FileTypeFilterProvider[File] =
+    GluinoFile.FileFileTypeFilterProvider
+
+  override def eachFile(consumer: File => Unit): Unit = ???
 }

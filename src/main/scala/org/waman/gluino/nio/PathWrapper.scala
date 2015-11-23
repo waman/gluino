@@ -4,11 +4,15 @@ import java.io._
 import java.nio.charset.Charset
 import java.nio.file.{Files, Path, Paths, StandardOpenOption}
 
-import org.waman.gluino.io.FileWrapperLike
+import org.waman.gluino.function.GluinoFunction
+import org.waman.gluino.io.{FileTypeFilterProvider, FileWrapperLike}
 
 import scala.collection.JavaConversions._
 
-class PathWrapper(path: Path) extends FileWrapperLike[PathWrapper]{
+class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
+    with GluinoFunction{
+
+  override def wrap(path: Path): PathWrapper = new PathWrapper(path)
 
   //***** Path Operation *****
   def /(child: String): Path = /(Paths.get(child))
@@ -39,4 +43,35 @@ class PathWrapper(path: Path) extends FileWrapperLike[PathWrapper]{
   override def text_= (text: String) = Files.write(path, List(text))
   override def setText(text: String, charset: Charset) =
     Files.write(path, List(text), charset)
+
+  //***** File Operation *****
+  override protected def getFileFilterProvider: FileTypeFilterProvider[Path] =
+    GluinoPath.PathFileTypeFilterProvider
+
+  override def isFile: Boolean = Files.isRegularFile(path)
+  override def isDirectory: Boolean = Files.isDirectory(path)
+
+//  override def rename(name: String): Boolean = try {
+//    Files.move(path, Paths.get(name))
+//    true
+//  }catch {
+//    case _: Exception => false
+//  }
+
+  override def delete(): Option[IOException] = {
+    try{
+      Files.delete(path)
+      Option.empty
+    }catch{
+      case ex: IOException => Some(ex)
+    }
+  }
+
+  //***** File *****
+  override def eachFile(consumer: Path => Unit): Unit = {
+    val ds = Files.list(path)
+    try{
+      Files.list(path).foreach(consumer)
+    }finally ds.close()
+  }
 }

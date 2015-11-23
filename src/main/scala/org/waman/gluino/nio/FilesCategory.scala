@@ -44,7 +44,7 @@ class FilesCategory(path: Path) extends GluinoFunction{
   def exists(options: Set[LinkOption]): Boolean = Files.exists(path, options.toArray:_*)
   def notExists: Boolean = Files.notExists(path)
   def	notExists(options: Set[LinkOption]): Boolean = Files.notExists(path, options.toArray:_*)
-  def delete(): Unit = Files.delete(path)
+//  def delete(): Unit = Files.delete(path)
   def	deleteIfExists(): Boolean = Files.deleteIfExists(path)
 
   // copy/move

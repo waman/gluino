@@ -15,7 +15,7 @@ class FilesCategorySpec extends FlatSpec with Matchers with GluinoPath{
   //  }
 
   "lastModified = " should "update lastModified attribute of a file with ZonedDateTime object" in {
-    val path = Files.createTempFile(null, null)
+    val path = GluinoPath.createTempFile()
     val time0 = path.lastModifiedTime
 
     val zdt = ZonedDateTime.of(2015, 10, 1, 0, 0, 0, 0, ZoneId.systemDefault)
@@ -32,7 +32,7 @@ class FilesCategorySpec extends FlatSpec with Matchers with GluinoPath{
   }
 
   "lines" should "list lines in the file as Stream" in {
-    val path = Files.createTempFile(null, null)
+    val path = GluinoPath.createTempFile()
     Files.write(path, Seq("first line.", "second line.", "third line."))
 
     path.lines{ ls =>

@@ -1,11 +1,10 @@
 package org.waman.gluino.nio
 
-import java.io.{BufferedWriter, BufferedReader, OutputStream, InputStream}
 import java.net.URI
 import java.nio.file._
 import java.nio.file.attribute._
 
-import org.waman.gluino.io.AppendableConverter
+import org.waman.gluino.io.{AppendableConverter, FileTypeFilterProvider}
 
 import scala.collection.JavaConversions._
 import scala.language.implicitConversions
@@ -18,13 +17,21 @@ trait GluinoPath extends AttributeConverter with AppendableConverter{
   def createTempFile(dir: Path = tempDir,
                      prefix: String = null,
                      suffix: String = null,
-                     attributes: Set[FileAttribute[_]] = Set()): Path =
-    Files.createTempFile(dir, prefix, suffix, attributes.toArray:_*)
+                     deleteOnExit: Boolean = true,
+                     attributes: Set[FileAttribute[_]] = Set()): Path = {
+    val file = Files.createTempFile(dir, prefix, suffix, attributes.toArray:_*)
+    if(deleteOnExit)file.toFile.deleteOnExit()
+    file
+  }
 
   def createTempDirectory(dir: Path = tempDir,
                           prefix: String = null,
-                          attributes: Set[FileAttribute[_]] = Set()): Path =
-    Files.createTempDirectory(dir, prefix, attributes.toArray:_*)
+                          deleteOnExit: Boolean = true,
+                          attributes: Set[FileAttribute[_]] = Set()): Path = {
+    val td = Files.createTempDirectory(dir, prefix, attributes.toArray:_*)
+    if(deleteOnExit)td.toFile.deleteOnExit()
+    td
+  }
 
 
   //***** Path Creation *****
@@ -39,6 +46,16 @@ trait GluinoPath extends AttributeConverter with AppendableConverter{
   //***** Path Wrappers *****
   implicit def wrapPath(path: Path): PathWrapper = new PathWrapper(path)
   implicit def convertPathToFilesCategory(path: Path): FilesCategory = new FilesCategory(path)
+
+  //***** FileType *****
+  implicit object PathFileTypeFilterProvider extends FileTypeFilterProvider[Path] {
+
+    override def getFilterForFile: Path => Boolean =
+      path => new PathWrapper(path).isFile
+
+    override def getFilterForDirectory: Path => Boolean =
+      path => new PathWrapper(path).isDirectory
+  }
 
   //***** Conversion of Path to Stream, Reader/Writer *****
 //  implicit def convertPathToFile(path: Path): java.io.File = path.toFile

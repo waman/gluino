@@ -5,7 +5,7 @@ import java.nio.file.{Path, Paths}
 import org.waman.gluino.io.FileWrapperLikeSpec
 
 class PathWrapperSpec
-    extends FileWrapperLikeSpec[PathWrapper]
+    extends FileWrapperLikeSpec[Path, PathWrapper]
     with GluinoPath {
 
   override protected def newFileWrapperLike(path: Path): PathWrapper = new PathWrapper(path)

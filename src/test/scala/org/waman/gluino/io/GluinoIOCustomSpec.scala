@@ -4,6 +4,7 @@ import java.io._
 import java.nio.charset.Charset
 import java.nio.file.{Files, Path, StandardOpenOption}
 
+import org.scalatest.enablers.{Size, Readability, Writability, Existence}
 import org.scalatest.matchers.{BeMatcher, MatchResult}
 import org.scalatest.{FreeSpec, Matchers}
 import org.waman.gluino.FourPhaseInformer
@@ -79,7 +80,7 @@ trait GluinoIOCustomSpec extends FreeSpec with Matchers with FourPhaseInformer{
   lazy val readOnlyFileISO2022 = readOnlyPathISO2022.toFile
 
   def createReadOnlyFileISO2022(): Path = {
-    val path = Files.createTempFile(null, null)
+    val path = GluinoPath.createTempFile()
     Files.write(path, contentISO2022, ISO2022)
     path
   }
@@ -189,4 +190,16 @@ trait GluinoIOCustomSpec extends FreeSpec with Matchers with FourPhaseInformer{
   }
 
   def closed = not(opened)
+
+  implicit object PathEnabler extends Existence[Path]
+      with Readability[Path] with Writability[Path] with Size[Path]{
+
+    override def exists(path: Path): Boolean = Files.exists(path)
+
+    override def isReadable(path: Path): Boolean = Files.isReadable(path)
+
+    override def isWritable(path: Path): Boolean = Files.isWritable(path)
+
+    override def sizeOf(path: Path): Long = Files.size(path)
+  }
 }
