@@ -1,7 +1,11 @@
 package org.waman.gluino.io
 
-import java.io.File
-import java.nio.file.Path
+import java.io.{IOException, File}
+import java.nio.file.{Files, Path}
+
+import org.waman.gluino.nio.GluinoPath
+
+import org.scalatest.OptionValues._
 
 trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
     extends InputStreamWrapperLikeSpec
@@ -12,17 +16,63 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
   override protected def newInputStreamWrapperLike(path: Path) = newFileWrapperLike(path)
   override protected def newOutputStreamWrapperLike(path: Path) = newFileWrapperLike(path)
 
-  private trait FileSUT extends DestFileFixture{
+  trait FileWrapperLike_FileFixture extends DestFileFixture{
     val sut = newFileWrapperLike(destPath)
   }
 
-  "delete() method should" - {
+  trait DestDirectoryFixture{
+    val destPath = GluinoPath.createTempDirectory()
+    lazy val destFile = destPath.toFile
+  }
 
-    "delete the file" in new FileSUT{
-      __Exercise__
-      sut.delete()
-      __Verify__
-      destPath should not (exist)
+  trait FileWrapperLike_DirectoryFixture extends DestDirectoryFixture{
+    val sut = newFileWrapperLike(destPath)
+  }
+
+  trait DestDirectoryWithAFileFixture extends DestDirectoryFixture{
+    val childPath = GluinoPath.createTempFile(destPath)
+    lazy val childFile = childPath.toFile
+  }
+
+  trait FileWrapperLike_DirectoryWithAFileFixture extends DestDirectoryWithAFileFixture{
+    val sut = newFileWrapperLike(destPath)
+  }
+
+  "***** File Operations *****" - {
+
+    "delete() method should" - {
+
+      "delete the file" in new FileWrapperLike_FileFixture{
+        __Exercise__
+        sut.delete()
+        __Verify__
+        destPath should not (exist)
+      }
+
+      "delete the directory" in new FileWrapperLike_DirectoryFixture {
+        __Exercise__
+        sut.delete()
+        __Verify__
+        destPath should not (exist)
+      }
+
+      "RETURN an Option[IOException] if the file does not exist" in
+        new FileWrapperLike_FileFixture {
+          __SetUp__
+          Files.delete(destPath)
+          __Exercise__
+          val result = sut.delete()
+          __Verify__
+          result.value should be (a [IOException])
+        }
+
+      "RETURN an Option[IOException] if the directory is not empty" in
+        new FileWrapperLike_DirectoryWithAFileFixture {
+          __Exercise__
+          val result = sut.delete()
+          __Verify__
+          result.value should be (a [IOException])
+        }
     }
   }
 

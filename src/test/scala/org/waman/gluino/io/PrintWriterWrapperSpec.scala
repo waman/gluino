@@ -93,21 +93,21 @@ trait CloseablePrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
     extends PrintWriterWrapperLikeSpec[T]
     with MockFactory{
 
-  private trait SUT extends DestFileFixture{
+  trait PrintWriterWrapperLikeFixture extends DestFileFixture{
     val sut = newPrintWriterWrapperLike(destPath)
   }
 
   "Some methods of PrintWriterWrapperLike trait should NOT close the PrintWriter after use" - {
 
     /** WriterWrapper#append() is not implicitly applied due to overloading */
-    "WriterWrapper#append() method" in new SUT{
+    "WriterWrapper#append() method" in new PrintWriterWrapperLikeFixture{
       __Exercise__
       sut.append("first line.")
       __Verify__
       sut should be (opened)
     }
 
-    "<< operator" in new SUT{
+    "<< operator" in new PrintWriterWrapperLikeFixture{
       __Exercise__
       sut << "first line."
       __Verify__

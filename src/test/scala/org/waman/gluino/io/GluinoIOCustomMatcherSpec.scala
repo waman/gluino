@@ -3,9 +3,9 @@ package org.waman.gluino.io
 import java.io._
 
 import org.waman.gluino.io.datastream.{DataInputStreamWrapper, DataOutputStreamWrapper}
-import org.waman.gluino.io.objectstream.{ObjectInputStreamWrapper, ObjectOutputStreamWrapper}
+import org.waman.gluino.io.objectstream.{ObjectStreamFixture, ObjectInputStreamWrapper, ObjectOutputStreamWrapper}
 
-class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
+class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec with ObjectStreamFixture{
 
   "open/closed BeMatcher should" - {
 
@@ -85,34 +85,34 @@ class GluinoIOCustomMatcherSpec extends GluinoIOCustomSpec{
 
       "verify the ObjectInputStream to be closed" in new ObjectInputStreamFixture {
         __Exercise__
-        ois.close()
+        objectInput.close()
         __Verify__
-        ois should be (closed)
+        objectInput should be (closed)
         input should be (closed)
       }
 
       "verify the ObjectInputStream to be opened" in new ObjectInputStreamFixture {
         __Verify__
-        ois should be (opened)
+        objectInput should be (opened)
         input should be (opened)
       }
 
       "verify the ObjectInputStreamWrapper to be closed" in new ObjectInputStreamFixture {
         __SetUp__
-        val wrapper = ObjectInputStreamWrapper(ois)
+        val wrapper = ObjectInputStreamWrapper(objectInput)
         __Exercise__
         wrapper.close()
         __Verify__
         wrapper should be (closed)
-        ois should be (closed)
+        objectInput should be (closed)
       }
 
       "verify the ObjectInputStreamWrapper to be opened" in new ObjectInputStreamFixture {
         __SetUp__
-        val wrapper = ObjectInputStreamWrapper(ois)
+        val wrapper = ObjectInputStreamWrapper(objectInput)
         __Verify__
         wrapper should be (opened)
-        ois should be (opened)
+        objectInput should be (opened)
       }
     }
 

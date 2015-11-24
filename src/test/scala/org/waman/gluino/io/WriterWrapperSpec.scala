@@ -13,24 +13,24 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
 
   override protected def newPrintWriterWrapperLike(path: Path) = newWriterWrapperLike(path)
 
-  private trait SUT extends DestFileFixture{
+  trait WriterWrapperLikeFixture extends DestFileFixture{
     val sut = newWriterWrapperLike(destPath)
   }
 
-  private trait SUTWithContent extends DestFileWithContentFixture{
+  trait WriterWrapperLikeWithContentFixture extends DestFileWithContentFixture{
     val sut = newWriterWrapperLike(destPath)
   }
 
   "withWriter() method should" - {
 
-    "close the writer after use" in new SUT {
+    "close the writer after use" in new WriterWrapperLikeFixture {
       __Exercise__
       val result = sut.withWriter{ w => w }
       __Verify__
       result should be (closed)
     }
 
-    "close the writer when exception thrown" in new SUT {
+    "close the writer when exception thrown" in new WriterWrapperLikeFixture {
       __Exercise__
       var result: Writer = null
       try{
@@ -45,7 +45,7 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
       result should be (closed)
     }
 
-    "be able to use with the loan pattern" in new SUT{
+    "be able to use with the loan pattern" in new WriterWrapperLikeFixture{
       __Exercise__
       sut.withWriter { w =>
         w.write(contentAsString)
@@ -56,17 +56,18 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
   }
 
   // WriterWrapper#append() is not implicitly applied due to overloading
-  "append(Writable) method should append the specified lines to the writer" in new SUTWithContent{
-    __Exercise__
-    sut.append("fourth line.")
-    closeIfCloseable(sut)
-    __Verify__
-    text(destPath) should equal (contentAsString + "fourth line.")
-  }
+  "append(Writable) method should append the specified lines to the writer" in
+    new WriterWrapperLikeWithContentFixture{
+      __Exercise__
+      sut.append("fourth line.")
+      closeIfCloseable(sut)
+      __Verify__
+      text(destPath) should equal (contentAsString + "fourth line.")
+    }
 
   "<< operator for Writable (in WriterWrapper) should" - {
 
-    "append the specified Writable to the writer" in new SUTWithContent {
+    "append the specified Writable to the writer" in new WriterWrapperLikeWithContentFixture {
       __Exercise__
       sut << "fourth line."
       closeIfCloseable(sut)
@@ -74,13 +75,14 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
       text(destPath) should equal (contentAsString + "fourth line.")
     }
 
-    "sequentially append the specified Writables to the writer" in new SUTWithContent {
-      __Exercise__
-      sut << "fourth " << "line." << sep
-      closeIfCloseable(sut)
-      __Verify__
-      text(destPath) should equal (contentAsString + "fourth line." + sep)
-    }
+    "sequentially append the specified Writables to the writer" in
+      new WriterWrapperLikeWithContentFixture {
+        __Exercise__
+        sut << "fourth " << "line." << sep
+        closeIfCloseable(sut)
+        __Verify__
+        text(destPath) should equal (contentAsString + "fourth line." + sep)
+      }
   }
 }
 
@@ -118,43 +120,41 @@ class WriterWrapperSpec
     }
   }
 
-  private trait SUT extends DestFileWithContentFixture{
-    val sut = newWriterWrapperLike(destPath)
-  }
-
   "writeLine(String) method should" - {
 
-    "NOT close the writer" in new SUT{
+    "NOT close the writer" in new WriterWrapperLikeFixture{
       __Exercise__
       sut.writeLine("first line.")
       __Verify__
       sut should be (opened)
     }
 
-    "write down the specified line to the writer" in new SUT{
-      __Exercise__
-      sut.writeLine("fourth line.")
-      sut.close()
-      __Verify__
-      text(destPath) should equal (contentAsString + "fourth line." + sep)
-    }
+    "write down the specified line (followed by a line separator) to the writer" in
+      new WriterWrapperLikeWithContentFixture{
+        __Exercise__
+        sut.writeLine("fourth line.")
+        sut.close()
+        __Verify__
+        text(destPath) should equal (contentAsString + "fourth line." + sep)
+      }
   }
 
   "writeLines(Seq[String]) method should" - {
 
-    "NOT close the writer" in new SUT{
+    "NOT close the writer" in new WriterWrapperLikeFixture{
       __Exercise__
       sut.writeLines(Seq("first line.", "second line."))
       __Verify__
       sut should be (opened)
     }
 
-    "write down the specified lines to the writer" in new SUT {
-      __Exercise__
-      sut.writeLines(Seq("fourth line.", "fifth line."))
-      sut.close()
-      __Verify__
-      text(destPath) should equal (contentAsString + "fourth line." + sep + "fifth line." + sep)
-    }
+    "write down the specified lines (each line is followed by a line separator) to the writer" in
+      new WriterWrapperLikeWithContentFixture {
+        __Exercise__
+        sut.writeLines(Seq("fourth line.", "fifth line."))
+        sut.close()
+        __Verify__
+        text(destPath) should equal (contentAsString + "fourth line." + sep + "fifth line." + sep)
+      }
   }
 }

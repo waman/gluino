@@ -19,24 +19,24 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
   override protected def newObjectOutputStreamWrapperLike(path: Path) = newOutputStreamWrapperLike(path)
   override protected def newDataOutputStreamWrapperLike(path: Path) = newOutputStreamWrapperLike(path)
 
-  private trait SUT extends DestFileFixture{
-    val sut = newWriterWrapperLike(destPath)
+  trait OutputStreamWrapperLikeFixture extends DestFileFixture{
+    val sut = newOutputStreamWrapperLike(destPath)
   }
 
-  private trait SUTWithContent extends DestFileWithContentISO2022Fixture{
-    val sut = newWriterWrapperLike(destPath)
+  trait OutputStreamWrapperLikeISO2022Fixture extends DestFileWithContentISO2022Fixture{
+    val sut = newOutputStreamWrapperLike(destPath)
   }
 
   "withOutputStream() method should" - {
 
-    "close the stream after use" in new SUT {
+    "close the stream after use" in new OutputStreamWrapperLikeFixture {
       __Exercise__
       val result = sut.withOutputStream{ os => os }
       __Verify__
       result should be (closed)
     }
 
-    "close the stream when exception thrown" in new SUT {
+    "close the stream when exception thrown" in new OutputStreamWrapperLikeFixture {
       __Exercise__
       var result: OutputStream = null
       try{
@@ -51,7 +51,7 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
       result should be (closed)
     }
 
-    "be able to use with the loan pattern" in new SUT{
+    "be able to use with the loan pattern" in new OutputStreamWrapperLikeFixture{
       __Exercise__
       sut.withOutputStream { os =>
         os.write(contentAsStringISO2022.getBytes(ISO2022))
@@ -62,17 +62,18 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
   }
 
   // OutputStreamWrapper#append() is not implicitly applied due to overloading
-  "append(Outputtable) method should append the specified bytes to the stream" in new SUTWithContent{
-    __Exercise__
-    sut.append("4行目".getBytes(ISO2022))
-    closeIfCloseable(sut)
-    __Verify__
-    text(destPath, ISO2022) should equal (contentAsStringISO2022 + "4行目")
-  }
+  "append(Outputtable) method should append the specified bytes to the stream" in
+    new OutputStreamWrapperLikeISO2022Fixture{
+      __Exercise__
+      sut.append("4行目".getBytes(ISO2022))
+      closeIfCloseable(sut)
+      __Verify__
+      text(destPath, ISO2022) should equal (contentAsStringISO2022 + "4行目")
+    }
 
   "<< operator for Outputtable should" - {
 
-    "append the specified Outputtable to the stream" in new SUTWithContent {
+    "append the specified Outputtable to the stream" in new OutputStreamWrapperLikeISO2022Fixture {
       __Exercise__
       sut << "4行目".getBytes(ISO2022)
       closeIfCloseable(sut)
@@ -80,13 +81,14 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
       text(destPath, ISO2022) should equal(contentAsStringISO2022 + "4行目")
     }
 
-    "sequentially append the specified Writables to the writer" in new SUTWithContent {
-      __Exercise__
-      sut << "4行目".getBytes(ISO2022) << sep.getBytes(ISO2022)
-      closeIfCloseable(sut)
-      __Verify__
-      text(destPath, ISO2022) should equal(contentAsStringISO2022 + "4行目" + sep)
-    }
+    "sequentially append the specified Writables to the writer" in
+      new OutputStreamWrapperLikeISO2022Fixture {
+        __Exercise__
+        sut << "4行目".getBytes(ISO2022) << sep.getBytes(ISO2022)
+        closeIfCloseable(sut)
+        __Verify__
+        text(destPath, ISO2022) should equal(contentAsStringISO2022 + "4行目" + sep)
+      }
   }
 
   def text(path: Path, charset: Charset): String = new String(Files.readAllBytes(path), charset)
@@ -98,21 +100,17 @@ trait CloseableOutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
     with CloseableObjectOutputStreamWrapperLikeSpec
     with CloseableDataOutputStreamWrapperLikeSpec{
 
-  private trait SUT extends DestFileFixture{
-    val sut = newOutputStreamWrapperLike(destPath)
-  }
-
   "Methods of OutputStreamWrapperLike trait should NOT close reader after use" - {
 
     /** WriterWrapper#append() is not implicitly applied due to overloading */
-    "OutputStreamWrapper#append() method" in new SUT{
+    "OutputStreamWrapper#append() method" in new OutputStreamWrapperLikeFixture{
       __Exercise__
       sut.append("first line.")
       __Verify__
       sut should be (opened)
     }
 
-    "<< operator" in new SUT{
+    "<< operator" in new OutputStreamWrapperLikeFixture{
       __Exercise__
       sut << "first line."
       __Verify__

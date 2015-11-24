@@ -12,20 +12,20 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
 
   protected def newReaderWrapperLike(path: Path): ReaderWrapperLike
 
-  private trait SUT {
+  trait ReaderWrapperLikeFixture {
     val sut = newReaderWrapperLike(readOnlyPath)
   }
 
   "withReader() method should" - {
 
-    "close the reader after use" in new SUT {
+    "close the reader after use" in new ReaderWrapperLikeFixture {
       __Exercise__
       val result = sut.withReader{ r => r }
       __Verify__
       result should be (closed)
     }
 
-    "close the reader when exception thrown" in new SUT {
+    "close the reader when exception thrown" in new ReaderWrapperLikeFixture {
       __Exercise__
       var result: Reader = null
       try{
@@ -40,7 +40,7 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
       result should be (closed)
     }
 
-    "be able to use with the loan pattern" in new SUT {
+    "be able to use with the loan pattern" in new ReaderWrapperLikeFixture {
       __SetUp__
       val result = new mutable.StringBuilder
       __Exercise__
@@ -57,7 +57,7 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
   }
 
   "***** text *****" - {
-    "eachChar() method should read characters one by one" in new SUT{
+    "eachChar() method should read characters one by one" in new ReaderWrapperLikeFixture{
       __SetUp__
       var sum = 0
       __Exercise__
@@ -66,20 +66,21 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
       sum should equal(contentAsString.foldLeft(0)(_ + _.asInstanceOf[Int]))
     }
 
-    "transformChar() method should transform each char and write down to the specified writer" in new SUT{
-      new WriterFixture {
-        __Exercise__
-        sut.transformChar(writer){
-          case v if "aeiou" contains v => Character.toUpperCase(v)
-          case c => c
+    "transformChar() method should transform each char and write down to the specified writer" in
+      new ReaderWrapperLikeFixture{
+        new WriterFixture {
+          __Exercise__
+          sut.transformChar(writer){
+            case v if "aeiou" contains v => Character.toUpperCase(v)
+            case c => c
+          }
+          __Verify__
+          Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+            List("fIrst lInE.", "sEcOnd lInE.", "thIrd lInE.")
         }
-        __Verify__
-        Files.readAllLines(destPath) should contain theSameElementsInOrderAs
-          List("fIrst lInE.", "sEcOnd lInE.", "thIrd lInE.")
       }
-    }
 
-    "text method should return file content as String" in new SUT{
+    "text method should return file content as String" in new ReaderWrapperLikeFixture{
       __Verify__
       sut.text should be (contentAsString)
     }
@@ -87,45 +88,48 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
 
   "***** lines *****" - {
 
-    "eachLines(String => Unit) method should read lines one by one" in new SUT{
-      __SetUp__
-      val result = new mutable.ListBuffer[String]
-      __Exercise__
-      sut.eachLine(result += _)
-      __Verify__
-      result should contain theSameElementsInOrderAs content
-    }
+    "eachLines(String => Unit) method should read lines one by one" in
+      new ReaderWrapperLikeFixture{
+        __SetUp__
+        val result = new mutable.ListBuffer[String]
+        __Exercise__
+        sut.eachLine(result += _)
+        __Verify__
+        result should contain theSameElementsInOrderAs content
+      }
 
     "eachLine(Int)((String, Int) => Unit) method should" - {
 
-      "read lines one by one with line number. The first arg specifies the starting number." in new SUT{
-        __SetUp__
-        val result = new mutable.ListBuffer[String]
-        __Exercise__
-        sut.eachLine(1)((s, n) => result += s"""$n. $s""")
-        __Verify__
-        result should contain theSameElementsInOrderAs List(
-          "1. first line.",
-          "2. second line.",
-          "3. third line."
-        )
-      }
+      "read lines one by one with line number. The first arg specifies the starting number." in
+        new ReaderWrapperLikeFixture{
+          __SetUp__
+          val result = new mutable.ListBuffer[String]
+          __Exercise__
+          sut.eachLine(1)((s, n) => result += s"""$n. $s""")
+          __Verify__
+          result should contain theSameElementsInOrderAs List(
+            "1. first line.",
+            "2. second line.",
+            "3. third line."
+          )
+        }
 
-      "read lines one by one with line number. if the first arg omitted, line number starts at 0." in new SUT{
-        __SetUp__
-        val result = new mutable.ListBuffer[String]
-        __Exercise__
-        sut.eachLine()((s, n) => result += s"""$n. $s""")
-        __Verify__
-        result should contain theSameElementsInOrderAs List(
-          "0. first line.",
-          "1. second line.",
-          "2. third line."
-        )
-      }
+      "read lines one by one with line number. if the first arg omitted, line number starts at 0." in
+        new ReaderWrapperLikeFixture{
+          __SetUp__
+          val result = new mutable.ListBuffer[String]
+          __Exercise__
+          sut.eachLine()((s, n) => result += s"""$n. $s""")
+          __Verify__
+          result should contain theSameElementsInOrderAs List(
+            "0. first line.",
+            "1. second line.",
+            "2. third line."
+          )
+        }
     }
 
-    "splitEachLine() method should split each line by the specified regex" in new SUT{
+    "splitEachLine() method should split each line by the specified regex" in new ReaderWrapperLikeFixture{
       __SetUp__
       val result = new mutable.ListBuffer[String]()
       __Exercise__
@@ -135,19 +139,20 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
         List("first", "line.", "second", "line.", "third", "line.")
     }
 
-    "filterLine(String => Boolean) method should filter line and write down to the specified writer" in new SUT {
-      new WriterFixture {
-        __Exercise__
-        val writable = sut.filterLine(_ contains "second")
-        writable.writeTo(writer)
-        writer.close()
-        __Verify__
-        Files.readAllLines(destPath).loneElement should equal("second line.")
+    "filterLine(String => Boolean) method should filter line and write down to the specified writer" in
+      new ReaderWrapperLikeFixture {
+        new WriterFixture {
+          __Exercise__
+          val writable = sut.filterLine(_ contains "second")
+          writable.writeTo(writer)
+          writer.close()
+          __Verify__
+          Files.readAllLines(destPath).loneElement should equal("second line.")
+        }
       }
-    }
 
     "filterLine(Writer)(String => Boolean) method should filter line and write down to the specified writer" in
-      new SUT{
+      new ReaderWrapperLikeFixture{
         new WriterFixture {
           __Exercise__
           sut.filterLine(writer)(_ contains "second")
@@ -156,17 +161,18 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
         }
       }
 
-    "transformLine() method should transform each line and write down to the specified writer" in new SUT{
-      new WriterFixture {
-        __Exercise__
-        sut.transformLine(writer)(_.toUpperCase)
-        __Verify__
-        Files.readAllLines(destPath) should contain theSameElementsInOrderAs
-          List("FIRST LINE.", "SECOND LINE.", "THIRD LINE.")
+    "transformLine() method should transform each line and write down to the specified writer" in
+      new ReaderWrapperLikeFixture{
+        new WriterFixture {
+          __Exercise__
+          sut.transformLine(writer)(_.toUpperCase)
+          __Verify__
+          Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+            List("FIRST LINE.", "SECOND LINE.", "THIRD LINE.")
+        }
       }
-    }
 
-    "readLines method should read all lines in File" in new SUT{
+    "readLines method should read all lines in File" in new ReaderWrapperLikeFixture{
       __Exercise__
       val lines = sut.readLines
       __Verify__
@@ -178,21 +184,17 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
 trait CloseableReaderWrapperLikeSpec
     extends ReaderWrapperLikeSpec with MockFactory{
 
-  private trait SUT{
-    val sut = newReaderWrapperLike(readOnlyPath)
-  }
-
   "Methods of ReaderWrapperLike trait should properly close the reader after use" - {
 
     "***** text *****" - {
-      "eachChar() method" in new SUT{
+      "eachChar() method" in new ReaderWrapperLikeFixture{
         __Exercise__
         sut.eachChar { _ => }
         __Verify__
         sut should be (closed)
       }
 
-      "transformChar() method" in new SUT{
+      "transformChar() method" in new ReaderWrapperLikeFixture{
         new WriterFixture {
           __Exercise__
           sut.transformChar(writer)(c => c)
@@ -202,7 +204,7 @@ trait CloseableReaderWrapperLikeSpec
         }
       }
 
-      "text method" in new SUT{
+      "text method" in new ReaderWrapperLikeFixture{
         __Exercise__
         sut.text
         __Verify__
@@ -212,28 +214,28 @@ trait CloseableReaderWrapperLikeSpec
 
     "***** lines *****" - {
 
-      "eachLine() method" in new SUT{
+      "eachLine() method" in new ReaderWrapperLikeFixture{
         __Exercise__
         sut.eachLine{ _ => }
         __Verify__
         sut should be (closed)
       }
 
-      "eachLine(Int)((String, Int) => Unit) method" in new SUT{
+      "eachLine(Int)((String, Int) => Unit) method" in new ReaderWrapperLikeFixture{
         __Exercise__
         sut.eachLine(1){ (_, _) => }
         __Verify__
         sut should be (closed)
       }
 
-      "splitEachLine()" in new SUT{
+      "splitEachLine()" in new ReaderWrapperLikeFixture{
         __Exercise__
         sut.splitEachLine("\\s+".r){_ => }
         __Verify__
         sut should be (closed)
       }
 
-      "filterLine(String => Boolean) method " in new SUT{
+      "filterLine(String => Boolean) method " in new ReaderWrapperLikeFixture{
         new WriterFixture {
           __Exercise__
           val writable = sut.filterLine{ _ => true }
@@ -243,7 +245,7 @@ trait CloseableReaderWrapperLikeSpec
         }
       }
 
-      "filterLine(Writer)(String => Boolean) method" in new SUT{
+      "filterLine(Writer)(String => Boolean) method" in new ReaderWrapperLikeFixture{
         new WriterFixture {
           __Exercise__
           sut.filterLine(writer){ _ => true }
@@ -253,7 +255,7 @@ trait CloseableReaderWrapperLikeSpec
         }
       }
 
-      "transformLine() method" in new SUT{
+      "transformLine() method" in new ReaderWrapperLikeFixture{
         new WriterFixture {
           __Exercise__
           sut.transformLine(writer)(_.toUpperCase)
@@ -263,7 +265,7 @@ trait CloseableReaderWrapperLikeSpec
         }
       }
 
-      "readLines" in new SUT{
+      "readLines" in new ReaderWrapperLikeFixture{
         new ReaderFixture{
           __Exercise__
           sut.readLines

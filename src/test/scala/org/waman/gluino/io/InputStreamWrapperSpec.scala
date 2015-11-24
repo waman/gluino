@@ -22,24 +22,24 @@ trait InputStreamWrapperLikeSpec
   override protected def newDataInputStreamWrapperLike(path: Path) = newInputStreamWrapperLike(path)
   override protected def newObjectInputStreamWrapperLike(path: Path) = newInputStreamWrapperLike(path)
 
-  private trait SUT{
+  trait InputStreamWrapperLikeFixture{
     val sut = newInputStreamWrapperLike(readOnlyPath)
   }
 
-  private trait SUT_ISO2022{
+  trait InputStreamWrapperLikeISO2022Fixture{
     val sut = newInputStreamWrapperLike(readOnlyPathISO2022)
   }
 
   "withInputStream() method should" - {
 
-    "close the stream after use" in new SUT {
+    "close the stream after use" in new InputStreamWrapperLikeFixture {
       __Exercise__
       val result = sut.withInputStream{ is => is }
       __Verify__
       result should be (closed)
     }
 
-    "close the stream when exception thrown" in new SUT {
+    "close the stream when exception thrown" in new InputStreamWrapperLikeFixture {
       __Exercise__
       var result: InputStream = null
       try{
@@ -54,7 +54,7 @@ trait InputStreamWrapperLikeSpec
       result should be (closed)
     }
 
-    "be able to use with the loan pattern" in new SUT {
+    "be able to use with the loan pattern" in new InputStreamWrapperLikeFixture {
       __SetUp__
       var sum = 0
       __Exercise__
@@ -71,7 +71,7 @@ trait InputStreamWrapperLikeSpec
   }
 
   "***** Bytes *****" - {
-    "eachByte() method should read bytes one by one" in new SUT{
+    "eachByte() method should read bytes one by one" in new InputStreamWrapperLikeFixture{
       __SetUp__
       var sum = 0
       __Exercise__
@@ -80,7 +80,7 @@ trait InputStreamWrapperLikeSpec
       sum should equal(contentAsString.sum)
     }
 
-    "bytes method should return file content as Array[byte]" in new SUT{
+    "bytes method should return file content as Array[byte]" in new InputStreamWrapperLikeFixture{
       __Verify__
       sut.bytes should be (contentAsString.getBytes())
     }
@@ -89,7 +89,7 @@ trait InputStreamWrapperLikeSpec
   "***** Tests for methods from ReaderWrapperLike trait with encoding *****" - {
 
     "***** text *****" - {
-      "eachChar() method should read characters one by one" in new SUT_ISO2022 {
+      "eachChar() method should read characters one by one" in new InputStreamWrapperLikeISO2022Fixture {
         __SetUp__
         var sum = 0
         __Exercise__
@@ -98,7 +98,7 @@ trait InputStreamWrapperLikeSpec
         sum should equal(contentAsStringISO2022.foldLeft(0)(_ + _.asInstanceOf[Int]))
       }
 
-      "transformChar() method should transform each char and write down to the specified writer" in new SUT_ISO2022 {
+      "transformChar() method should transform each char and write down to the specified writer" in new InputStreamWrapperLikeISO2022Fixture {
         new WriterFixture {
           __Exercise__
           sut.transformChar(writer, ISO2022) {
@@ -111,14 +111,14 @@ trait InputStreamWrapperLikeSpec
         }
       }
 
-      "text method should return file content as String" in new SUT_ISO2022 {
+      "text method should return file content as String" in new InputStreamWrapperLikeISO2022Fixture {
         __Verify__
         sut.text(ISO2022) should be(contentAsStringISO2022)
       }
     }
 
     "***** lines *****" - {
-      "eachLines(String => Unit) method should read lines one by one" in new SUT_ISO2022 {
+      "eachLines(String => Unit) method should read lines one by one" in new InputStreamWrapperLikeISO2022Fixture {
         __SetUp__
         val result = new mutable.ListBuffer[String]
         __Exercise__
@@ -128,7 +128,7 @@ trait InputStreamWrapperLikeSpec
       }
 
       "eachLine(Int)((String, Int) => Unit) method should read lines one by one with line number. The first arg specifies the starting number." in
-        new SUT_ISO2022 {
+        new InputStreamWrapperLikeISO2022Fixture {
           __SetUp__
           val result = new mutable.ListBuffer[String]
           __Exercise__
@@ -141,7 +141,7 @@ trait InputStreamWrapperLikeSpec
           )
         }
 
-      "splitEachLine() method should split each line by the specified regex" in new SUT_ISO2022 {
+      "splitEachLine() method should split each line by the specified regex" in new InputStreamWrapperLikeISO2022Fixture {
         __SetUp__
         val result = new ListBuffer[String]()
         __Exercise__
@@ -152,7 +152,7 @@ trait InputStreamWrapperLikeSpec
       }
 
       "filterLine(String => Boolean) method should filter line and write down to the specified writer" in
-        new SUT_ISO2022 {
+        new InputStreamWrapperLikeISO2022Fixture {
           new WriterFixture {
             __Exercise__
             val writable = sut.filterLine(ISO2022)(_ contains "2")
@@ -164,7 +164,7 @@ trait InputStreamWrapperLikeSpec
         }
 
       "filterLine(Writer)(String => Boolean) method should filter line and write down to the specified writer" in
-        new SUT_ISO2022 {
+        new InputStreamWrapperLikeISO2022Fixture {
           new WriterFixture {
             __Exercise__
             sut.filterLine(writer, ISO2022)(_ contains "2")
@@ -173,7 +173,7 @@ trait InputStreamWrapperLikeSpec
           }
         }
 
-      "transformLine() method should transform each line and write down to the specified writer" in new SUT_ISO2022 {
+      "transformLine() method should transform each line and write down to the specified writer" in new InputStreamWrapperLikeISO2022Fixture {
         new WriterFixture {
           __Exercise__
           sut.transformLine(writer, ISO2022)(line => s"""[$line]""")
@@ -183,7 +183,7 @@ trait InputStreamWrapperLikeSpec
         }
       }
 
-      "readLines method should read all lines in File" in new SUT_ISO2022 {
+      "readLines method should read all lines in File" in new InputStreamWrapperLikeISO2022Fixture {
         __Exercise__
         val result = sut.readLines(ISO2022)
         __Verify__
@@ -199,26 +199,18 @@ trait CloseableInputStreamWrapperLikeSpec
     with CloseableDataInputStreamWrapperLikeSpec
     with CloseableObjectInputStreamWrapperLikeSpec{
 
-  private trait SUT{
-    val sut = newInputStreamWrapperLike(readOnlyPath)
-  }
-
-  private trait SUT_ISO2022{
-    val sut = newInputStreamWrapperLike(readOnlyPathISO2022)
-  }
-
   "Methods of ReaderWrapperLike trait should properly close reader after use" - {
 
     "***** Bytes *****" - {
 
-      "eachByte() method" in new SUT {
+      "eachByte() method" in new InputStreamWrapperLikeFixture {
         __Exercise__
         sut.eachByte { _ => }
         __Verify__
         sut should be(closed)
       }
 
-      "bytes method" in new SUT {
+      "bytes method" in new InputStreamWrapperLikeFixture {
         __Exercise__
         sut.bytes
         __Verify__
@@ -230,14 +222,14 @@ trait CloseableInputStreamWrapperLikeSpec
 
       "***** text *****" - {
 
-        "eachChar() method" in new SUT_ISO2022 {
+        "eachChar() method" in new InputStreamWrapperLikeISO2022Fixture {
           __Exercise__
           sut.eachChar(ISO2022) { _ => }
           __Verify__
           sut should be(closed)
         }
 
-        "transformChar() method" in new SUT_ISO2022 {
+        "transformChar() method" in new InputStreamWrapperLikeISO2022Fixture {
           new WriterFixture {
             __Exercise__
             sut.transformChar(writer, ISO2022)(c => c)
@@ -247,7 +239,7 @@ trait CloseableInputStreamWrapperLikeSpec
           }
         }
 
-        "text method" in new SUT_ISO2022 {
+        "text method" in new InputStreamWrapperLikeISO2022Fixture {
           __Exercise__
           sut.text(ISO2022)
           __Verify__
@@ -257,28 +249,28 @@ trait CloseableInputStreamWrapperLikeSpec
 
       "***** lines *****" - {
 
-        "eachLines(String => Unit) method" in new SUT_ISO2022 {
+        "eachLines(String => Unit) method" in new InputStreamWrapperLikeISO2022Fixture {
           __Exercise__
           sut.eachLine(ISO2022) { _ => }
           __Verify__
           sut should be(closed)
         }
 
-        "eachLine(Int)((String, Int) => Unit) method" in new SUT_ISO2022 {
+        "eachLine(Int)((String, Int) => Unit) method" in new InputStreamWrapperLikeISO2022Fixture {
           __Exercise__
           sut.eachLine(1, ISO2022) { (_, _) => }
           __Verify__
           sut should be(closed)
         }
 
-        "splitEachLine() method" in new SUT_ISO2022 {
+        "splitEachLine() method" in new InputStreamWrapperLikeISO2022Fixture {
           __Exercise__
           sut.splitEachLine("\\s+".r, ISO2022) { _ => }
           __Verify__
           sut should be(closed)
         }
 
-        "filterLine(String => Boolean) method" in new SUT_ISO2022 {
+        "filterLine(String => Boolean) method" in new InputStreamWrapperLikeISO2022Fixture {
           new WriterFixture {
             __Exercise__
             val writable = sut.filterLine(ISO2022) { _ => true }
@@ -288,7 +280,7 @@ trait CloseableInputStreamWrapperLikeSpec
           }
         }
 
-        "filterLine(Writer)(String => Boolean) method" in new SUT_ISO2022 {
+        "filterLine(Writer)(String => Boolean) method" in new InputStreamWrapperLikeISO2022Fixture {
           new WriterFixture {
             __Exercise__
             sut.filterLine(writer, ISO2022) { _ => true }
@@ -298,7 +290,7 @@ trait CloseableInputStreamWrapperLikeSpec
           }
         }
 
-        "transformLine() method" in new SUT_ISO2022 {
+        "transformLine() method" in new InputStreamWrapperLikeISO2022Fixture {
           new WriterFixture {
             __Exercise__
             sut.transformLine(writer, ISO2022)(_.toUpperCase)
@@ -308,7 +300,7 @@ trait CloseableInputStreamWrapperLikeSpec
           }
         }
 
-        "readLines method" in new SUT_ISO2022 {
+        "readLines method" in new InputStreamWrapperLikeISO2022Fixture {
           __Exercise__
           sut.readLines(ISO2022)
           __Verify__

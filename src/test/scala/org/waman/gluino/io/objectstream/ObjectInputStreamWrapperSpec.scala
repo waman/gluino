@@ -7,24 +7,24 @@ import org.waman.gluino.io.GluinoIOCustomSpec
 
 import scala.collection.mutable
 
-trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
+trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec with ObjectStreamFixture{
 
   protected def newObjectInputStreamWrapperLike(path: Path): ObjectInputStreamWrapperLike
 
-  private trait SUT{
-     val sut = newObjectInputStreamWrapperLike(readOnlyPathObjects)
+  trait ObjectInputStreamWrapperLikeFixture{
+     val sut = newObjectInputStreamWrapperLike(readOnlyObjectPath)
   }
 
   "withObjectInputStream() method should" - {
 
-    "close the stream after use" in new SUT {
+    "close the stream after use" in new ObjectInputStreamWrapperLikeFixture {
       __Exercise__
       val result = sut.withObjectInputStream{ ois => ois }
       __Verify__
       result should be (closed)
     }
 
-    "close the stream when exception thrown" in new SUT{
+    "close the stream when exception thrown" in new ObjectInputStreamWrapperLikeFixture{
       __Exercise__
       var result: ObjectInputStream = null
       try{
@@ -39,7 +39,7 @@ trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
       result should be (closed)
     }
 
-    "be able to use with the loan pattern" in new SUT{
+    "be able to use with the loan pattern" in new ObjectInputStreamWrapperLikeFixture{
       __SetUp__
       var result = new mutable.MutableList[Any]
       __Exercise__
@@ -49,37 +49,37 @@ trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
         result += ois.readObject()
       }
       __Verify__
-      result should contain theSameElementsInOrderAs contentObjects
+      result should contain theSameElementsInOrderAs objectContent
     }
   }
 
-  "eachAnyRef() method should iterate objects read from the stream" in new SUT{
+  "eachAnyRef() method should iterate objects read from the stream" in new ObjectInputStreamWrapperLikeFixture{
     __SetUp__
     var result = new mutable.MutableList[Any]
     __Exercise__
     sut.eachAnyRef(result += _)
     __Verify__
-    result should contain theSameElementsInOrderAs contentObjects
+    result should contain theSameElementsInOrderAs objectContent
   }
 
   "readAnyRefs(Int) should be" - {
 
-    "read the specified number of AnyRefs (objects)" in new SUT{
+    "read the specified number of AnyRefs (objects)" in new ObjectInputStreamWrapperLikeFixture{
       __Exercise__
       val result = sut.readAnyRefs(3)
       __Verify__
       result.size should equal (3)
-      result should contain theSameElementsInOrderAs contentObjects
+      result should contain theSameElementsInOrderAs objectContent
     }
 
-    "throw an EOFException if the specified integer is bigger than the number of objects retained in the file" in new SUT{
+    "throw an EOFException if the specified integer is bigger than the number of objects retained in the file" in new ObjectInputStreamWrapperLikeFixture{
       __Verify__
       an [EOFException] should be thrownBy {
         sut.readAnyRefs(10)
       }
     }
 
-    "throw an IllegalArgumentException if the specified integer is negative" in new SUT{
+    "throw an IllegalArgumentException if the specified integer is negative" in new ObjectInputStreamWrapperLikeFixture{
       __Verify__
       an [IllegalArgumentException] should be thrownBy {
         sut.readAnyRefs(-1)
@@ -91,20 +91,16 @@ trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
 trait CloseableObjectInputStreamWrapperLikeSpec
     extends ObjectInputStreamWrapperLikeSpec{
 
-  private trait SUT{
-    val sut = newObjectInputStreamWrapperLike(readOnlyPathObjects)
-  }
-
   "Methods of ObjectInputStreamWrapperLike trait should properly close the stream after use" - {
 
-    "eachAnyRef() method" in new SUT{
+    "eachAnyRef() method" in new ObjectInputStreamWrapperLikeFixture{
       __Exercise__
       sut.eachAnyRef{ _ => }
       __Verify__
       sut should be (closed)
     }
 
-    "readAnyRefs() method" in new SUT{
+    "readAnyRefs() method" in new ObjectInputStreamWrapperLikeFixture{
       __Exercise__
       sut.readAnyRefs(1)
       __Verify__

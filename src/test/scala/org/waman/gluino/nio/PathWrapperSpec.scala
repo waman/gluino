@@ -1,8 +1,10 @@
 package org.waman.gluino.nio
 
-import java.nio.file.{Path, Paths}
+import java.nio.file._
 
 import org.waman.gluino.io.FileWrapperLikeSpec
+
+import org.scalatest.OptionValues._
 
 class PathWrapperSpec
     extends FileWrapperLikeSpec[Path, PathWrapper]
@@ -46,4 +48,29 @@ class PathWrapperSpec
       child should equal(expectedChild)
     }
   }
+
+  "***** File Operations for PathWrapper *****" - {
+
+    "delete() method should" - {
+
+      "RETURN an Option[NoSuchFileException] if the file does not exist" in
+        new FileWrapperLike_FileFixture {
+          __SetUp__
+          Files.delete(destPath)
+          __Exercise__
+          val result = sut.delete()
+          __Verify__
+          result.value should be (a [NoSuchFileException])
+        }
+
+      "RETURN an Option[DirectoryNotEmptyException] if the directory is not empty" in
+        new FileWrapperLike_DirectoryWithAFileFixture {
+          __Exercise__
+          val result = sut.delete()
+          __Verify__
+          result.value should be (a [DirectoryNotEmptyException])
+        }
+    }
+  }
+
 }

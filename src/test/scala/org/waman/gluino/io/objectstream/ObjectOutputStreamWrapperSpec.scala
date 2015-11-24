@@ -8,24 +8,24 @@ import org.waman.gluino.io.GluinoIOCustomSpec
 
 import scala.collection.mutable
 
-trait ObjectOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
+trait ObjectOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec with ObjectStreamFixture{
 
   protected def newObjectOutputStreamWrapperLike(path: Path): ObjectOutputStreamWrapperLike
 
-  private trait SUT extends DestFileFixture{
+  trait ObjectOutputStreamWrapperLikeFixture extends DestFileFixture{
     val sut = newObjectOutputStreamWrapperLike(destPath)
   }
 
   "withObjectOutputStream() method should" - {
 
-    "close the stream after use" in new SUT {
+    "close the stream after use" in new ObjectOutputStreamWrapperLikeFixture {
       __Exercise__
       val result = sut.withObjectOutputStream{ oos => oos }
       __Verify__
       result should be (closed)
     }
 
-    "close the stream when exception thrown" in new SUT {
+    "close the stream when exception thrown" in new ObjectOutputStreamWrapperLikeFixture {
       __Exercise__
       var result: ObjectOutputStream = null
       try{
@@ -40,13 +40,13 @@ trait ObjectOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
       result should be (closed)
     }
 
-    "be able to use with the loan pattern" in new SUT{
+    "be able to use with the loan pattern" in new ObjectOutputStreamWrapperLikeFixture{
       __Exercise__
       sut.withObjectOutputStream { oos =>
-        contentObjects.foreach(oos.writeObject(_))
+        objectContent.foreach(oos.writeObject(_))
       }
       __Verify__
-      objects(destPath) should contain theSameElementsInOrderAs contentObjects
+      objects(destPath) should contain theSameElementsInOrderAs objectContent
     }
   }
 

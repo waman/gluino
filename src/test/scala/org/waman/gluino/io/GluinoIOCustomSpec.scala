@@ -89,64 +89,6 @@ trait GluinoIOCustomSpec extends FreeSpec with Matchers with FourPhaseInformer{
     Files.write(destPath, contentISO2022, ISO2022)
   }
 
-  //***** Data Stream *****
-  lazy val readOnlyPathData = createReadOnlyPathData()
-  lazy val readOnlyFileData = readOnlyPathData.toFile
-
-  def createReadOnlyPathData(): Path = {
-    val path = GluinoPath.createTempFile()
-    val oos = new DataOutputStream(Files.newOutputStream(path))
-    try{
-      oos.writeInt(1)
-      oos.writeLong(2L)
-      oos.writeDouble(3.0d)
-      oos.writeUTF("UTF")
-      oos.writeBytes("string")
-
-      oos.flush()
-    }finally oos.close()
-
-    path
-  }
-
-  trait DataInputStreamFixture{
-    val input = Files.newInputStream(readOnlyPathData)
-    val ois = new DataInputStream(input)
-  }
-
-  trait DestFileWithDataFixture{
-    val destPath = createReadOnlyPathData()
-    lazy val destFile = destPath.toFile
-  }
-
-  //***** Object Stream *****
-  // content
-  val contentObjects = List("1", new Integer(2), BigDecimal(3))
-
-  lazy val readOnlyPathObjects = createReadOnlyPathObjects()
-  lazy val readOnlyFileObjects = readOnlyPathObjects.toFile
-
-  def createReadOnlyPathObjects(): Path = {
-    val path = GluinoPath.createTempFile()
-    val oos = new ObjectOutputStream(Files.newOutputStream(path))
-    try{
-      contentObjects.foreach(oos.writeObject(_))
-      oos.flush()
-    }finally oos.close()
-
-    path
-  }
-
-  trait ObjectInputStreamFixture{
-    val input = Files.newInputStream(readOnlyPathObjects)
-    val ois = new ObjectInputStream(input)
-  }
-
-  trait DestFileWithObjectsFixture{
-    val destPath = createReadOnlyPathObjects()
-    lazy val destFile = destPath.toFile
-  }
-
   //***** Custom Matchers *****
   def opened = BeMatcher{ io: Any =>
     val exec: () => Any = io match {

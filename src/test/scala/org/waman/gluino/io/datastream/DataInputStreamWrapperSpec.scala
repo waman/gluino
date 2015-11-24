@@ -7,16 +7,16 @@ import org.waman.gluino.io.GluinoIOCustomSpec
 
 import scala.collection.mutable
 
-trait DataInputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
+trait DataInputStreamWrapperLikeSpec extends GluinoIOCustomSpec with DataStreamFixture{
 
   protected def newDataInputStreamWrapperLike(path: Path): DataInputStreamWrapperLike
 
-  private trait SUT extends DestFileFixture{
+  trait DataInputStreamWrapperLikeFixture extends DestFileFixture{
     val sut = newDataInputStreamWrapperLike(destPath)
   }
 
-  private trait SUTWithContent extends DestFileWithDataFixture{
-    val sut = newDataInputStreamWrapperLike(destPath)
+  trait DataInputStreamWrapperLikeWithContentFixture extends DataFileFixture{
+    val sut = newDataInputStreamWrapperLike(dataPath)
   }
 
   private def initFile(path: Path): Unit = {
@@ -34,14 +34,14 @@ trait DataInputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
 
   "withDataInputStream() method should" - {
 
-    "close the stream after use" in new SUT{
+    "close the stream after use" in new DataInputStreamWrapperLikeFixture{
       __Exercise__
       val result = sut.withDataInputStream{ dis => dis }
       __Verify__
       result should be (closed)
     }
 
-    "close the stream when exception thrown" in new SUT{
+    "close the stream when exception thrown" in new DataInputStreamWrapperLikeFixture{
       __Exercise__
       var result: InputStream = null
       try{
@@ -56,7 +56,7 @@ trait DataInputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
       result should be (closed)
     }
 
-    "be able to use with the loan pattern" in new SUTWithContent {
+    "be able to use with the loan pattern" in new DataInputStreamWrapperLikeWithContentFixture {
       __SetUp__
       val result = new mutable.MutableList[Any]()
       __Exercise__

@@ -2,22 +2,22 @@ package org.waman.gluino.io
 
 class FileFileTypeSpec extends GluinoIOCustomSpec with GluinoFile{
 
-  private trait SUTWithFile{
+  trait TempFileFixture{
     val sut = createTempFile()
   }
 
-  private trait SUTWithDirectory{
+  trait TempDirectoryFixture{
     val sut = createTempDirectory()
   }
 
   "FileType.Files should" - {
 
-    "return true for a file in filter() call" in new SUTWithFile {
+    "return true for a file in filter() call" in new TempFileFixture {
       __Verify__
       FileType.Files.filter(sut) should equal (true)
     }
 
-    "return false for a directory in filter() call" in new SUTWithDirectory {
+    "return false for a directory in filter() call" in new TempDirectoryFixture {
       __Verify__
       FileType.Files.filter(sut) should equal (false)
     }
@@ -25,12 +25,12 @@ class FileFileTypeSpec extends GluinoIOCustomSpec with GluinoFile{
 
   "FileType.Directories should" - {
 
-    "return false for a file in a filter() call" in new SUTWithFile {
+    "return false for a file in a filter() call" in new TempFileFixture {
       __Verify__
       FileType.Directories.filter(sut) should equal (false)
     }
 
-    "return true for a directory in a filter() call" in new SUTWithDirectory {
+    "return true for a directory in a filter() call" in new TempDirectoryFixture {
       __Verify__
       FileType.Directories.filter(sut) should equal (true)
     }
@@ -38,12 +38,12 @@ class FileFileTypeSpec extends GluinoIOCustomSpec with GluinoFile{
 
   "FileType.Any should" - {
 
-    "return true for a file in a filter() call" in new SUTWithFile {
+    "return true for a file in a filter() call" in new TempFileFixture {
       __Verify__
       FileType.Any.filter(sut) should equal (true)
     }
 
-    "return true for a directory in a filter() call" in new SUTWithDirectory {
+    "return true for a directory in a filter() call" in new TempDirectoryFixture {
       __Verify__
       FileType.Any.filter(sut) should equal (true)
     }

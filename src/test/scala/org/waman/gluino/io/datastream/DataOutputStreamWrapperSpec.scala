@@ -5,24 +5,24 @@ import java.nio.file.{Files, Path}
 
 import org.waman.gluino.io.GluinoIOCustomSpec
 
-trait DataOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
+trait DataOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec with DataStreamFixture{
 
   protected def newDataOutputStreamWrapperLike(path: Path): DataOutputStreamWrapperLike
 
-  private trait SUT extends DestFileFixture{
+  trait DataOutputStreamWrapperLikeFixture extends DestFileFixture{
     val sut = newDataOutputStreamWrapperLike(destPath)
   }
 
   "withDataOutputStream() method should" - {
 
-    "close the stream after use" in new SUT {
+    "close the stream after use" in new DataOutputStreamWrapperLikeFixture {
       __Exercise__
       val result = sut.withDataOutputStream{ dos => dos }
       __Verify__
       result should be (closed)
     }
 
-    "close the stream when exception thrown" in new SUT {
+    "close the stream when exception thrown" in new DataOutputStreamWrapperLikeFixture {
       __Exercise__
       var result: DataOutputStream = null
       try{
@@ -37,7 +37,7 @@ trait DataOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
       result should be (closed)
     }
 
-    "be able to use with the loan pattern" in new SUT{
+    "be able to use with the loan pattern" in new DataOutputStreamWrapperLikeFixture{
       __Exercise__
       sut.withDataOutputStream { dos =>
         dos.writeInt(1)
@@ -47,7 +47,7 @@ trait DataOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec{
         dos.writeBytes("string")
       }
       __Verify__
-      Files.readAllBytes(destPath) should equal (Files.readAllBytes(readOnlyPathData))
+      Files.readAllBytes(destPath) should equal (Files.readAllBytes(readOnlyDataPath))
     }
   }
 }

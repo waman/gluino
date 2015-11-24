@@ -36,11 +36,7 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
   override def delete(): Option[IOException] = {
     file.delete() match {
       case true => Option.empty
-      case false =>
-        if(!file.exists())
-          Some(new FileNotFoundException(file.getAbsolutePath))
-        else
-          Some(new IOException())
+      case false => Some(new IOException("Fail to delete a directory: " + file.getAbsoluteFile))
     }
   }
 
