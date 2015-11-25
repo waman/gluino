@@ -8,7 +8,29 @@ import GluinoIO.{lineSeparator => sep}
 
 class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
 
-  "DirectoryBuilder should" in {
+  "DirectoryBuilder should create files" in {
+    __Exercise__
+    val target = new DirectoryBuilder{
+      val baseDir = GluinoPath.createTempDirectory()
+      file("file1.txt")
+      file("file2.txt", "Content")
+      file("file3.txt")withWriter{ w =>
+        w.writeLine("1st line.")
+        w.writeLine("2nd line.")
+        w.writeLine("3rd line.")
+      }
+    }.baseDir
+    __Verify__
+    target / "file1.txt" should exist
+    target / "file2.txt" should exist
+    target / "file3.txt" should exist
+    text(target / "file2.txt") should equal ("Content" + sep)
+    text(target / "file3.txt") should equal ("1st line." + sep + "2nd line." + sep + "3rd line." + sep)
+    __TearDown__
+
+  }
+
+  "DirectoryBuilder should create directory structure" in {
     __Exercise__
     val target = new DirectoryBuilder{
       val baseDir = GluinoPath.createTempDirectory()

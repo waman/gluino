@@ -2,28 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="04fdf3ea-2091-491b-880f-2592d225098d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/DirectoryBuilder.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/number/GluinoNumber.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/number/IntWrapper.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/number/GluinoNumberCustomSpec.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/number/IntWrapperSpec.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/FourPhaseInformer.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/FourPhaseInformer.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/AppendableConverterSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/AppendableConverterSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoIOCustomSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoIOCustomSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/InputStreamWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/InputStreamWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/OutputStreamWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/OutputStreamWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/PrintWriterWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/PrintWriterWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/datastream/DataInputStreamWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/datastream/DataInputStreamWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/datastream/DataOutputStreamWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/datastream/DataOutputStreamWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/objectstream/ObjectInputStreamWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/objectstream/ObjectInputStreamWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/objectstream/ObjectOutputStreamWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/objectstream/ObjectOutputStreamWrapperSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala" />
     </list>
     <ignored path="gluino.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -87,8 +67,8 @@
       <file leaf-file-name="DirectoryBuilderSpec.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.37533513">
-              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.5522788">
+              <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
               <folding>
                 <element signature="e#30#64#0" expanded="true" />
               </folding>
@@ -178,8 +158,8 @@
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/number/IntWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/objectstream/ObjectInputStreamWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/DirectoryBuilder.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala" />
       </list>
     </option>
   </component>
@@ -581,22 +561,7 @@
       <recent name="org.waman.gluino.nio" />
     </key>
   </component>
-  <component name="RunManager" selected="ScalaTest.DirectoryBuilderSpec">
-    <configuration default="false" name="PathWrapperSpec.***** File Operations for PathWrapper ***** delete() method should RETURN an Option of a NoSuchFileException if the file does not exist&#10;***** File Operations for PathWrapper ***** delete() method should RETURN an Option of a DirectoryNotEmptyException if the directory is not empty" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.nio.PathWrapperSpec" />
-      <setting name="package" value="" />
-      <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="***** File Operations for PathWrapper ***** delete() method should RETURN an Option of a NoSuchFileException if the file does not exist&#10;***** File Operations for PathWrapper ***** delete() method should RETURN an Option of a DirectoryNotEmptyException if the directory is not empty" />
-      <setting name="testKind" value="Test name" />
-      <setting name="showProgressMessages" value="true" />
-      <envs />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should create files">
     <configuration default="false" name="PathWrapperSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
@@ -653,6 +618,21 @@
       <setting name="searchForTest" value="Across module dependencies" />
       <setting name="testName" value="" />
       <setting name="testKind" value="Class" />
+      <setting name="showProgressMessages" value="true" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="DirectoryBuilderSpec.DirectoryBuilder should create files" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="gluino" />
+      <setting name="path" value="org.waman.gluino.nio.DirectoryBuilderSpec" />
+      <setting name="package" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <setting name="searchForTest" value="Across module dependencies" />
+      <setting name="testName" value="DirectoryBuilder should create files" />
+      <setting name="testKind" value="Test name" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
@@ -946,19 +926,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec.***** File Operations for PathWrapper ***** delete() method should RETURN an Option of a NoSuchFileException if the file does not exist&#10;***** File Operations for PathWrapper ***** delete() method should RETURN an Option of a DirectoryNotEmptyException if the directory is not empty" />
-      <item index="1" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec" />
-      <item index="2" class="java.lang.String" itemvalue="ScalaTest.IntWrapperSpec.times(Int =&gt; Unit) method should execute the arg function this many times" />
-      <item index="3" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should" />
-      <item index="4" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec" />
+      <item index="0" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec" />
+      <item index="1" class="java.lang.String" itemvalue="ScalaTest.IntWrapperSpec.times(Int =&gt; Unit) method should execute the arg function this many times" />
+      <item index="2" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should" />
+      <item index="3" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec" />
+      <item index="4" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should create files" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec" />
-        <item index="1" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should" />
-        <item index="2" class="java.lang.String" itemvalue="ScalaTest.IntWrapperSpec.times(Int =&gt; Unit) method should execute the arg function this many times" />
-        <item index="3" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec" />
-        <item index="4" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec.***** File Operations for PathWrapper ***** delete() method should RETURN an Option of a NoSuchFileException if the file does not exist&#10;***** File Operations for PathWrapper ***** delete() method should RETURN an Option of a DirectoryNotEmptyException if the directory is not empty" />
+        <item index="0" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should create files" />
+        <item index="1" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec" />
+        <item index="2" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should" />
+        <item index="3" class="java.lang.String" itemvalue="ScalaTest.IntWrapperSpec.times(Int =&gt; Unit) method should execute the arg function this many times" />
+        <item index="4" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec" />
       </list>
     </recent_temporary>
   </component>
@@ -1202,7 +1182,13 @@
       <option name="project" value="LOCAL" />
       <updated>1448333874330</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Add DirectoryBuilder to build directory structure easily">
+      <created>1448416372038</created>
+      <option name="number" value="00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1448416372038</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1224,8 +1210,8 @@
     <history-entry file="DirectoryBuilderSpec_DirectoryBuilder_should - 2015.11.25 at 10h 20m 06s.xml">
       <configuration name="DirectoryBuilderSpec.DirectoryBuilder should" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="PathWrapperSpec - 2015.11.24 at 11h 51m 36s.xml">
-      <configuration name="PathWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    <history-entry file="DirectoryBuilderSpec_DirectoryBuilder_should_create_files - 2015.11.25 at 10h 57m 54s.xml">
+      <configuration name="DirectoryBuilderSpec.DirectoryBuilder should create files" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
     <history-entry file="PathWrapperSpec - 2015.11.24 at 11h 53m 18s.xml">
       <configuration name="PathWrapperSpec" configurationId="ScalaTestRunConfiguration" />
@@ -1281,7 +1267,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="Add samples of java stream related methods in Files" />
     <MESSAGE value="Add some methods of ScalaJdkPath, Scala version of GDK method extension." />
     <MESSAGE value="Change Set to Seq of FileAttributes in method signature in createXxxx() methods." />
     <MESSAGE value="Add line read/write method to Path and Add wrapper class to Input/OutputStream and Reader/Writer." />
@@ -1306,7 +1291,8 @@
     <MESSAGE value="Add tests for stream" />
     <MESSAGE value="Add FileType constant and enabling to filter with FileType." />
     <MESSAGE value="Refactor test fixtures." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor test fixtures." />
+    <MESSAGE value="Add DirectoryBuilder to build directory structure easily" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add DirectoryBuilder to build directory structure easily" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1685,8 +1671,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.37533513">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.5522788">
+          <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
           <folding>
             <element signature="e#30#64#0" expanded="true" />
           </folding>
