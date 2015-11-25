@@ -4,10 +4,12 @@ import java.io.{EOFException, ObjectInputStream}
 import java.nio.file.Path
 
 import org.waman.gluino.io.GluinoIOCustomSpec
+import org.waman.gluino.number.GluinoNumber
 
 import scala.collection.mutable
 
-trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec with ObjectStreamFixture{
+trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec
+    with ObjectStreamFixture with GluinoNumber{
 
   protected def newObjectInputStreamWrapperLike(path: Path): ObjectInputStreamWrapperLike
 
@@ -44,23 +46,24 @@ trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec with ObjectStr
       var result = new mutable.MutableList[Any]
       __Exercise__
       sut.withObjectInputStream { ois =>
-        result += ois.readObject()
-        result += ois.readObject()
-        result += ois.readObject()
+        3 times {
+          result += ois.readObject()
+        }
       }
       __Verify__
       result should contain theSameElementsInOrderAs objectContent
     }
   }
 
-  "eachAnyRef() method should iterate objects read from the stream" in new ObjectInputStreamWrapperLikeFixture{
-    __SetUp__
-    var result = new mutable.MutableList[Any]
-    __Exercise__
-    sut.eachAnyRef(result += _)
-    __Verify__
-    result should contain theSameElementsInOrderAs objectContent
-  }
+  "eachAnyRef() method should iterate objects read from the stream" in
+    new ObjectInputStreamWrapperLikeFixture{
+      __SetUp__
+      var result = new mutable.MutableList[Any]
+      __Exercise__
+      sut.eachAnyRef(result += _)
+      __Verify__
+      result should contain theSameElementsInOrderAs objectContent
+    }
 
   "readAnyRefs(Int) should be" - {
 
@@ -72,12 +75,13 @@ trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec with ObjectStr
       result should contain theSameElementsInOrderAs objectContent
     }
 
-    "throw an EOFException if the specified integer is bigger than the number of objects retained in the file" in new ObjectInputStreamWrapperLikeFixture{
-      __Verify__
-      an [EOFException] should be thrownBy {
-        sut.readAnyRefs(10)
+    "throw an EOFException if the specified integer is bigger than the number of objects retained in the file" in
+      new ObjectInputStreamWrapperLikeFixture{
+        __Verify__
+        an [EOFException] should be thrownBy {
+          sut.readAnyRefs(10)
+        }
       }
-    }
 
     "throw an IllegalArgumentException if the specified integer is negative" in new ObjectInputStreamWrapperLikeFixture{
       __Verify__

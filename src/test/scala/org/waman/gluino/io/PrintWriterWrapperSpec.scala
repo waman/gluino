@@ -11,12 +11,12 @@ trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
 
   protected def newPrintWriterWrapperLike(path: Path): T
 
-  private trait SUT extends DestFileFixture{
-    val sut = newPrintWriterWrapperLike(destPath)
+  private trait SUT extends FileFixture{
+    val sut = newPrintWriterWrapperLike(path)
   }
 
-  private trait SUTWithContent extends DestFileWithContentFixture{
-    val sut = newPrintWriterWrapperLike(destPath)
+  private trait SUTWithContent extends FileWithContentFixture{
+    val sut = newPrintWriterWrapperLike(path)
   }
 
   "withPrintWriter() method should" - {
@@ -49,7 +49,7 @@ trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
         pw.write(contentAsString)
       }
       __Verify__
-      text(destPath) should equal (contentAsString)
+      text(path) should equal (contentAsString)
     }
   }
 
@@ -59,7 +59,7 @@ trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
     sut.append("fourth line.")
     closeIfCloseable(sut)
     __Verify__
-    text(destPath) should equal (contentAsString + "fourth line.")
+    text(path) should equal (contentAsString + "fourth line.")
   }
 
   "<< operator for Writable (in PrintWriterWrapper) should" - {
@@ -69,7 +69,7 @@ trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
       sut << "fourth line."
       closeIfCloseable(sut)
       __Verify__
-      text(destPath) should equal (contentAsString + "fourth line.")
+      text(path) should equal (contentAsString + "fourth line.")
     }
 
     "sequentially append the specified Writables to the PrintWriter" in new SUTWithContent {
@@ -77,7 +77,7 @@ trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
       sut << "fourth " << "line." << sep
       closeIfCloseable(sut)
       __Verify__
-      text(destPath) should equal (contentAsString + "fourth line." + sep)
+      text(path) should equal (contentAsString + "fourth line." + sep)
     }
   }
 
@@ -93,8 +93,8 @@ trait CloseablePrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
     extends PrintWriterWrapperLikeSpec[T]
     with MockFactory{
 
-  trait PrintWriterWrapperLikeFixture extends DestFileFixture{
-    val sut = newPrintWriterWrapperLike(destPath)
+  trait PrintWriterWrapperLikeFixture extends FileFixture{
+    val sut = newPrintWriterWrapperLike(path)
   }
 
   "Some methods of PrintWriterWrapperLike trait should NOT close the PrintWriter after use" - {

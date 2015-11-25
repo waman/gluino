@@ -19,12 +19,12 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
   override protected def newObjectOutputStreamWrapperLike(path: Path) = newOutputStreamWrapperLike(path)
   override protected def newDataOutputStreamWrapperLike(path: Path) = newOutputStreamWrapperLike(path)
 
-  trait OutputStreamWrapperLikeFixture extends DestFileFixture{
-    val sut = newOutputStreamWrapperLike(destPath)
+  trait OutputStreamWrapperLikeFixture extends FileFixture{
+    val sut = newOutputStreamWrapperLike(path)
   }
 
-  trait OutputStreamWrapperLikeISO2022Fixture extends DestFileWithContentISO2022Fixture{
-    val sut = newOutputStreamWrapperLike(destPath)
+  trait OutputStreamWrapperLikeISO2022Fixture extends FileWithContentISO2022Fixture{
+    val sut = newOutputStreamWrapperLike(path)
   }
 
   "withOutputStream() method should" - {
@@ -57,7 +57,7 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
         os.write(contentAsStringISO2022.getBytes(ISO2022))
       }
       __Verify__
-      text(destPath, ISO2022) should equal (contentAsStringISO2022)
+      text(path, ISO2022) should equal (contentAsStringISO2022)
     }
   }
 
@@ -68,7 +68,7 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
       sut.append("4行目".getBytes(ISO2022))
       closeIfCloseable(sut)
       __Verify__
-      text(destPath, ISO2022) should equal (contentAsStringISO2022 + "4行目")
+      text(path, ISO2022) should equal (contentAsStringISO2022 + "4行目")
     }
 
   "<< operator for Outputtable should" - {
@@ -78,7 +78,7 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
       sut << "4行目".getBytes(ISO2022)
       closeIfCloseable(sut)
       __Verify__
-      text(destPath, ISO2022) should equal(contentAsStringISO2022 + "4行目")
+      text(path, ISO2022) should equal(contentAsStringISO2022 + "4行目")
     }
 
     "sequentially append the specified Writables to the writer" in
@@ -87,7 +87,7 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
         sut << "4行目".getBytes(ISO2022) << sep.getBytes(ISO2022)
         closeIfCloseable(sut)
         __Verify__
-        text(destPath, ISO2022) should equal(contentAsStringISO2022 + "4行目" + sep)
+        text(path, ISO2022) should equal(contentAsStringISO2022 + "4行目" + sep)
       }
   }
 

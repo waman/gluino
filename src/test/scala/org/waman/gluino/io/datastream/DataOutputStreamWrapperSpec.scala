@@ -9,8 +9,8 @@ trait DataOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec with DataStream
 
   protected def newDataOutputStreamWrapperLike(path: Path): DataOutputStreamWrapperLike
 
-  trait DataOutputStreamWrapperLikeFixture extends DestFileFixture{
-    val sut = newDataOutputStreamWrapperLike(destPath)
+  trait DataOutputStreamWrapperLikeFixture extends FileFixture{
+    val sut = newDataOutputStreamWrapperLike(path)
   }
 
   "withDataOutputStream() method should" - {
@@ -47,7 +47,7 @@ trait DataOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec with DataStream
         dos.writeBytes("string")
       }
       __Verify__
-      Files.readAllBytes(destPath) should equal (Files.readAllBytes(readOnlyDataPath))
+      Files.readAllBytes(path) should equal (Files.readAllBytes(readOnlyDataPath))
     }
   }
 }

@@ -106,7 +106,7 @@ trait InputStreamWrapperLikeSpec
             case c => c
           }
           __Verify__
-          Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+          Files.readAllLines(path) should contain theSameElementsInOrderAs
             List("1番目", "2番目", "3番目")
         }
       }
@@ -159,7 +159,7 @@ trait InputStreamWrapperLikeSpec
             writable.writeTo(writer)
             writer.close()
             __Verify__
-            Files.readAllLines(destPath).loneElement should equal("2行目")
+            Files.readAllLines(path).loneElement should equal("2行目")
           }
         }
 
@@ -169,7 +169,7 @@ trait InputStreamWrapperLikeSpec
             __Exercise__
             sut.filterLine(writer, ISO2022)(_ contains "2")
             __Verify__
-            Files.readAllLines(destPath).loneElement should equal("2行目")
+            Files.readAllLines(path).loneElement should equal("2行目")
           }
         }
 
@@ -178,7 +178,7 @@ trait InputStreamWrapperLikeSpec
           __Exercise__
           sut.transformLine(writer, ISO2022)(line => s"""[$line]""")
           __Verify__
-          Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+          Files.readAllLines(path) should contain theSameElementsInOrderAs
             List("[1行目]", "[2行目]", "[3行目]")
         }
       }

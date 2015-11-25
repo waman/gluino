@@ -6,36 +6,54 @@ import java.nio.file.{Files, Path}
 import org.waman.gluino.nio.GluinoPath
 
 import org.scalatest.OptionValues._
+import org.waman.gluino.number.GluinoNumber
+
+import scala.collection.mutable
 
 trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
     extends InputStreamWrapperLikeSpec
-    with OutputStreamWrapperLikeSpec[W]{
+    with OutputStreamWrapperLikeSpec[W]
+    with GluinoNumber{
 
   protected def newFileWrapperLike(path: Path): W
 
   override protected def newInputStreamWrapperLike(path: Path) = newFileWrapperLike(path)
   override protected def newOutputStreamWrapperLike(path: Path) = newFileWrapperLike(path)
 
-  trait FileWrapperLike_FileFixture extends DestFileFixture{
-    val sut = newFileWrapperLike(destPath)
+  trait FileWrapperLike_FileFixture extends FileFixture{
+    val sut = newFileWrapperLike(path)
   }
 
-  trait DestDirectoryFixture{
-    val destPath = GluinoPath.createTempDirectory()
-    lazy val destFile = destPath.toFile
+  trait DirectoryFixture{
+    val dir = GluinoPath.createTempDirectory()
   }
 
-  trait FileWrapperLike_DirectoryFixture extends DestDirectoryFixture{
-    val sut = newFileWrapperLike(destPath)
+  trait FileWrapperLike_DirectoryFixture extends DirectoryFixture{
+    val sut = newFileWrapperLike(dir)
   }
 
-  trait DestDirectoryWithAFileFixture extends DestDirectoryFixture{
-    val childPath = GluinoPath.createTempFile(destPath)
-    lazy val childFile = childPath.toFile
+  trait DirectoryWithAFileFixture extends DirectoryFixture{
+    val childPath = GluinoPath.createTempFile(dir)
   }
 
-  trait FileWrapperLike_DirectoryWithAFileFixture extends DestDirectoryWithAFileFixture{
-    val sut = newFileWrapperLike(destPath)
+  trait FileWrapperLike_DirectoryWithAFileFixture extends DirectoryWithAFileFixture{
+    val sut = newFileWrapperLike(dir)
+  }
+
+  trait DirectoryWithFilesFixture extends DirectoryFixture{
+    val childPaths = initChildPaths(dir)
+  }
+
+  private def initChildPaths(dir: Path): List[Path] = {
+    var children = new mutable.MutableList[Path]
+    3 times {
+      children += GluinoPath.createTempFile(dir)
+    }
+    children.toList
+  }
+
+  trait FileWrapperLike_DirectoryWithFilesFixture extends DirectoryWithFilesFixture{
+    val sut = newFileWrapperLike(dir)
   }
 
   "***** File Operations *****" - {
@@ -46,20 +64,20 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         __Exercise__
         sut.delete()
         __Verify__
-        destPath should not (exist)
+        path should not (exist)
       }
 
       "delete the directory" in new FileWrapperLike_DirectoryFixture {
         __Exercise__
         sut.delete()
         __Verify__
-        destPath should not (exist)
+        dir should not (exist)
       }
 
       "RETURN an Option[IOException] if the file does not exist" in
         new FileWrapperLike_FileFixture {
           __SetUp__
-          Files.delete(destPath)
+          Files.delete(path)
           __Exercise__
           val result = sut.delete()
           __Verify__
@@ -79,6 +97,8 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
   "***** File Operations through Files and/or Directory Structure *****" - {
 
     "eachFile() method should" - {
+
+      "iterate "
     }
   }
 }

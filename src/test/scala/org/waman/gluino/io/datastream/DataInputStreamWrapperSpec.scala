@@ -11,8 +11,8 @@ trait DataInputStreamWrapperLikeSpec extends GluinoIOCustomSpec with DataStreamF
 
   protected def newDataInputStreamWrapperLike(path: Path): DataInputStreamWrapperLike
 
-  trait DataInputStreamWrapperLikeFixture extends DestFileFixture{
-    val sut = newDataInputStreamWrapperLike(destPath)
+  trait DataInputStreamWrapperLikeFixture extends FileFixture{
+    val sut = newDataInputStreamWrapperLike(path)
   }
 
   trait DataInputStreamWrapperLikeWithContentFixture extends DataFileFixture{

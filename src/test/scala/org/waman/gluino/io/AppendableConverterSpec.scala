@@ -69,7 +69,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         o.outputTo(output)
         output.close()
         __Verify__
-        Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+        Files.readAllLines(path) should contain theSameElementsInOrderAs
           (content :+ "fourth line.")
       }
     }
@@ -92,7 +92,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         o.outputTo(output)
         output.close()
         __Verify__
-        Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+        Files.readAllLines(path) should contain theSameElementsInOrderAs
           (content :+ "fourth line.")
       }
     }
@@ -118,7 +118,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
           o.outputTo(output)
           output.close()
           __Verify__
-          Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+          Files.readAllLines(path) should contain theSameElementsInOrderAs
             (content ++ content)
         }
       }
@@ -142,7 +142,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         o.outputTo(output)
         output.close()
         __Verify__
-        Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+        Files.readAllLines(path) should contain theSameElementsInOrderAs
           (content ++ content)
       }
     }
@@ -165,7 +165,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         o.outputTo(output)
         output.close()
         __Verify__
-        Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+        Files.readAllLines(path) should contain theSameElementsInOrderAs
           (content ++ content)
       }
     }
@@ -223,7 +223,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         w.writeTo(writer)
         writer.close()
         __Verify__
-        text(destPath) should equal (contentAsString + "fourth line.")
+        text(path) should equal (contentAsString + "fourth line.")
       }
     }
 
@@ -248,7 +248,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
           w.writeTo(writer)
           writer.close()
           __Verify__
-          text(destPath) should equal (contentAsString + contentAsString)
+          text(path) should equal (contentAsString + contentAsString)
         }
       }
     }
@@ -273,7 +273,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         w.writeTo(writer)
         writer.close()
         __Verify__
-        text(destPath) should equal (contentAsString + contentAsString)
+        text(path) should equal (contentAsString + contentAsString)
       }
     }
 
@@ -295,7 +295,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         w.writeTo(writer)
         writer.close()
         __Verify__
-        text(destPath) should equal (contentAsString + contentAsString)
+        text(path) should equal (contentAsString + contentAsString)
       }
     }
   }

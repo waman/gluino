@@ -75,7 +75,7 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
             case c => c
           }
           __Verify__
-          Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+          Files.readAllLines(path) should contain theSameElementsInOrderAs
             List("fIrst lInE.", "sEcOnd lInE.", "thIrd lInE.")
         }
       }
@@ -147,7 +147,7 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
           writable.writeTo(writer)
           writer.close()
           __Verify__
-          Files.readAllLines(destPath).loneElement should equal("second line.")
+          Files.readAllLines(path).loneElement should equal("second line.")
         }
       }
 
@@ -157,7 +157,7 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
           __Exercise__
           sut.filterLine(writer)(_ contains "second")
           __Verify__
-          Files.readAllLines(destPath).loneElement should equal ("second line.")
+          Files.readAllLines(path).loneElement should equal ("second line.")
         }
       }
 
@@ -167,7 +167,7 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
           __Exercise__
           sut.transformLine(writer)(_.toUpperCase)
           __Verify__
-          Files.readAllLines(destPath) should contain theSameElementsInOrderAs
+          Files.readAllLines(path) should contain theSameElementsInOrderAs
             List("FIRST LINE.", "SECOND LINE.", "THIRD LINE.")
         }
       }

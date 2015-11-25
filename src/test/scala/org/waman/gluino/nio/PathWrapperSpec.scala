@@ -56,7 +56,7 @@ class PathWrapperSpec
       "RETURN an Option[NoSuchFileException] if the file does not exist" in
         new FileWrapperLike_FileFixture {
           __SetUp__
-          Files.delete(destPath)
+          Files.delete(path)
           __Exercise__
           val result = sut.delete()
           __Verify__

@@ -13,12 +13,12 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
 
   override protected def newPrintWriterWrapperLike(path: Path) = newWriterWrapperLike(path)
 
-  trait WriterWrapperLikeFixture extends DestFileFixture{
-    val sut = newWriterWrapperLike(destPath)
+  trait WriterWrapperLikeFixture extends FileFixture{
+    val sut = newWriterWrapperLike(path)
   }
 
-  trait WriterWrapperLikeWithContentFixture extends DestFileWithContentFixture{
-    val sut = newWriterWrapperLike(destPath)
+  trait WriterWrapperLikeWithContentFixture extends FileWithContentFixture{
+    val sut = newWriterWrapperLike(path)
   }
 
   "withWriter() method should" - {
@@ -51,7 +51,7 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
         w.write(contentAsString)
       }
       __Verify__
-      text(destPath) should equal (contentAsString)
+      text(path) should equal (contentAsString)
     }
   }
 
@@ -62,7 +62,7 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
       sut.append("fourth line.")
       closeIfCloseable(sut)
       __Verify__
-      text(destPath) should equal (contentAsString + "fourth line.")
+      text(path) should equal (contentAsString + "fourth line.")
     }
 
   "<< operator for Writable (in WriterWrapper) should" - {
@@ -72,7 +72,7 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
       sut << "fourth line."
       closeIfCloseable(sut)
       __Verify__
-      text(destPath) should equal (contentAsString + "fourth line.")
+      text(path) should equal (contentAsString + "fourth line.")
     }
 
     "sequentially append the specified Writables to the writer" in
@@ -81,7 +81,7 @@ trait WriterWrapperLikeSpec[T <: WriterWrapperLike[T]]
         sut << "fourth " << "line." << sep
         closeIfCloseable(sut)
         __Verify__
-        text(destPath) should equal (contentAsString + "fourth line." + sep)
+        text(path) should equal (contentAsString + "fourth line." + sep)
       }
   }
 }
@@ -135,7 +135,7 @@ class WriterWrapperSpec
         sut.writeLine("fourth line.")
         sut.close()
         __Verify__
-        text(destPath) should equal (contentAsString + "fourth line." + sep)
+        text(path) should equal (contentAsString + "fourth line." + sep)
       }
   }
 
@@ -154,7 +154,7 @@ class WriterWrapperSpec
         sut.writeLines(Seq("fourth line.", "fifth line."))
         sut.close()
         __Verify__
-        text(destPath) should equal (contentAsString + "fourth line." + sep + "fifth line." + sep)
+        text(path) should equal (contentAsString + "fourth line." + sep + "fifth line." + sep)
       }
   }
 }

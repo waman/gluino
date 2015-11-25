@@ -12,8 +12,8 @@ trait ObjectOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec with ObjectSt
 
   protected def newObjectOutputStreamWrapperLike(path: Path): ObjectOutputStreamWrapperLike
 
-  trait ObjectOutputStreamWrapperLikeFixture extends DestFileFixture{
-    val sut = newObjectOutputStreamWrapperLike(destPath)
+  trait ObjectOutputStreamWrapperLikeFixture extends FileFixture{
+    val sut = newObjectOutputStreamWrapperLike(path)
   }
 
   "withObjectOutputStream() method should" - {
@@ -46,7 +46,7 @@ trait ObjectOutputStreamWrapperLikeSpec extends GluinoIOCustomSpec with ObjectSt
         objectContent.foreach(oos.writeObject(_))
       }
       __Verify__
-      objects(destPath) should contain theSameElementsInOrderAs objectContent
+      objects(path) should contain theSameElementsInOrderAs objectContent
     }
   }
 

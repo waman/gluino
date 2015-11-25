@@ -9,8 +9,8 @@ trait FourPhaseInformer extends Informing{
   def __Verify__ = null
   def __TearDown__ = null
 
-  def __SetUp__(message: String)    = { info("[set up]    " + message); null }
-  def __Exercise__(message: String) = { info("[exercise]  " + message); null }
-  def __Verify__(message: String)   = { info("[verify]    " + message); null }
-  def __TearDown__(message: String) = { info("[tear down] " + message); null }
+  def ___SetUp___(message: String)    = { info("[set up]    " + message); null }
+  def ___Exercise___(message: String) = { info("[exercise]  " + message); null }
+  def ___Verify___(message: String)   = { info("[verify]    " + message); null }
+  def ___TearDown___(message: String) = { info("[tear down] " + message); null }
 }

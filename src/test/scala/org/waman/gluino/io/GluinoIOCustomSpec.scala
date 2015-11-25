@@ -4,21 +4,17 @@ import java.io._
 import java.nio.charset.Charset
 import java.nio.file.{Files, Path, StandardOpenOption}
 
-import org.scalatest.enablers.{Size, Readability, Writability, Existence}
+import org.scalatest.enablers.{Existence, Readability, Size, Writability}
 import org.scalatest.matchers.{BeMatcher, MatchResult}
-import org.scalatest.{FreeSpec, Matchers}
-import org.waman.gluino.FourPhaseInformer
+import org.waman.gluino.GluinoCustomSpec
 import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
-import org.waman.gluino.io.datastream.{DataOutputStreamWrapper, DataInputStreamWrapper}
+import org.waman.gluino.io.datastream.{DataInputStreamWrapper, DataOutputStreamWrapper}
 import org.waman.gluino.io.objectstream.{ObjectInputStreamWrapper, ObjectOutputStreamWrapper}
 import org.waman.gluino.nio.GluinoPath
 
 import scala.collection.JavaConversions._
 
-trait GluinoIOCustomSpec extends FreeSpec with Matchers with FourPhaseInformer{
-
-  //***** Utility methods *****
-  def convertImplicitly[T](t: T) = t
+trait GluinoIOCustomSpec extends GluinoCustomSpec{
 
   //***** Fixtures *****
   // content
@@ -44,30 +40,29 @@ trait GluinoIOCustomSpec extends FreeSpec with Matchers with FourPhaseInformer{
   }
 
   // OutputStream, Writer
-  trait DestFileFixture{
-    val destPath = GluinoPath.createTempFile()
-    val destFile = destPath.toFile
+  trait FileFixture{
+    val path = GluinoPath.createTempFile()
   }
 
-  trait OutputStreamFixture extends DestFileFixture{
-    val output = Files.newOutputStream(destPath)
+  trait OutputStreamFixture extends FileFixture{
+    val output = Files.newOutputStream(path)
   }
 
-  trait WriterFixture extends DestFileFixture{
-    val writer = Files.newBufferedWriter(destPath)
+  trait WriterFixture extends FileFixture{
+    val writer = Files.newBufferedWriter(path)
   }
 
   // OutputStream, Writer with content
-  trait DestFileWithContentFixture extends DestFileFixture{
-    Files.write(destPath, content)
+  trait FileWithContentFixture extends FileFixture{
+    Files.write(path, content)
   }
 
-  trait OutputStreamWithContentFixture extends DestFileWithContentFixture{
-    val output = Files.newOutputStream(destPath, StandardOpenOption.APPEND)
+  trait OutputStreamWithContentFixture extends FileWithContentFixture{
+    val output = Files.newOutputStream(path, StandardOpenOption.APPEND)
   }
 
-  trait WriterWithContentFixture extends DestFileWithContentFixture{
-    val writer = Files.newBufferedWriter(destPath, StandardOpenOption.APPEND)
+  trait WriterWithContentFixture extends FileWithContentFixture{
+    val writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)
   }
 
   //***** Encoded File Fixture *****
@@ -77,7 +72,6 @@ trait GluinoIOCustomSpec extends FreeSpec with Matchers with FourPhaseInformer{
 
   lazy val ISO2022 = Charset.forName("ISO-2022-JP")
   lazy val readOnlyPathISO2022 = createReadOnlyFileISO2022()
-  lazy val readOnlyFileISO2022 = readOnlyPathISO2022.toFile
 
   def createReadOnlyFileISO2022(): Path = {
     val path = GluinoPath.createTempFile()
@@ -85,8 +79,8 @@ trait GluinoIOCustomSpec extends FreeSpec with Matchers with FourPhaseInformer{
     path
   }
 
-  trait DestFileWithContentISO2022Fixture extends DestFileFixture{
-    Files.write(destPath, contentISO2022, ISO2022)
+  trait FileWithContentISO2022Fixture extends FileFixture{
+    Files.write(path, contentISO2022, ISO2022)
   }
 
   //***** Custom Matchers *****
