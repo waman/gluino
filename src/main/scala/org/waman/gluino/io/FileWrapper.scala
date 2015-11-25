@@ -29,6 +29,7 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
     new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), charset))
 
   //***** File Operation *****
+  override def fileName: String = file.getName
   override def isFile: Boolean = file.isFile
   override def isDirectory: Boolean = file.isDirectory
 
@@ -43,5 +44,5 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
   override protected def getFileFilterProvider: FileTypeFilterProvider[File] =
     GluinoFile.FileFileTypeFilterProvider
 
-  override def eachFile(consumer: File => Unit): Unit = ???
+  override def eachFile(consumer: File => Unit): Unit = file.listFiles().foreach(consumer(_))
 }

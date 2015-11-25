@@ -1,8 +1,9 @@
 package org.waman.gluino.nio
 
-import java.nio.file.Path
+import java.nio.file.{Files, Path}
+import scala.collection.JavaConversions._
 
-abstract class DirectoryBuilder extends GluinoPath{
+abstract class DirectoryBuilder{
 
   val baseDir: Path
   private var currentDir: Path = null
@@ -13,7 +14,7 @@ abstract class DirectoryBuilder extends GluinoPath{
 
   def dir(name: String)(buildDir: => Unit): Path = {
     initCurrentDir()
-    val newDir = (this.currentDir / name).createDirectory()
+    val newDir = Files.createDirectory(this.currentDir.resolve(name))
 
     val oldDir = this.currentDir
     this.currentDir = newDir
@@ -25,12 +26,12 @@ abstract class DirectoryBuilder extends GluinoPath{
 
   def file(name: String): Path = {
     initCurrentDir()
-    (this.currentDir / name).createFile()
+    Files.createFile(this.currentDir.resolve(name))
   }
 
   def file(name: String, content: String): Path = {
     val newFile = file(name)
-    newFile.write(Seq(content))
+    Files.write(newFile, Seq(content))
     newFile
   }
 }

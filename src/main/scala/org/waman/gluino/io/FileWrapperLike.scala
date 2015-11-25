@@ -60,6 +60,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     newPrintWriter(charset, append = true).withPrintWriter(consumer)
 
   //***** File Operation *****
+  def fileName: String
   def isFile: Boolean
   def isDirectory: Boolean
 
@@ -73,12 +74,6 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   //***** File Operations through Files and/or Directory Structure *****
   protected def getFileFilterProvider: FileTypeFilterProvider[F]
 
-  // Directories
-  def eachDir(consumer: F => Unit): Unit = eachFile(FileType.Directories)(consumer)
-
-  def eachDirMatch(filter: F => Boolean)(consumer: F => Unit): Unit =
-    eachFileMatch(filter)(consumer)
-
   // Files
   def eachFile(consumer: F => Unit): Unit
 
@@ -87,6 +82,13 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
   def eachFileMatch(filter: F => Boolean)(consumer: F => Unit): Unit = eachFile{ file =>
     if(filter(file))consumer(file)
+  }
+
+  // Directories
+  def eachDir(consumer: F => Unit): Unit = eachFile(FileType.Directories)(consumer)
+
+  def eachDirMatch(filter: F => Boolean)(consumer: F => Unit): Unit = eachDir{ dir =>
+    if(filter(dir))consumer(dir)
   }
 
   // Directory Structure

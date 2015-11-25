@@ -27,7 +27,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
     text(target / "file2.txt") should equal ("Content" + sep)
     text(target / "file3.txt") should equal ("1st line." + sep + "2nd line." + sep + "3rd line." + sep)
     __TearDown__
-
+    Seq("file1.txt", "file2.txt", "file3.txt").map(target / _).foreach(_.delete())
   }
 
   "DirectoryBuilder should create directory structure" in {

@@ -48,6 +48,7 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   override protected def getFileFilterProvider: FileTypeFilterProvider[Path] =
     GluinoPath.PathFileTypeFilterProvider
 
+  override def fileName: String = path.getFileName.toString
   override def isFile: Boolean = Files.isRegularFile(path)
   override def isDirectory: Boolean = Files.isDirectory(path)
 
@@ -71,7 +72,7 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   override def eachFile(consumer: Path => Unit): Unit = {
     val ds = Files.list(path)
     try{
-      Files.list(path).foreach(consumer)
+      ds.foreach(consumer)
     }finally ds.close()
   }
 }

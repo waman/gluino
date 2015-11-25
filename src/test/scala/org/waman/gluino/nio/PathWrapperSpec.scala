@@ -73,4 +73,5 @@ class PathWrapperSpec
     }
   }
 
+  override def wrap(path: Path): PathWrapper = new PathWrapper(path)
 }
