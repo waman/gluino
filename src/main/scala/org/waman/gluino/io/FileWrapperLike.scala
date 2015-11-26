@@ -74,11 +74,17 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   //***** File Operations through Files and/or Directory Structure *****
   protected def getFileFilterProvider: FileTypeFilterProvider[F]
 
+  private def filterType(fileType: FileType, file: F): Boolean =
+    fileType.filter(file)(getFileFilterProvider)
+
+  private def consumeIfFileTypeMatches(file: F, fileType: FileType, consumer: F => Unit): Unit =
+    if(filterType(fileType, file))consumer(file)
+
   // Files
   def eachFile(consumer: F => Unit): Unit
 
   def eachFile(fileType: FileType)(consumer: F => Unit): Unit =
-    eachFileMatch(fileType.filter(_)(getFileFilterProvider))(consumer)
+    eachFileMatch(filterType(fileType, _))(consumer)
 
   def eachFileMatch(filter: F => Boolean)(consumer: F => Unit): Unit = eachFile{ file =>
     if(filter(file))consumer(file)
@@ -91,28 +97,29 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     if(filter(dir))consumer(dir)
   }
 
+  def eachFileRecurse(fileType: FileType = FileType.Any, visitDirectoryPost: Boolean = false)
+                     (consumer: F => Unit): Unit = {
+    eachFile{ f =>
+      wrap(f) match {
+        case file if file.isFile => consumeIfFileTypeMatches(f, fileType, consumer)
+        case dir if dir.isDirectory =>
+          if(!visitDirectoryPost)
+            consumeIfFileTypeMatches(f, fileType, consumer)
+
+          dir.eachFileRecurse(fileType, visitDirectoryPost)(consumer)
+
+          if(visitDirectoryPost)
+            consumeIfFileTypeMatches(f, fileType, consumer)
+        case _ =>
+      }
+    }
+  }
+
   // Directory Structure
   def eachDirRecurse(consumer: F => Unit, visitDirectoryPost: Boolean = true): Unit =
     eachFileRecurse(FileType.Directories, visitDirectoryPost)(consumer)
 
-  def eachFileRecurse(fileType: FileType = FileType.Any, visitDirectoryPost: Boolean = false)
-                     (consumer: F => Unit): Unit = {
-    if(!visitDirectoryPost){
-      eachDir { dir =>
-        if(fileType.filter(dir)(getFileFilterProvider))consumer(dir)
-        wrap(dir).eachFileRecurse(fileType, visitDirectoryPost)(consumer)
-      }
-    }
 
-    eachFile(fileType)(consumer)
-
-    if(visitDirectoryPost){
-      eachDir { dir =>
-        wrap(dir).eachFileRecurse(fileType, visitDirectoryPost)(consumer)
-        if(fileType.filter(dir)(getFileFilterProvider))consumer(dir)
-      }
-    }
-  }
   //  def moveDir(dest: F): Option[IOException]
   //  def copyDir(dest: F): Option[IOException]
   //  def deleteDir(): Option[IOException] =
