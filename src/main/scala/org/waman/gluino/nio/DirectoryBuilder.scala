@@ -12,9 +12,13 @@ abstract class DirectoryBuilder{
     if(this.currentDir == null)
       this.currentDir = this.baseDir
 
-  def dir(name: String)(buildDir: => Unit): Path = {
+  protected def emptyDir(name: String): Path = {
     initCurrentDir()
-    val newDir = Files.createDirectory(this.currentDir.resolve(name))
+    Files.createDirectory(this.currentDir.resolve(name))
+  }
+
+  protected def dir(name: String)(buildDir: => Unit): Path = {
+    val newDir = emptyDir(name)
 
     val oldDir = this.currentDir
     this.currentDir = newDir
@@ -24,14 +28,11 @@ abstract class DirectoryBuilder{
     newDir
   }
 
-  def file(name: String): Path = {
+  protected def file(name: String): Path = {
     initCurrentDir()
     Files.createFile(this.currentDir.resolve(name))
   }
 
-  def file(name: String, content: String): Path = {
-    val newFile = file(name)
-    Files.write(newFile, Seq(content))
-    newFile
-  }
+  protected def file(name: String, content: String): Path =
+    Files.write(file(name), Seq(content))
 }

@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="04fdf3ea-2091-491b-880f-2592d225098d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/higashida.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/higashida.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapper.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapper.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapperLike.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapperLike.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/DirectoryBuilder.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/DirectoryBuilder.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala" />
     </list>
     <ignored path="gluino.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,55 +34,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="FileWrapperLike.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapperLike.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="79" column="63" selection-start-line="79" selection-start-column="63" selection-end-line="79" selection-end-column="63" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FileWrapper.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapper.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="31" column="46" selection-start-line="30" selection-start-column="30" selection-end-line="31" selection-end-column="46" />
-              <folding>
-                <element signature="e#29#45#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PathWrapper.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FileWrapperSpec.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="199" column="0" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
-              <folding>
-                <element signature="e#29#63#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DirectoryBuilderSpec.scala" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DirectoryBuilderSpec.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="8" column="70" selection-start-line="8" selection-start-column="70" selection-end-line="8" selection-end-column="70" />
+            <state vertical-scroll-proportion="0.71313673">
+              <caret line="127" column="34" selection-start-line="127" selection-start-column="34" selection-end-line="127" selection-end-column="34" />
               <folding>
                 <element signature="e#30#64#0" expanded="true" />
               </folding>
@@ -94,25 +46,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DirectoryBuilder.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="build.sbt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.sbt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="35" column="55" selection-start-line="35" selection-start-column="2" selection-end-line="35" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor vertical-scroll-proportion="0.0">
+                <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                <folding />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DirectoryBuilder.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/DirectoryBuilder.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6595174">
-              <caret line="26" column="34" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
               <folding>
                 <element signature="e#30#64#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PathWrapperSpec.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="59" column="22" selection-start-line="59" selection-start-column="22" selection-end-line="59" selection-end-column="22" />
-              <folding>
-                <element signature="e#30#52#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -233,6 +196,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -567,9 +532,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -593,7 +556,7 @@
       <recent name="org.waman.gluino.nio" />
     </key>
   </component>
-  <component name="RunManager" selected="ScalaTest.DirectoryBuilderSpec">
+  <component name="RunManager" selected="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should be able to create file with content by using withWriter method (enhanced by GluinoPath)">
     <configuration default="false" name="DirectoryBuilderSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
@@ -609,7 +572,7 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="DirectoryBuilderSpec.DirectoryBuilder should create files" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+    <configuration default="false" name="DirectoryBuilderSpec.DirectoryBuilder should create nested directory structure" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
       <setting name="path" value="org.waman.gluino.nio.DirectoryBuilderSpec" />
@@ -618,52 +581,52 @@
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="DirectoryBuilder should create files" />
+      <setting name="testName" value="DirectoryBuilder should create nested directory structure" />
       <setting name="testKind" value="Test name" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="FileWrapperSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+    <configuration default="false" name="DirectoryBuilderSpec.DirectoryBuilder should be able to create files under any place of directory structure" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.io.FileWrapperSpec" />
+      <setting name="path" value="org.waman.gluino.nio.DirectoryBuilderSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="" />
-      <setting name="testKind" value="Class" />
+      <setting name="testName" value="DirectoryBuilder should be able to create files under any place of directory structure" />
+      <setting name="testKind" value="Test name" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="PathWrapperSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+    <configuration default="false" name="DirectoryBuilderSpec.DirectoryBuilder should be able to create file with content when 2 String args are passed" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.nio.PathWrapperSpec" />
+      <setting name="path" value="org.waman.gluino.nio.DirectoryBuilderSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="" />
-      <setting name="testKind" value="Class" />
+      <setting name="testName" value="DirectoryBuilder should be able to create file with content when 2 String args are passed" />
+      <setting name="testKind" value="Test name" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="FileWrapperSpec.***** File Operations through Files and/or Directory Structure ***** eachFile() method should iterate files and directories in the specified directory (NOT deeply iterate)" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+    <configuration default="false" name="DirectoryBuilderSpec.DirectoryBuilder should be able to create file with content by using withWriter method (enhanced by GluinoPath)" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.io.FileWrapperSpec" />
+      <setting name="path" value="org.waman.gluino.nio.DirectoryBuilderSpec" />
       <setting name="package" value="" />
       <setting name="vmparams" value="" />
       <setting name="params" value="" />
       <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
       <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="***** File Operations through Files and/or Directory Structure ***** eachFile() method should iterate files and directories in the specified directory (NOT deeply iterate)" />
+      <setting name="testName" value="DirectoryBuilder should be able to create file with content by using withWriter method (enhanced by GluinoPath)" />
       <setting name="testKind" value="Test name" />
       <setting name="showProgressMessages" value="true" />
       <envs />
@@ -959,18 +922,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec" />
-      <item index="1" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should create files" />
-      <item index="2" class="java.lang.String" itemvalue="ScalaTest.FileWrapperSpec" />
-      <item index="3" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec" />
-      <item index="4" class="java.lang.String" itemvalue="ScalaTest.FileWrapperSpec.***** File Operations through Files and/or Directory Structure ***** eachFile() method should iterate files and directories in the specified directory (NOT deeply iterate)" />
+      <item index="1" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should create nested directory structure" />
+      <item index="2" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should be able to create files under any place of directory structure" />
+      <item index="3" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should be able to create file with content when 2 String args are passed" />
+      <item index="4" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should be able to create file with content by using withWriter method (enhanced by GluinoPath)" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec" />
-        <item index="1" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should create files" />
-        <item index="2" class="java.lang.String" itemvalue="ScalaTest.FileWrapperSpec" />
-        <item index="3" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec" />
-        <item index="4" class="java.lang.String" itemvalue="ScalaTest.FileWrapperSpec.***** File Operations through Files and/or Directory Structure ***** eachFile() method should iterate files and directories in the specified directory (NOT deeply iterate)" />
+        <item index="0" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should be able to create file with content by using withWriter method (enhanced by GluinoPath)" />
+        <item index="1" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should be able to create file with content when 2 String args are passed" />
+        <item index="2" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should be able to create files under any place of directory structure" />
+        <item index="3" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should create nested directory structure" />
+        <item index="4" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec" />
       </list>
     </recent_temporary>
   </component>
@@ -1226,24 +1189,30 @@
       <option name="project" value="LOCAL" />
       <updated>1448416700050</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Add impls and tests for file-iteration methods of FileWrapperLike">
+      <created>1448461290968</created>
+      <option name="number" value="00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1448461290968</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="DirectoryBuilderSpec - 2015.11.25 at 23h 19m 46s.xml">
-      <configuration name="DirectoryBuilderSpec" configurationId="ScalaTestRunConfiguration" />
+    <history-entry file="DirectoryBuilderSpec_DirectoryBuilder_should_be_able_to_create_file_with_content_by_using_withWriter_method_(enhanced_by_GluinoPath) - 2015.11.26 at 10h 09m 22s.xml">
+      <configuration name="DirectoryBuilderSpec.DirectoryBuilder should be able to create file with content by using withWriter method (enhanced by GluinoPath)" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="FileWrapperSpec - 2015.11.25 at 13h 37m 13s.xml">
-      <configuration name="FileWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    <history-entry file="DirectoryBuilderSpec_DirectoryBuilder_should_be_able_to_create_file_with_content_by_using_withWriter_method_(enhanced_by_GluinoPath) - 2015.11.26 at 10h 14m 53s.xml">
+      <configuration name="DirectoryBuilderSpec.DirectoryBuilder should be able to create file with content by using withWriter method (enhanced by GluinoPath)" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="FileWrapperSpec - 2015.11.25 at 13h 39m 00s.xml">
-      <configuration name="FileWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    <history-entry file="DirectoryBuilderSpec_DirectoryBuilder_should_be_able_to_create_file_with_content_by_using_withWriter_method_(enhanced_by_GluinoPath) - 2015.11.26 at 10h 20m 43s.xml">
+      <configuration name="DirectoryBuilderSpec.DirectoryBuilder should be able to create file with content by using withWriter method (enhanced by GluinoPath)" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="FileWrapperSpec - 2015.11.25 at 13h 57m 18s.xml">
-      <configuration name="FileWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    <history-entry file="DirectoryBuilderSpec_DirectoryBuilder_should_be_able_to_create_file_with_content_by_using_withWriter_method_(enhanced_by_GluinoPath) - 2015.11.26 at 10h 21m 33s.xml">
+      <configuration name="DirectoryBuilderSpec.DirectoryBuilder should be able to create file with content by using withWriter method (enhanced by GluinoPath)" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="FileWrapperSpec_______File_Operations_through_Files_and_or_Directory_Structure_______eachFile()_method_should_iterate_files_and_directories_in_the_specified_directory_(NOT_deeply_iterate) - 2015.11.25 at 13h 22m 22s.xml">
-      <configuration name="FileWrapperSpec.***** File Operations through Files and/or Directory Structure ***** eachFile() method should iterate files and directories in the specified directory (NOT deeply iterate)" configurationId="ScalaTestRunConfiguration" />
+    <history-entry file="DirectoryBuilderSpec_DirectoryBuilder_should_create_nested_directory_structure - 2015.11.26 at 08h 02m 45s.xml">
+      <configuration name="DirectoryBuilderSpec.DirectoryBuilder should create nested directory structure" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
     <history-entry file="FileWrapperSpec_______File_Operations_through_Files_and_or_Directory_Structure_______eachFile()_method_should_iterate_files_and_directories_in_the_specified_directory_(NOT_deeply_iterate) - 2015.11.25 at 13h 22m 45s.xml">
       <configuration name="FileWrapperSpec.***** File Operations through Files and/or Directory Structure ***** eachFile() method should iterate files and directories in the specified directory (NOT deeply iterate)" configurationId="ScalaTestRunConfiguration" />
@@ -1305,7 +1274,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="Add some methods of ScalaJdkPath, Scala version of GDK method extension." />
     <MESSAGE value="Change Set to Seq of FileAttributes in method signature in createXxxx() methods." />
     <MESSAGE value="Add line read/write method to Path and Add wrapper class to Input/OutputStream and Reader/Writer." />
     <MESSAGE value="Add content to README" />
@@ -1330,7 +1298,8 @@
     <MESSAGE value="Add FileType constant and enabling to filter with FileType." />
     <MESSAGE value="Refactor test fixtures." />
     <MESSAGE value="Add DirectoryBuilder to build directory structure easily" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add DirectoryBuilder to build directory structure easily" />
+    <MESSAGE value="Add impls and tests for file-iteration methods of FileWrapperLike" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add impls and tests for file-iteration methods of FileWrapperLike" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1343,20 +1312,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ReaderWrapper.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.19624573">
-          <caret line="35" column="36" selection-start-line="35" selection-start-column="36" selection-end-line="35" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/Writable.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17064847">
-          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/PrintWriterWrapper.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1655,9 +1610,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="46" selection-start-line="30" selection-start-column="30" selection-end-line="31" selection-end-column="46" />
-          <folding>
-            <element signature="e#29#45#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1665,7 +1617,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1673,44 +1624,56 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="79" column="63" selection-start-line="79" selection-start-column="63" selection-end-line="79" selection-end-column="63" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="0.18088737">
           <caret line="59" column="22" selection-start-line="59" selection-start-column="22" selection-end-line="59" selection-end-column="22" />
-          <folding>
-            <element signature="e#30#52#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="199" column="0" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
-          <folding>
-            <element signature="e#29#63#0" expanded="true" />
-          </folding>
+          <caret line="207" column="71" selection-start-line="207" selection-start-column="71" selection-end-line="207" selection-end-column="71" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala">
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor vertical-scroll-proportion="0.0">
+            <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/DirectoryBuilder.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="8" column="70" selection-start-line="8" selection-start-column="70" selection-end-line="8" selection-end-column="70" />
+          <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
           <folding>
             <element signature="e#30#64#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/DirectoryBuilder.scala">
+    <entry file="file://$PROJECT_DIR$/build.sbt">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6595174">
-          <caret line="26" column="34" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="35" column="55" selection-start-line="35" selection-start-column="2" selection-end-line="35" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.71313673">
+          <caret line="127" column="34" selection-start-line="127" selection-start-column="34" selection-end-line="127" selection-end-column="34" />
           <folding>
             <element signature="e#30#64#0" expanded="true" />
           </folding>

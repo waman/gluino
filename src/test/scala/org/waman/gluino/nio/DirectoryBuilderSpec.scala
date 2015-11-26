@@ -1,61 +1,156 @@
 package org.waman.gluino.nio
 
-import java.nio.file.{Path, Files}
+import java.nio.file.{Files, Path}
 
-import org.waman.gluino.io.{GluinoIO, GluinoIOCustomSpec}
-
-import GluinoIO.{lineSeparator => sep}
+import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
+import org.waman.gluino.io.GluinoIOCustomSpec
 
 class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
 
-  "DirectoryBuilder should create files" in {
-    __Exercise__
-    val target = new DirectoryBuilder{
-      val baseDir = GluinoPath.createTempDirectory()
-      file("file1.txt")
-      file("file2.txt", "Content")
-      file("file3.txt")withWriter{ w =>
-        w.writeLine("1st line.")
-        w.writeLine("2nd line.")
-        w.writeLine("3rd line.")
-      }
-    }.baseDir
-    __Verify__
-    target / "file1.txt" should exist
-    target / "file2.txt" should exist
-    target / "file3.txt" should exist
-    text(target / "file2.txt") should equal ("Content" + sep)
-    text(target / "file3.txt") should equal ("1st line." + sep + "2nd line." + sep + "3rd line." + sep)
-    __TearDown__
-    Seq("file1.txt", "file2.txt", "file3.txt").map(target / _).foreach(_.delete())
-  }
+  "DirectoryBuilder should" - {
 
-  "DirectoryBuilder should create directory structure" in {
-    __Exercise__
-    val target = new DirectoryBuilder{
-      val baseDir = GluinoPath.createTempDirectory()
-      dir("parentDir"){
-        dir("childDir"){
-          file("file1.txt")
-          file("file2.txt", "Content")
+    "be able to create nested directory structure" in {
+      __Exercise__
+      val projectHome = new DirectoryBuilder {
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+        dir("src") {
+          dir("main") {
+            dir("java") {} // {} is needed even if empty directory
+            dir("scala") {}
+            emptyDir("resources") // {} is not needed
+          }
+          dir("test") {
+            dir("scala") {}
+            dir("resources") {}
+          }
         }
-        file("file3.txt").withWriter{ w =>
-          w.writeLine("1st line.")
-          w.writeLine("2nd line.")
-          w.writeLine("3rd line.")
-        }
-      }
-    }.baseDir
-    __Verify__
-    target / "parentDir" should exist
-    target / "parentDir" / "childDir" should exist
-    target / "parentDir" / "childDir" / "file1.txt" should exist
-    target / "parentDir" / "childDir" / "file2.txt" should exist
-    target / "parentDir" / "file3.txt" should exist
-    text(target / "parentDir" / "childDir" / "file2.txt") should equal ("Content" + sep)
-    text(target / "parentDir" / "file3.txt") should equal ("1st line." + sep + "2nd line." + sep + "3rd line." + sep)
-    __TearDown__
+        dir("project") {}
+      }.baseDir
+      __Verify__
+      projectHome / "src" should exist
+      projectHome / "src" / "main" should exist
+      projectHome / "src" / "main" / "java" should exist
+      projectHome / "src" / "main" / "scala" should exist
+      projectHome / "src" / "main" / "resources" should exist
+      projectHome / "src" / "test" / "scala" should exist
+      projectHome / "src" / "test" / "resources" should exist
+      projectHome / "project" should exist
+      __TearDown__
 
+    }
+
+    "be able to create files under any place of directory structure" in {
+      __Exercise__
+      val projectHome = new DirectoryBuilder {
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+        file("build.sbt")
+        file("README.md")
+        file(".gitignore")
+        dir("project") {
+          file("build.properties")
+        }
+        dir("src") {
+          dir("main") {
+            dir("scala") {
+              file("MyFirstApp.scala")
+            }
+          }
+          dir("test") {
+            dir("scala") {
+              file("MyFirstAppSpec.scala")
+            }
+          }
+        }
+      }.baseDir
+      __Verify__
+      projectHome / "build.sbt" should exist
+      projectHome / "README.md" should exist
+      projectHome / ".gitignore" should exist
+      projectHome / "project" / "build.properties" should exist
+      projectHome / "src" / "main" / "scala" / "MyFirstApp.scala" should exist
+      projectHome / "src" / "test" / "scala" / "MyFirstAppSpec.scala" should exist
+      __TearDown__
+
+    }
+
+    "be able to create file with content when 2 String args are passed" in {
+      __Exercise__
+      val projectHome = new DirectoryBuilder {
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+        file("build.sbt")
+        file("README.md", "Read me!")
+        file(".gitignore", "target/")
+        dir("project") {
+          file("build.properties", "sbt.version=0.13.8")
+        }
+        dir("src") {
+          dir("main") {
+            dir("scala") {
+              file("MyFirstApp.scala")
+            }
+          }
+          dir("test") {
+            dir("scala") {
+              file("MyFirstAppSpec.scala")
+            }
+          }
+        }
+      }.baseDir
+      __Verify__
+      text(projectHome / "README.md") should equal("Read me!" + sep)
+      text(projectHome / ".gitignore") should equal("target/" + sep)
+      text(projectHome / "project" / "build.properties") should equal("sbt.version=0.13.8" + sep)
+      __TearDown__
+
+    }
+
+    "be able to create file with content by using withWriter method (enhanced by GluinoPath)" in {
+      __Exercise__
+      val projectHome = new DirectoryBuilder {
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+        file("build.sbt",
+          s"""name := "${baseDir.getFileName}"
+              |
+              |version := "0.1-SNAPSHOT"
+              |
+              |libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"""".stripMargin)
+        file("README.md", "Read me!")
+        file(".gitignore", "target/")
+        dir("project") {
+          file("build.properties", "sbt.version=0.13.8")
+        }
+        dir("src") {
+          dir("main") {
+            dir("scala") {
+              file("MyFirstApp.scala").withWriter{ w =>
+                w.write("class MyFirstApp extends App{" + sep)
+                w.write("  println(\"Hello World!\")" + sep)
+                w.write("}" + sep)
+              }
+            }
+          }
+          dir("test") {
+            dir("scala") {
+              file("MyFirstAppSpec.scala",
+                """import org.scalatest.{FlatSpec, Matchers}
+                  |
+                  |class MyFirstAppSpec extends FlatSpec with Matchers{
+                  |
+                  |}""".stripMargin)
+            }
+          }
+        }
+      }.baseDir
+      __Verify__
+      (projectHome / "build.sbt").size should be > 0L
+      (projectHome / "README.md").size should be > 0L
+      (projectHome / ".gitignore").size should be > 0L
+      (projectHome / "project" / "build.properties").size should be > 0L
+      (projectHome / "src" / "main" / "scala" / "MyFirstApp.scala").size should be > 0L
+      (projectHome / "src" / "test" / "scala" / "MyFirstAppSpec.scala").size should be > 0L
+      __TearDown__
+
+    }
   }
 
   def text(path: Path): String = new String(Files.readAllBytes(path))
