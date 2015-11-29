@@ -10,7 +10,14 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     with InputStreamWrapperLike with OutputStreamWrapperLike[W]
     with ReaderWrapperLike with WriterWrapperLike[W] with PrintWriterWrapperLike[W]{ self: W =>
 
-  def wrap(file: F): W
+  protected def getFile: F
+  def fileName: String
+  protected def wrap(file: F): W
+
+  def isFile: Boolean
+  def isDirectory: Boolean
+
+  protected def getFileFilterProvider: FileTypeFilterProvider[F]
 
   //***** Byte, InputStream/OutputStream *****
   def newInputStream: InputStream
@@ -60,10 +67,6 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     newPrintWriter(charset, append = true).withPrintWriter(consumer)
 
   //***** File Operation *****
-  def fileName: String
-  def isFile: Boolean
-  def isDirectory: Boolean
-
 //  def renameFileName(fileName: String): F
 //
 //  def rename(dest: F): Option[IOException] = move(dest)
@@ -72,66 +75,93 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def delete(): Option[IOException]
 
   //***** File Operations through Files and/or Directory Structure *****
-  protected def getFileFilterProvider: FileTypeFilterProvider[F]
+  /** eachFile[Match][Recurse], eachDir[Match][Recurse]
+    * -Match --- take a file filter (F => Boolean function) to filter files
+    * -Recurse --- deeply iterate directories
+    * -Dir --- iterate directories only
+    */
+  private def toFilter(fileType: FileType): F => Boolean =
+    f => fileType.filter(f)(getFileFilterProvider)
 
-  private def filterType(fileType: FileType, file: F): Boolean =
-    fileType.filter(file)(getFileFilterProvider)
+  private def toFilter(fileType: FileType, filter: F => Boolean): F => Boolean =
+    f => toFilter(fileType)(f) && filter(f)
 
-  private def consumeIfFileTypeMatches(file: F, fileType: FileType, consumer: F => Unit): Unit =
-    if(filterType(fileType, file))consumer(file)
+  private def consumeIfFileTypeMatches(file: F, filter: F => Boolean, consumer: F => Unit): Unit =
+    if(filter(file))consumer(file)
 
-  // Files
+  // eachFiles
   def eachFile(consumer: F => Unit): Unit
 
   def eachFile(fileType: FileType)(consumer: F => Unit): Unit =
-    eachFileMatch(filterType(fileType, _))(consumer)
+    doEachFileMatch(toFilter(fileType), consumer)
 
-  def eachFileMatch(filter: F => Boolean)(consumer: F => Unit): Unit = eachFile{ file =>
-    if(filter(file))consumer(file)
-  }
+  def eachFileMatch(filter: F => Boolean)(consumer: F => Unit): Unit =
+    doEachFileMatch(toFilter(FileType.Any, filter), consumer)
 
-  // Directories
-  def eachDir(consumer: F => Unit): Unit = eachFile(FileType.Directories)(consumer)
+  def eachFileMatch(fileType: FileType, filter: F => Boolean)(consumer: F => Unit): Unit =
+    doEachFileMatch(toFilter(fileType, filter), consumer)
 
-  def eachDirMatch(filter: F => Boolean)(consumer: F => Unit): Unit = eachDir{ dir =>
-    if(filter(dir))consumer(dir)
+  private def doEachFileMatch(filter: F => Boolean, consumer: F => Unit): Unit = eachFile{ file =>
+    consumeIfFileTypeMatches(file, filter, consumer)
   }
 
   def eachFileRecurse(fileType: FileType = FileType.Any, visitDirectoryPost: Boolean = false)
-                     (consumer: F => Unit): Unit = {
+                     (consumer: F => Unit): Unit =
+    doEachFileMatchRecurse(toFilter(fileType), visitDirectoryPost)(consumer)
+
+  def eachFileMatchRecurse(fileType: FileType, filter: F => Boolean, visitDirectoryPost: Boolean = false)
+                          (consumer: F => Unit): Unit =
+    doEachFileMatchRecurse(toFilter(fileType, filter), visitDirectoryPost)(consumer)
+
+  private def doEachFileMatchRecurse(filter: F => Boolean, visitDirectoryPost: Boolean = false)
+                          (consumer: F => Unit): Unit = {
+    if(!visitDirectoryPost)
+      consumeIfFileTypeMatches(getFile, filter, consumer)
+
     eachFile{ f =>
       wrap(f) match {
-        case file if file.isFile => consumeIfFileTypeMatches(f, fileType, consumer)
+        case file if file.isFile =>
+          consumeIfFileTypeMatches(f, filter, consumer)
         case dir if dir.isDirectory =>
-          if(!visitDirectoryPost)
-            consumeIfFileTypeMatches(f, fileType, consumer)
-
-          dir.eachFileRecurse(fileType, visitDirectoryPost)(consumer)
-
-          if(visitDirectoryPost)
-            consumeIfFileTypeMatches(f, fileType, consumer)
+          dir.doEachFileMatchRecurse(filter, visitDirectoryPost)(consumer)
         case _ =>
       }
     }
+
+    if(visitDirectoryPost)
+      consumeIfFileTypeMatches(getFile, filter, consumer)
   }
 
-  // Directory Structure
-  def eachDirRecurse(consumer: F => Unit, visitDirectoryPost: Boolean = true): Unit =
-    eachFileRecurse(FileType.Directories, visitDirectoryPost)(consumer)
+  // eachDir
+  def eachDir(consumer: F => Unit): Unit = eachFile(FileType.Directories)(consumer)
+
+  def eachDirMatch(filter: F => Boolean)(consumer: F => Unit): Unit =
+    eachFileMatch(FileType.Directories, filter)(consumer)
+
+  def eachDirRecurse(consumer: F => Unit): Unit =
+    eachDirRecurse(visitParentPost = false)(consumer)
+
+  def eachDirRecurse(visitParentPost: Boolean)(consumer: F => Unit): Unit =
+    eachFileRecurse(FileType.Directories, visitParentPost)(consumer)
+
+  def eachDirMatchRecurse(filter: F => Boolean, visitParentPost: Boolean = false)
+                         (consumer: F => Unit): Unit =
+    eachFileMatchRecurse(FileType.Directories, filter, visitParentPost)(consumer)
 
 
   //  def moveDir(dest: F): Option[IOException]
   //  def copyDir(dest: F): Option[IOException]
-  //  def deleteDir(): Option[IOException] =
-  //    try {
-  //      eachFileRecurse(FileType.Any, visitDirectoryPost = true) { file =>
-  //        wrap(file).delete() match {
-  //          case Some(ex) => throw ex
-  //          case _ =>
-  //        }
-  //      }
-  //      Option.empty
-  //    }catch {
-  //      case ex: IOException => Some(ex)
-  //    }
+
+  def deleteDir(): Option[IOException] =
+    try {
+      eachFileRecurse(FileType.Any, visitDirectoryPost = true) { file =>
+        wrap(file).delete() match {
+          case Some(ex) => throw ex
+          case _ =>
+        }
+      }
+      None
+    }catch {
+      case ex: IOException => Some(ex)
+    }
 }

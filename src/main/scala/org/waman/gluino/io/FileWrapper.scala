@@ -5,7 +5,15 @@ import java.nio.charset.Charset
 
 class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
 
-  override def wrap(file: File): FileWrapper = new FileWrapper(file)
+  override protected def getFile: File = file
+  override def fileName: String = file.getName
+  override protected def wrap(file: File): FileWrapper = new FileWrapper(file)
+
+  override def isFile: Boolean = file.isFile
+  override def isDirectory: Boolean = file.isDirectory
+
+  override protected def getFileFilterProvider: FileTypeFilterProvider[File] =
+    GluinoFile.FileFileTypeFilterProvider
 
   //***** Path Operation *****
   def /(child: String): File = new File(file.getPath + "/" + child)
@@ -29,20 +37,13 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
     new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), charset))
 
   //***** File Operation *****
-  override def fileName: String = file.getName
-  override def isFile: Boolean = file.isFile
-  override def isDirectory: Boolean = file.isDirectory
-
-//  override def rename(name: String): Boolean = file.renameTo(new File(name))
+  //  override def rename(name: String): Boolean = file.renameTo(new File(name))
   override def delete(): Option[IOException] = {
     file.delete() match {
-      case true => Option.empty
+      case true => None
       case false => Some(new IOException("Fail to delete a directory: " + file.getAbsoluteFile))
     }
   }
-
-  override protected def getFileFilterProvider: FileTypeFilterProvider[File] =
-    GluinoFile.FileFileTypeFilterProvider
 
   override def eachFile(consumer: File => Unit): Unit = file.listFiles().foreach(consumer(_))
 }

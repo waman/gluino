@@ -12,7 +12,15 @@ import scala.collection.JavaConversions._
 class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
     with GluinoFunction{
 
-  override def wrap(path: Path): PathWrapper = new PathWrapper(path)
+  override protected def getFile = path
+  override def fileName: String = path.getFileName.toString
+  override protected def wrap(path: Path): PathWrapper = new PathWrapper(path)
+
+  override def isFile: Boolean = Files.isRegularFile(path)
+  override def isDirectory: Boolean = Files.isDirectory(path)
+
+  override protected def getFileFilterProvider: FileTypeFilterProvider[Path] =
+    GluinoPath.PathFileTypeFilterProvider
 
   //***** Path Operation *****
   def /(child: String): Path = /(Paths.get(child))
@@ -45,13 +53,6 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
     Files.write(path, List(text), charset)
 
   //***** File Operation *****
-  override protected def getFileFilterProvider: FileTypeFilterProvider[Path] =
-    GluinoPath.PathFileTypeFilterProvider
-
-  override def fileName: String = path.getFileName.toString
-  override def isFile: Boolean = Files.isRegularFile(path)
-  override def isDirectory: Boolean = Files.isDirectory(path)
-
 //  override def rename(name: String): Boolean = try {
 //    Files.move(path, Paths.get(name))
 //    true
@@ -62,7 +63,7 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   override def delete(): Option[IOException] = {
     try{
       Files.delete(path)
-      Option.empty
+      None
     }catch{
       case ex: IOException => Some(ex)
     }

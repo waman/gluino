@@ -3,16 +3,17 @@ package org.waman.gluino.io
 import java.io.{File, IOException}
 import java.nio.file.{Files, Path}
 
-import scala.collection.mutable
-
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.OptionValues._
-import org.waman.gluino.nio.{DirectoryBuilder, GluinoPath}
+import org.waman.gluino.nio.{DirectoryBuilder, GluinoPath, PathWrapper}
 import org.waman.gluino.number.GluinoNumber
+
+import scala.collection.mutable
 
 trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
     extends InputStreamWrapperLikeSpec
     with OutputStreamWrapperLikeSpec[W]
-    with GluinoNumber{
+    with GluinoNumber with BeforeAndAfterAll{
 
   protected def newFileWrapperLike(path: Path): W
 
@@ -40,12 +41,13 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
   }
 
   val readOnlyDir: Path = initDirectory()
+  override def afterAll{ println(new PathWrapper(readOnlyDir).deleteDir()) }
 
   trait FileWrapperLike_ReadOnlyDirFixture{
     val sut = newFileWrapperLike(readOnlyDir)
   }
 
-  private def initDirectory(parent: Path = GluinoPath.createTempDirectory()): Path = {
+  private def initDirectory(parent: Path = GluinoPath.createTempDirectory(prefix = "123-")): Path = {
     new DirectoryBuilder{
       val baseDir = parent
       file("child1.txt")
@@ -117,194 +119,437 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
   }
 
   def wrap(file: F): W
+  def fileNames(files: Seq[F]): Seq[String] = files.map(wrap).map(_.fileName)
+  def fileNameContains(s: String): F => Boolean = wrap(_).fileName.contains(s)
 
   "***** File Operations through Files and/or Directory Structure *****" - {
 
-    "eachFile() method should" - {
+    "***** eachFile[Match][Recurse]() *****" - {
 
-      "iterate files and directories in the specified directory (NOT deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val result = new mutable.HashSet[F]
-          __Exercise__
-          sut.eachFile(result += _)
-          __Verify__
-          result.map(wrap).map(_.fileName) should contain theSameElementsAs
-            Set("child1.txt", "child2.txt", "child3.txt", "dir1", "dir2", "dir3")
-        }
-    }
+      "eachFile{} method should" - {
 
-    "eachFile(FileType) method should" - {
+        "iterate files and directories in the specified directory (NOT deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFile(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq("child1.txt", "child2.txt", "child3.txt", "dir1", "dir2", "dir3")
+          }
+      }
 
-      "iterate files in the specified directory if FileType.Files is passed (NOT deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val result = new mutable.HashSet[F]
-          __Exercise__
-          sut.eachFile(FileType.Files)(result += _)
-          __Verify__
-          result.map(wrap).map(_.fileName) should contain theSameElementsAs
-            Set("child1.txt", "child2.txt", "child3.txt")
-        }
+      "eachFile(FileType){} method should" - {
 
-      "iterate directories in the specified directory if FileType.Directories is passed (NOT deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val result = new mutable.HashSet[F]
-          __Exercise__
-          sut.eachFile(FileType.Directories)(result += _)
-          __Verify__
-          result.map(wrap).map(_.fileName) should contain theSameElementsAs
-            Set("dir1", "dir2", "dir3")
-        }
+        "iterate files in the specified directory if the argument is FileType.Files (NOT deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFile(FileType.Files)(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq("child1.txt", "child2.txt", "child3.txt")
+          }
 
-      "iterate files and directories in the specified directory if FileType.Any is passed (NOT deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val result = new mutable.HashSet[F]
-          __Exercise__
-          sut.eachFile(FileType.Any)(result += _)
-          __Verify__
-          result.map(wrap).map(_.fileName) should contain theSameElementsAs
-            Set("child1.txt", "child2.txt", "child3.txt", "dir1", "dir2", "dir3")
-        }
-    }
+        "iterate directories in the specified directory if the argument is FileType.Directories (NOT deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFile(FileType.Directories)(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq("dir1", "dir2", "dir3")
+          }
 
-    "eachFileMatch(F => Boolean) method should" - {
+        "iterate files and directories in the specified directory if the argument is FileType.Any (NOT deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFile(FileType.Any)(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq("child1.txt", "child2.txt", "child3.txt", "dir1", "dir2", "dir3")
+          }
+      }
 
-      "iterate files and directories which matches the specified condition in the specified directory (NOT deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val result = new mutable.HashSet[F]
-          __Exercise__
-          sut.eachFileMatch(wrap(_).fileName.contains("2"))(result += _)
-          __Verify__
-          result.map(wrap).map(_.fileName) should contain theSameElementsAs
-            Set("child2.txt", "dir2")
-        }
-    }
+      "eachFileMatch(F =>Boolean){} method should" - {
 
-    "eachDir() method should" - {
+        "iterate files and directories which matches the specified condition in the specified directory (NOT deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileMatch(fileNameContains("2"))(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq("child2.txt", "dir2")
+          }
+      }
 
-      "iterate directories in the specified directory (NOT deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val result = new mutable.HashSet[F]
-          __Exercise__
-          sut.eachDir(result += _)
-          __Verify__
-          result.map(wrap).map(_.fileName) should contain theSameElementsAs
-            Set("dir1", "dir2", "dir3")
-        }
-    }
+      "eachFileMatch(FileType, F => Boolean){} method should" - {
 
-    "eachDirMatch(F => Boolean) method should" - {
+        "iterate files which matches the specified condition in the specified directory if the FileType argument is Files (NOT deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileMatch(FileType.Files, fileNameContains("2"))(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs Seq("child2.txt")
+          }
 
-      "iterate directories which matches the specified condition in the specified directory (NOT deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val result = new mutable.HashSet[F]
-          __Exercise__
-          sut.eachDirMatch(wrap(_).fileName.contains("2"))(result += _)
-          __Verify__
-          result.map(wrap).map(_.fileName) should contain theSameElementsAs
-            Set("dir2")
-        }
-    }
+        "iterate directories which matches the specified condition in the specified directory if the FileType argument is Directories (NOT deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileMatch(FileType.Directories, fileNameContains("2"))(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs Seq("dir2")
+          }
 
-    "eachFileRecurse() method should" - {
+        "iterate files and directories which matches the specified condition in the specified directory if the FileType argument is Any (NOT deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileMatch(FileType.Any, fileNameContains("2"))(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq("child2.txt", "dir2")
+          }
+      }
 
-      "iterate files in the specified directory if FileType.Files is passed (DO deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val result = new mutable.HashSet[F]
-          __Exercise__
-          sut.eachFileRecurse(FileType.Files)(result += _)
-          __Verify__
-          result.map(wrap).map(_.fileName) should contain theSameElementsAs
-            Set("child1.txt", "child2.txt", "child3.txt",
+      "eachFileRecurse(FileType, Boolean){} method should" - {
+
+        "deeply iterate files in the specified directory if the FileType argument is Files" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileRecurse(FileType.Files)(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq("child1.txt", "child2.txt", "child3.txt",
                 "child11.txt", "child12.txt",
                 "child21.txt", "child22.txt", "child23.txt",
                 "child31.txt", "child311.txt", "child312.txt")
-        }
+          }
 
-      "iterate directories in the specified directory if FileType.Directories is passed (DO deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val result = new mutable.HashSet[F]
-          __Exercise__
-          sut.eachFileRecurse(FileType.Directories)(result += _)
-          __Verify__
-          result.map(wrap).map(_.fileName) should contain theSameElementsAs
-            Set("dir1", "dir2", "dir3", "dir31")
-        }
+        "deeply iterate directories in the specified directory if the FileType argument is Directories" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileRecurse(FileType.Directories)(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq(sut.fileName, "dir1", "dir2", "dir3", "dir31")
+          }
 
-      "iterate files and directories in the specified directory if FileType.Any is passed (DO deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val result = new mutable.HashSet[F]
-          __Exercise__
-          sut.eachFileRecurse(FileType.Any)(result += _)
-          __Verify__
-          result.map(wrap).map(_.fileName) should contain theSameElementsAs
-            Set("child1.txt", "child2.txt", "child3.txt",
-              "child11.txt", "child12.txt",
-              "child21.txt", "child22.txt", "child23.txt",
-              "child31.txt", "child311.txt", "child312.txt",
-              "dir1", "dir2", "dir3", "dir31")
-        }
+        "deeply iterate files and directories in the specified directory if the FileType argument is FileType.Any" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileRecurse(FileType.Any)(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq("child1.txt", "child2.txt", "child3.txt",
+                "child11.txt", "child12.txt",
+                "child21.txt", "child22.txt", "child23.txt",
+                "child31.txt", "child311.txt", "child312.txt",
+                sut.fileName, "dir1", "dir2", "dir3", "dir31")
+          }
 
-      "visit files before its parent directory if visitDirectoryPost is true (DO deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val files = new mutable.MutableList[F]
-          __Exercise__
-          sut.eachFileRecurse(FileType.Any, visitDirectoryPost = true)(files += _)
-          __Verify__
-          val result = files.map(wrap).map(_.fileName)
-          result should contain inOrder ("child11.txt", "dir1")
-          result should contain inOrder ("child12.txt", "dir1")
+        "deeply iterate files and directories in the specified directory if the FileType argument is omitted" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileRecurse()(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq("child1.txt", "child2.txt", "child3.txt",
+                "child11.txt", "child12.txt",
+                "child21.txt", "child22.txt", "child23.txt",
+                "child31.txt", "child311.txt", "child312.txt",
+                sut.fileName, "dir1", "dir2", "dir3", "dir31")
+          }
 
-          result should contain inOrder ("child21.txt", "dir2")
-          result should contain inOrder ("child22.txt", "dir2")
-          result should contain inOrder ("child23.txt", "dir2")
+        "visit each directory after its children if visitDirectoryPost is true" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val files = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileRecurse(FileType.Any, visitDirectoryPost = true)(files += _)
+            __Verify__
+            val result = fileNames(files)
+            result should contain inOrder("child11.txt", "dir1", sut.fileName)
+            result should contain inOrder("child12.txt", "dir1", sut.fileName)
 
-          result should contain inOrder ("child311.txt", "dir31", "dir3")
-          result should contain inOrder ("child312.txt", "dir31", "dir3")
-        }
+            result should contain inOrder("child21.txt", "dir2", sut.fileName)
+            result should contain inOrder("child22.txt", "dir2", sut.fileName)
+            result should contain inOrder("child23.txt", "dir2", sut.fileName)
 
-      "visit directory before its child files if visitDirectoryPost is false (DO deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val files = new mutable.MutableList[F]
-          __Exercise__
-          sut.eachFileRecurse(FileType.Any, visitDirectoryPost = false)(files += _)
-          __Verify__
-          val result = files.map(wrap).map(_.fileName)
-          result should contain inOrder ("dir1", "child11.txt")
-          result should contain inOrder ("dir1", "child12.txt")
+            result should contain inOrder("child311.txt", "dir31", "dir3", sut.fileName)
+            result should contain inOrder("child312.txt", "dir31", "dir3", sut.fileName)
+          }
 
-          result should contain inOrder ("dir2", "child21.txt")
-          result should contain inOrder ("dir2", "child22.txt")
-          result should contain inOrder ("dir2", "child23.txt")
+        "visit each directory before its children if visitDirectoryPost is false (DO deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val files = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileRecurse(FileType.Any, visitDirectoryPost = false)(files += _)
+            __Verify__
+            val result = fileNames(files)
+            result should contain inOrder(sut.fileName, "dir1", "child11.txt")
+            result should contain inOrder(sut.fileName, "dir1", "child12.txt")
 
-          result should contain inOrder ("dir3", "dir31", "child311.txt")
-          result should contain inOrder ("dir3", "dir31", "child312.txt")
-        }
+            result should contain inOrder(sut.fileName, "dir2", "child21.txt")
+            result should contain inOrder(sut.fileName, "dir2", "child22.txt")
+            result should contain inOrder(sut.fileName, "dir2", "child23.txt")
+
+            result should contain inOrder(sut.fileName, "dir3", "dir31", "child311.txt")
+            result should contain inOrder(sut.fileName, "dir3", "dir31", "child312.txt")
+          }
+
+        "visit each directory before its children if visitDirectoryPost is omitted" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val files = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileRecurse(FileType.Any)(files += _)
+            __Verify__
+            val result = fileNames(files)
+            result should contain inOrder(sut.fileName, "dir1", "child11.txt")
+            result should contain inOrder(sut.fileName, "dir1", "child12.txt")
+
+            result should contain inOrder(sut.fileName, "dir2", "child21.txt")
+            result should contain inOrder(sut.fileName, "dir2", "child22.txt")
+            result should contain inOrder(sut.fileName, "dir2", "child23.txt")
+
+            result should contain inOrder(sut.fileName, "dir3", "dir31", "child311.txt")
+            result should contain inOrder(sut.fileName, "dir3", "dir31", "child312.txt")
+          }
+      }
+
+
+      "eachFileMatchRecurse(F => Boolean, FileType, Boolean){} method should" - {
+
+        "deeply iterate files which matches the specified condition in the specified directory if the FileType argument is Files" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileMatchRecurse(FileType.Files, fileNameContains("2"))(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq("child2.txt", "child12.txt", "child21.txt", "child22.txt", "child23.txt", "child312.txt")
+          }
+
+        "deeply iterate directories which matches the specified condition in the specified directory if the FileType argument is Directories" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileMatchRecurse(FileType.Directories, fileNameContains("3"))(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq(sut.fileName, "dir3", "dir31")
+          }
+
+        "iterate files and directories which matches the specified condition in the specified directory if the FileType argument is Any" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileMatchRecurse(FileType.Any, fileNameContains("3"))(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq("child3.txt", "child23.txt",
+                "child31.txt", "child311.txt", "child312.txt",
+                sut.fileName, "dir3", "dir31")
+          }
+
+        "visit each directory after its children if visitDirectoryPost is true" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileMatchRecurse(FileType.Any, fileNameContains("3"), visitDirectoryPost = true)(result += _)
+            __Verify__
+            fileNames(result) should contain inOrder("child312.txt", "dir31", "dir3", sut.fileName)
+          }
+
+        "visit each directory before its children if visitDirectoryPost is false (DO deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileMatchRecurse(FileType.Any, fileNameContains("3"), visitDirectoryPost = false)(result += _)
+            __Verify__
+            fileNames(result) should contain inOrder(sut.fileName, "dir3", "dir31", "child311.txt")
+          }
+
+        "visit each directory before its children if visitDirectoryPost is omitted" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachFileMatchRecurse(FileType.Any, fileNameContains("3"))(result += _)
+            __Verify__
+            fileNames(result) should contain inOrder(sut.fileName, "dir3", "dir31", "child312.txt")
+          }
+      }
     }
 
-    "eachDirRecurse() method should" - {
+    "***** eachDir[Match][Recurse] *****" - {
 
-      "iterate directories in the specified directory (DO deeply iterate)" in
-        new FileWrapperLike_ReadOnlyDirFixture {
-          __SetUp__
-          val result = new mutable.HashSet[F]
-          __Exercise__
-          sut.eachDirRecurse(result += _)
-          __Verify__
-          result.map(wrap).map(_.fileName) should contain theSameElementsAs
-            Set("dir1", "dir2", "dir3", "dir31")
-        }
+      "eachDir{} method should" - {
+
+        "iterate directories in the specified directory (NOT deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachDir(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs Seq("dir1", "dir2", "dir3")
+          }
+      }
+
+      "eachDirMatch(F => Boolean){} method should" - {
+
+        "iterate directories which matches the specified condition in the specified directory (NOT deeply iterate)" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachDirMatch(fileNameContains("2"))(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs Seq("dir2")
+          }
+      }
+
+      "eachDirRecurse{} method should" - {
+
+        "deeply iterate directories in the specified directory" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachDirRecurse(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs
+              Seq(sut.fileName, "dir1", "dir2", "dir3", "dir31")
+          }
+
+        "visit each directory before its children." in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val dirs = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachDirRecurse(dirs += _)
+            __Verify__
+            val result = fileNames(dirs)
+            result should contain inOrder (sut.fileName, "dir1")
+            result should contain inOrder (sut.fileName, "dir2")
+            result should contain inOrder (sut.fileName, "dir3", "dir31")
+          }
+      }
+
+      "eachDirRecurse(Boolean){} method should" - {
+
+        "visit each directory after its children if visitParentPost is true" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val dirs = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachDirRecurse(visitParentPost = true)(dirs += _)
+            __Verify__
+            val result = fileNames(dirs)
+            result should contain inOrder("dir1", sut.fileName)
+            result should contain inOrder("dir2", sut.fileName)
+            result should contain inOrder("dir31", "dir3", sut.fileName)
+          }
+
+        "visit each directory before its children if visitDirectoryPost is false" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val files = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachDirRecurse(visitParentPost = false)(files += _)
+            __Verify__
+            val result = fileNames(files)
+            result should contain inOrder(sut.fileName, "dir1")
+            result should contain inOrder(sut.fileName, "dir2")
+            result should contain inOrder(sut.fileName, "dir3", "dir31")
+          }
+      }
+
+
+      "eachDirMatchRecurse(F => Boolean, Boolean){} method should" - {
+
+        "deeply iterate directories which matches the specified condition in the specified directory" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachDirMatchRecurse(fileNameContains("3"))(result += _)
+            __Verify__
+            fileNames(result) should contain theSameElementsAs Seq(sut.fileName, "dir3", "dir31")
+          }
+
+        "visit directory after its children if visitParentPost is true" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val result = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachDirMatchRecurse(fileNameContains("3"), visitParentPost = true)(result += _)
+            __Verify__
+            fileNames(result) should contain inOrder("dir31", "dir3", sut.fileName)
+          }
+
+        "visit directory before its children if visitParentPost is false" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val files = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachDirMatchRecurse(fileNameContains("3"), visitParentPost = false)(files += _)
+            __Verify__
+            fileNames(files) should contain inOrder(sut.fileName, "dir3", "dir31")
+          }
+
+        "visit directory before its children if visitDirectoryPost is omitted" in
+          new FileWrapperLike_ReadOnlyDirFixture {
+            __SetUp__
+            val files = new mutable.MutableList[F]
+            __Exercise__
+            sut.eachDirMatchRecurse(fileNameContains("3"))(files += _)
+            __Verify__
+            fileNames(files) should contain inOrder(sut.fileName, "dir3", "dir31")
+          }
+      }
+    }
+  }
+
+  "***** Directory Operations *****" - {
+
+    "deleteDir() method should" - {
+
+      "delete the directory even if not empty" in new FileWrapperLike_DirectoryFixture {
+        __Exercise__
+        val result = sut.deleteDir()
+        __Verify__
+        dir should not (exist)
+        result should be (None)
+      }
     }
   }
 }

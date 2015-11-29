@@ -33,6 +33,6 @@ abstract class DirectoryBuilder{
     Files.createFile(this.currentDir.resolve(name))
   }
 
-  protected def file(name: String, content: String): Path =
-    Files.write(file(name), Seq(content))
+  protected def file(name: String, content: String*): Path =
+    Files.write(file(name), content)
 }
