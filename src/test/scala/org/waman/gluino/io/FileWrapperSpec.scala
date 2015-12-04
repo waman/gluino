@@ -61,6 +61,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
       "return true if this file is older than the arg file" in new FileFixture {
         __SetUp__
         val sut = newFileWrapperLike(path)
+        Thread.sleep(10)
         val arg = asF(GluinoPath.createTempFile(deleteOnExit = true))
         __Exercise__
         val result = sut isOlderThan arg
@@ -80,6 +81,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
       "return false if this file is newer than the arg file" in new FileFixture {
         __SetUp__
         val arg = asF(path)
+        Thread.sleep(10)
         val sut = newFileWrapperLike(GluinoPath.createTempFile(deleteOnExit = true))
         __Exercise__
         val result = sut isOlderThan arg
@@ -93,6 +95,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
       "return false if this file is older than the arg file" in new FileFixture {
         __SetUp__
         val sut = newFileWrapperLike(path)
+        Thread.sleep(10)
         val arg = asF(GluinoPath.createTempFile(deleteOnExit = true))
         __Exercise__
         val result = sut isNewerThan arg
@@ -112,6 +115,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
       "return true if this file is newer than the arg file" in new FileFixture {
         __SetUp__
         val arg = asF(path)
+        Thread.sleep(10)
         val sut = newFileWrapperLike(GluinoPath.createTempFile(deleteOnExit = true))
         __Exercise__
         val result = sut isNewerThan arg
@@ -125,10 +129,443 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
 
     "renameTo() method should" - {
 
+      "for files" - {
+
+        "rename a file" in new FileWrapperLike_FileWithContentFixture {
+          __SetUp__
+          val targetPath = createNotExistingFile()
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.renameTo(target)
+          __Verify__
+          result should be (None)
+          path should not (exist)
+          targetPath should exist
+          text(targetPath) should equal(contentAsString)
+        }
+
+        "RETURN an Option[IOException] if the target file exists and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempFile(deleteOnExit = true))
+            __Exercise__
+            val result = sut.renameTo(target)
+            __Verify__
+            result.value should be(a[IOException])
+            path should exist
+          }
+
+        "RETURN an Option[IOException] if the target file exists and the 'isOverride' arg is false" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempFile(deleteOnExit = true))
+            __Exercise__
+            val result = sut.renameTo(target, isOverride = false)
+            __Verify__
+            result.value should be(a[IOException])
+            path should exist
+          }
+
+        "rename a file even if the target file exists when the 'isOverride' arg is true" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val targetPath = GluinoPath.createTempFile(deleteOnExit = true)
+            Files.write(targetPath, Seq("Some content."))
+            val target = asF(targetPath)
+            __Exercise__
+            sut.renameTo(target, isOverride = true)
+            __Verify__
+            path should not (exist)
+            targetPath should exist
+            text(targetPath) should equal(contentAsString)
+          }
+
+        "do nothing if the source and target are the same file and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val target = asF(path)
+            __Exercise__
+            val result = sut.renameTo(target)
+            __Verify__
+            result should be (None)
+            path should exist
+            text(path) should equal(contentAsString)
+          }
+
+        "do nothing if the source and target are the same file and the 'isOverride' arg is false" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val target = asF(path)
+            __Exercise__
+            val result = sut.renameTo(target, isOverride = false)
+            __Verify__
+            result should be (None)
+            path should exist
+            text(path) should equal(contentAsString)
+          }
+
+        "do nothing if the source and target are the same file and the 'isOverride' arg is true" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val target = asF(path)
+            __Exercise__
+            val result = sut.renameTo(target, isOverride = true)
+            __Verify__
+            result should be (None)
+            path should exist
+            text(path) should equal(contentAsString)
+          }
+
+        "rename a file by renameTo(String) method" in new FileWrapperLike_FileWithContentFixture {
+          __SetUp__
+          val targetPath = createNotExistingFile()
+          val target = targetPath.toString
+          __Exercise__
+          val result = sut.renameTo(target)
+          __Verify__
+          result should be (None)
+          path should not (exist)
+          targetPath should exist
+          text(targetPath) should equal(contentAsString)
+        }
+
+        "rename a file by renameTo(String, Boolean) method" in new FileWrapperLike_FileWithContentFixture {
+          __SetUp__
+          val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+          val target = targetPath.toString
+          __Exercise__
+          val result = sut.renameTo(target, isOverride = true)
+          __Verify__
+          result should be (None)
+          path should not (exist)
+          targetPath should exist
+          text(targetPath) should equal(contentAsString)
+        }
+      }
+
+      "for directories" - {
+
+        "rename the directory" in new FileWrapperLike_DirectoryFixture {
+          __SetUp__
+          val targetPath = createNotExistingDirectory()
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.renameTo(target)
+          __Verify__
+          result should be (None)
+          dir should not (exist)
+          targetPath should exist
+        }
+
+        "RETURN an Option[IOException] if the target directory exists and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempDirectory(deleteOnExit = true))
+            __Exercise__
+            val result = sut.renameTo(target)
+            __Verify__
+            result.value should be (a [IOException])
+            path should exist
+          }
+
+        "RETURN an Option[IOException] if the target directory exists and the 'isOverride' arg is false" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempDirectory(deleteOnExit = true))
+            __Exercise__
+            val result = sut.renameTo(target, isOverride = false)
+            __Verify__
+            result.value should be (a [IOException])
+            path should exist
+          }
+
+        "rename the directory even if the target directory exists when the 'isOverride' arg is true" in
+          new FileWrapperLike_DirectoryFixture {
+            __SetUp__
+            val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+            val target = asF(targetPath)
+            __Exercise__
+            val result = sut.renameTo(target, isOverride = true)
+            __Verify__
+            result should be (None)
+            dir should not (exist)
+            targetPath should exist
+          }
+
+        "RETURN an Option[IOException] if the directory is not empty and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_NotEmptyDirectoryFixture{
+            new NotEmptyDirectoryTargetFixture {
+              __Exercise__
+              val result = sut.renameTo(target)
+              __Verify__
+              result.value should be (a [IOException])
+              dir should exist
+            }
+          }
+
+        "RETURN an Option[IOException] if the directory is not empty and the 'isOverride' arg is false" in
+          new FileWrapperLike_NotEmptyDirectoryFixture {
+            new NotEmptyDirectoryTargetFixture {
+              __Exercise__
+              val result = sut.renameTo(target, isOverride = false)
+              __Verify__
+              result.value should be (a [IOException])
+              dir should exist
+            }
+          }
+
+        "do nothing if the source and target are the same directory and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_DirectoryFixture{
+            __SetUp__
+            val target = asF(dir)
+            __Exercise__
+            val result = sut.renameTo(target)
+            __Verify__
+            result should be (None)
+            dir should exist
+          }
+
+        "do nothing if the source and target are the same directory and the 'isOverride' arg is false" in
+          new FileWrapperLike_DirectoryFixture{
+            __SetUp__
+            val target = asF(dir)
+            __Exercise__
+            val result = sut.renameTo(target, isOverride = false)
+            __Verify__
+            result should be (None)
+            dir should exist
+          }
+
+        "do nothing if the source and target are the same directory and the 'isOverride' arg is true" in
+          new FileWrapperLike_DirectoryFixture{
+            __SetUp__
+            val target = asF(dir)
+            __Exercise__
+            val result = sut.renameTo(target, isOverride = true)
+            __Verify__
+            result should be (None)
+            dir should exist
+          }
+
+        "RETURN an Option[IOException] if the directory is not empty and the 'isOverride' arg is true" in
+          new FileWrapperLike_NotEmptyDirectoryFixture {
+            new NotEmptyDirectoryTargetFixture {
+              __Exercise__
+              val result = sut.renameTo(target, isOverride = true)
+              __Verify__
+              result.value should be (a [IOException])
+              dir should exist
+            }
+          }
+      }
     }
 
     "move() method should" - {
 
+      "for files" - {
+
+        "move a file" in new FileWrapperLike_FileWithContentFixture {
+          __SetUp__
+          val targetPath = createNotExistingFile()
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.move(target)
+          __Verify__
+          result should be (None)
+          path should not (exist)
+          targetPath should exist
+          text(targetPath) should equal(contentAsString)
+        }
+
+        "RETURN an Option[IOException] if the target file exists and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempFile(deleteOnExit = true))
+            __Exercise__
+            val result = sut.move(target)
+            __Verify__
+            result.value should be(a[IOException])
+            path should exist
+          }
+
+        "RETURN an Option[IOException] if the target file exists and the 'isOverride' arg is false" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempFile(deleteOnExit = true))
+            __Exercise__
+            val result = sut.move(target, isOverride = false)
+            __Verify__
+            result.value should be(a[IOException])
+            path should exist
+          }
+
+        "move a file even if the target file exists when the 'isOverride' arg is true" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val targetPath = GluinoPath.createTempFile(deleteOnExit = true)
+            Files.write(targetPath, Seq("Some content."))
+            val target = asF(targetPath)
+            __Exercise__
+            val result = sut.move(target, isOverride = true)
+            __Verify__
+            result should be (None)
+            path should not (exist)
+            targetPath should exist
+            text(targetPath) should equal(contentAsString)
+          }
+
+        "do nothing if the source and target are the same file and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val target = asF(path)
+            __Exercise__
+            val result = sut.move(target)
+            __Verify__
+            result should be (None)
+            path should exist
+            text(path) should equal(contentAsString)
+          }
+
+        "do nothing if the source and target are the same file and the 'isOverride' arg is false" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val target = asF(path)
+            __Exercise__
+            val result = sut.move(target, isOverride = false)
+            __Verify__
+            result should be (None)
+            path should exist
+            text(path) should equal(contentAsString)
+          }
+
+        "do nothing if the source and target are the same file and the 'isOverride' arg is true" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val target = asF(path)
+            __Exercise__
+            val result = sut.move(target, isOverride = true)
+            __Verify__
+            result should be (None)
+            path should exist
+            text(path) should equal(contentAsString)
+          }
+      }
+
+      "for directories" - {
+
+        "move the directory" in new FileWrapperLike_DirectoryFixture {
+          __SetUp__
+          val targetPath = createNotExistingDirectory()
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.move(target)
+          __Verify__
+          result should be (None)
+          dir should not (exist)
+          targetPath should exist
+        }
+
+        "RETURN an Option[IOException] if the target directory exists and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempDirectory(deleteOnExit = true))
+            __Exercise__
+            val result = sut.move(target)
+            __Verify__
+            result.value should be (a [IOException])
+            path should exist
+          }
+
+        "RETURN an Option[IOException] if the target directory exists and the 'isOverride' arg is false" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempDirectory(deleteOnExit = true))
+            __Exercise__
+            val result = sut.move(target, isOverride = false)
+            __Verify__
+            result.value should be (a [IOException])
+            path should exist
+          }
+
+        "move the directory even if the target directory exists when the 'isOverride' arg is true" in
+          new FileWrapperLike_DirectoryFixture {
+            __SetUp__
+            val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+            val target = asF(targetPath)
+            __Exercise__
+            val result = sut.move(target, isOverride = true)
+            __Verify__
+            result should be (None)
+            dir should not (exist)
+            targetPath should exist
+          }
+
+        "RETURN an Option[IOException] if the directory is not empty and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_NotEmptyDirectoryFixture{
+            new NotEmptyDirectoryTargetFixture {
+              __Exercise__
+              val result = sut.move(target)
+              __Verify__
+              result.value should be (a [IOException])
+              dir should exist
+            }
+          }
+
+        "RETURN an Option[IOException] if the directory is not empty and the 'isOverride' arg is false" in
+          new FileWrapperLike_NotEmptyDirectoryFixture {
+            new NotEmptyDirectoryTargetFixture {
+              __Exercise__
+              val result = sut.move(target, isOverride = false)
+              __Verify__
+              result.value should be (a [IOException])
+              dir should exist
+            }
+          }
+
+        "do nothing if the source and target are the same directory and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_DirectoryFixture{
+            __SetUp__
+            val target = asF(dir)
+            __Exercise__
+            val result = sut.move(target)
+            __Verify__
+            result should be (None)
+            dir should exist
+          }
+
+        "do nothing if the source and target are the same directory and the 'isOverride' arg is false" in
+          new FileWrapperLike_DirectoryFixture{
+            __SetUp__
+            val target = asF(dir)
+            __Exercise__
+            val result = sut.move(target, isOverride = false)
+            __Verify__
+            result should be (None)
+            dir should exist
+          }
+
+        "do nothing if the source and target are the same directory and the 'isOverride' arg is true" in
+          new FileWrapperLike_DirectoryFixture{
+            __SetUp__
+            val target = asF(dir)
+            __Exercise__
+            val result = sut.move(target, isOverride = true)
+            __Verify__
+            result should be (None)
+            dir should exist
+          }
+
+        "RETURN an Option[IOException] if the directory is not empty and the 'isOverride' arg is true" in
+          new FileWrapperLike_NotEmptyDirectoryFixture {
+            new NotEmptyDirectoryTargetFixture {
+              __Exercise__
+              val result = sut.move(target, isOverride = true)
+              __Verify__
+              result.value should be (a [IOException])
+              dir should exist
+            }
+          }
+      }
     }
 
     "copy() method should" - {
@@ -140,8 +577,9 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
           val targetPath = createNotExistingFile()
           val target = asF(targetPath)
           __Exercise__
-          sut.copy(target)
+          val result = sut.copy(target)
           __Verify__
+          result should be (None)
           path should exist
           targetPath should exist
           text(path) should equal(contentAsString)
@@ -156,6 +594,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
             val result = sut.copy(target)
             __Verify__
             result.value should be(a[IOException])
+            path should exist
           }
 
         "RETURN an Option[IOException] if the target file exists and the 'isOverride' arg is false" in
@@ -166,6 +605,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
             val result = sut.copy(target, isOverride = false)
             __Verify__
             result.value should be(a[IOException])
+            path should exist
           }
 
         "copy a file even if the target file exists when the 'isOverride' arg is true" in
@@ -227,8 +667,9 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
           val targetPath = createNotExistingDirectory()
           val target = asF(targetPath)
           __Exercise__
-          sut.copy(target)
+          val result = sut.copy(target)
           __Verify__
+          result should be (None)
           dir should exist
           targetPath should exist
         }
@@ -241,6 +682,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
             val result = sut.copy(target)
             __Verify__
             result.value should be (a [IOException])
+            path should exist
           }
 
         "RETURN an Option[IOException] if the target directory exists and the 'isOverride' arg is false" in
@@ -251,6 +693,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
             val result = sut.copy(target, isOverride = false)
             __Verify__
             result.value should be (a [IOException])
+            path should exist
           }
 
         "copy the directory even if the target directory exists when the 'isOverride' arg is true" in
@@ -259,8 +702,9 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
             val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
             val target = asF(targetPath)
             __Exercise__
-            sut.copy(target, isOverride = true)
+            val result = sut.copy(target, isOverride = true)
             __Verify__
+            result should be (None)
             dir should exist
             targetPath should exist
           }
@@ -272,6 +716,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
               val result = sut.copy(target)
               __Verify__
               result.value should be (a [IOException])
+              dir should exist
             }
           }
 
@@ -282,6 +727,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
               val result = sut.copy(target, isOverride = false)
               __Verify__
               result.value should be (a [IOException])
+              dir should exist
             }
           }
 
@@ -325,6 +771,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
               val result = sut.copy(target, isOverride = true)
               __Verify__
               result.value should be (a [IOException])
+              dir should exist
             }
           }
       }

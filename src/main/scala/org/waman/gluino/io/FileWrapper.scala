@@ -38,7 +38,20 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
     new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), charset))
 
   //***** File Operation *****
-  //  override def rename(name: String): Boolean = file.renameTo(new File(name))
+  override def renameTo(dest: File, isOverride: Boolean): Option[IOException] = {
+    if(isOverride && dest.exists() && file != dest)
+      dest.delete()
+
+    val result = file.renameTo(dest)
+    if (result)
+      None
+    else
+      Some(new IOException(
+        s"""Fail to rename/move the file:
+           |\tfrom $file
+           |\tto   $dest""".stripMargin))
+  }
+
   override def copy(dest: File, isOverride: Boolean = false): Option[IOException] = {
     if(file == dest) return None
 

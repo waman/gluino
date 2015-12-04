@@ -75,22 +75,15 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     newPrintWriter(charset, append = true).withPrintWriter(consumer)
 
   //***** File Operation *****
-  def renameTo(fileName: String): Option[IOException] = renameTo(from(fileName))
+  def renameTo(fileName: String): Option[IOException] = renameTo(fileName, isOverride = false)
+  def renameTo(fileName: String, isOverride: Boolean): Option[IOException] = renameTo(from(fileName), isOverride)
   def renameTo(dest: F): Option[IOException] = move(dest, isOverride = false)
-  def renameTo(dest: F, isOverride: Boolean): Option[IOException] = move(dest, isOverride)
 
-  def move(dest: F, isOverride: Boolean = false): Option[IOException] =
-    copy(dest, isOverride) match {
-      case None =>
-        delete() match {
-          case None => None
-          case oex => oex
-        }
-      case oex => oex
-    }
+  // it is necessary to implement at least one of renameTo(F, Boolean) and move(F, Boolean)
+  def renameTo(dest: F, isOverride: Boolean): Option[IOException] = move(dest, isOverride)
+  def move(dest: F, isOverride: Boolean = false): Option[IOException] = renameTo(dest, isOverride)
 
   def copy(dest: F, isOverride: Boolean = false): Option[IOException]
-
   def delete(): Option[IOException]
 
   //***** File Operations through Files and/or Directory Structure *****
