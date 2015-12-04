@@ -21,6 +21,12 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   override def isFile: Boolean = Files.isRegularFile(path)
   override def isDirectory: Boolean = Files.isDirectory(path)
 
+  def isOlderThan(arg: Path): Boolean =
+    Files.getLastModifiedTime(path).toMillis < Files.getLastModifiedTime(arg).toMillis
+
+  def isNewerThan(arg: Path): Boolean =
+    Files.getLastModifiedTime(path).toMillis > Files.getLastModifiedTime(arg).toMillis
+
   override protected def getFileFilterProvider: FileTypeFilterProvider[Path] =
     GluinoPath.PathFileTypeFilterProvider
 

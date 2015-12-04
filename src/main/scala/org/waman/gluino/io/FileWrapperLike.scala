@@ -22,6 +22,9 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def isFile: Boolean
   def isDirectory: Boolean
 
+  def isOlderThan(arg: F): Boolean
+  def isNewerThan(arg: F): Boolean
+
   protected def getFileFilterProvider: FileTypeFilterProvider[F]
 
   //***** Byte, InputStream/OutputStream *****

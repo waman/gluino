@@ -14,6 +14,9 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
   override def isFile: Boolean = file.isFile
   override def isDirectory: Boolean = file.isDirectory
 
+  def isOlderThan(arg: File): Boolean = file.lastModified < arg.lastModified
+  def isNewerThan(arg: File): Boolean = file.lastModified > arg.lastModified
+
   override protected def getFileFilterProvider: FileTypeFilterProvider[File] =
     GluinoFile.FileFileTypeFilterProvider
 

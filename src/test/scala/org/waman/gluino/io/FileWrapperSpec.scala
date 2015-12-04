@@ -54,6 +54,73 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
     val target = asF(targetPath)
   }
 
+  "isOlder/NewerThan() methods" - {
+
+    "isOlderThan() method should" - {
+
+      "return true if this file is older than the arg file" in new FileFixture {
+        __SetUp__
+        val sut = newFileWrapperLike(path)
+        val arg = asF(GluinoPath.createTempFile(deleteOnExit = true))
+        __Exercise__
+        val result = sut isOlderThan arg
+        __Verify__
+        result should be (true)
+      }
+
+      "return false if this file is created at the same time as the arg file" in new FileWrapperLike_FileFixture {
+        __SetUp__
+        val arg = asF(path)
+        __Exercise__
+        val result = sut isOlderThan arg
+        __Verify__
+        result should be (false)
+      }
+
+      "return false if this file is newer than the arg file" in new FileFixture {
+        __SetUp__
+        val arg = asF(path)
+        val sut = newFileWrapperLike(GluinoPath.createTempFile(deleteOnExit = true))
+        __Exercise__
+        val result = sut isOlderThan arg
+        __Verify__
+        result should be (false)
+      }
+    }
+
+    "isNewerThan() method should" - {
+
+      "return false if this file is older than the arg file" in new FileFixture {
+        __SetUp__
+        val sut = newFileWrapperLike(path)
+        val arg = asF(GluinoPath.createTempFile(deleteOnExit = true))
+        __Exercise__
+        val result = sut isNewerThan arg
+        __Verify__
+        result should be (false)
+      }
+
+      "return false if this file is created at the same time as the arg file" in new FileWrapperLike_FileFixture {
+        __SetUp__
+        val arg = asF(path)
+        __Exercise__
+        val result = sut isNewerThan arg
+        __Verify__
+        result should be (false)
+      }
+
+      "return true if this file is newer than the arg file" in new FileFixture {
+        __SetUp__
+        val arg = asF(path)
+        val sut = newFileWrapperLike(GluinoPath.createTempFile(deleteOnExit = true))
+        __Exercise__
+        val result = sut isNewerThan arg
+        __Verify__
+        result should be (true)
+      }
+    }
+  }
+
   "***** File Operations *****" - {
 
     "renameTo() method should" - {
