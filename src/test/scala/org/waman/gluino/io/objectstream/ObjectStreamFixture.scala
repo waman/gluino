@@ -13,7 +13,7 @@ trait ObjectStreamFixture {
   lazy val readOnlyObjectFile = readOnlyObjectPath.toFile
 
   private def createReadOnlyObjectPath(): Path = {
-    val path = GluinoPath.createTempFile()
+    val path = GluinoPath.createTempFile(deleteOnExit = true)
     val oos = new ObjectOutputStream(Files.newOutputStream(path))
     try{
       objectContent.foreach(oos.writeObject(_))

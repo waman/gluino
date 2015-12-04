@@ -17,7 +17,7 @@ trait GluinoPath extends AttributeConverter with AppendableConverter{
   def createTempFile(dir: Path = tempDir,
                      prefix: String = null,
                      suffix: String = null,
-                     deleteOnExit: Boolean = true,
+                     deleteOnExit: Boolean = false,
                      attributes: Set[FileAttribute[_]] = Set()): Path = {
     val file = Files.createTempFile(dir, prefix, suffix, attributes.toArray:_*)
     if(deleteOnExit)file.toFile.deleteOnExit()
@@ -26,7 +26,7 @@ trait GluinoPath extends AttributeConverter with AppendableConverter{
 
   def createTempDirectory(dir: Path = tempDir,
                           prefix: String = null,
-                          deleteOnExit: Boolean = true,
+                          deleteOnExit: Boolean = false,
                           attributes: Set[FileAttribute[_]] = Set()): Path = {
     val td = Files.createTempDirectory(dir, prefix, attributes.toArray:_*)
     if(deleteOnExit)td.toFile.deleteOnExit()

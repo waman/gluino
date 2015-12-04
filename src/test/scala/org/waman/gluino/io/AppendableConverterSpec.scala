@@ -1,8 +1,9 @@
 package org.waman.gluino.io
 
-import java.nio.file.{Path, Files}
+import java.nio.file.Files
 
 import org.waman.gluino.ImplicitConversion
+import org.waman.gluino.nio.PathWrapper
 
 class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverter{
 
@@ -10,7 +11,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
 
     "Outputtable can be implicitly converted from some types" - {
 
-      "Array[Byte] should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "Array[Byte] should be implicitly converted to Outputtable" taggedAs ImplicitConversion in {
         __SetUp__
         val bytes: Array[Byte] = "first line.".getBytes()
         __Verify__
@@ -19,7 +20,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         }
       }
 
-      "Seq[Byte] should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "Seq[Byte] should be implicitly converted to Outputtable" taggedAs ImplicitConversion in {
         __SetUp__
         val byteSeq: Seq[Byte] = "first line.".getBytes().toSeq
         __Verify__
@@ -28,7 +29,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         }
       }
 
-      "InputStream should be implicitly converted to Writable" taggedAs ImplicitConversion in
+      "InputStream should be implicitly converted to Outputtable" taggedAs ImplicitConversion in
         new InputStreamFixture {
           __Verify__
           noException should be thrownBy {
@@ -36,17 +37,24 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
           }
         }
 
-      "File should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "File should be implicitly converted to Outputtable" taggedAs ImplicitConversion in {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Outputtable](readOnlyFile)
         }
       }
 
-      "Path should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "Path should be implicitly converted to Outputtable" taggedAs ImplicitConversion in {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Outputtable](readOnlyPath)
+        }
+      }
+
+      "FileWrapperLike should be implicitly converted to Outputtable" taggedAs ImplicitConversion in {
+        __Verify__
+        noException should be thrownBy {
+          convertImplicitly[Outputtable](new PathWrapper(readOnlyPath))
         }
       }
     }
@@ -151,7 +159,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
 
       "NOT close the output stream after outputTo() call" in new OutputStreamFixture {
         __SetUp__
-        val o = convertFileToOutputtable(readOnlyFile)
+        val o = convertPathToOutputtable(readOnlyPath)
         __Exercise__
         o.outputTo(output)
         __Verify__
@@ -160,7 +168,53 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
 
       "be appended to the OutputStream" in new OutputStreamWithContentFixture {
         __SetUp__
-        val o = convertFileToOutputtable(readOnlyFile)
+        val o = convertPathToOutputtable(readOnlyPath)
+        __Exercise__
+        o.outputTo(output)
+        output.close()
+        __Verify__
+        Files.readAllLines(path) should contain theSameElementsInOrderAs
+          (content ++ content)
+      }
+    }
+
+    "Outputtable by FileWrapper should" - {
+
+      "NOT close the output stream after outputTo() call" in new OutputStreamFixture {
+        __SetUp__
+        val o = convertFileWrapperToOutputtable(new FileWrapper(readOnlyFile))
+        __Exercise__
+        o.outputTo(output)
+        __Verify__
+        output should be (opened)
+      }
+
+      "be appended to the OutputStream" in new OutputStreamWithContentFixture {
+        __SetUp__
+        val o = convertFileWrapperToOutputtable(new FileWrapper(readOnlyFile))
+        __Exercise__
+        o.outputTo(output)
+        output.close()
+        __Verify__
+        Files.readAllLines(path) should contain theSameElementsInOrderAs
+          (content ++ content)
+      }
+    }
+
+    "Outputtable by PathWrapper should" - {
+
+      "NOT close the output stream after outputTo() call" in new OutputStreamFixture {
+        __SetUp__
+        val o = convertPathWrapperToOutputtable(new PathWrapper(readOnlyPath))
+        __Exercise__
+        o.outputTo(output)
+        __Verify__
+        output should be (opened)
+      }
+
+      "be appended to the OutputStream" in new OutputStreamWithContentFixture {
+        __SetUp__
+        val o = convertPathWrapperToOutputtable(new PathWrapper(readOnlyPath))
         __Exercise__
         o.outputTo(output)
         output.close()
@@ -197,10 +251,52 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         }
       }
 
+      "(File, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+        __Verify__
+        noException should be thrownBy {
+          convertImplicitly[Writable]((readOnlyFileISO2022, ISO2022))
+        }
+      }
+
       "Path should be implicitly converted to Writable" taggedAs ImplicitConversion in {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Writable](readOnlyPath)
+        }
+      }
+
+      "(Path, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+        __Verify__
+        noException should be thrownBy {
+          convertImplicitly[Writable]((readOnlyPathISO2022, ISO2022))
+        }
+      }
+
+      "FileWrapper should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+        __Verify__
+        noException should be thrownBy {
+          convertImplicitly[Writable](new FileWrapper(readOnlyFile))
+        }
+      }
+
+      "(FileWrapper, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+        __Verify__
+        noException should be thrownBy {
+          convertImplicitly[Writable]((new FileWrapper(readOnlyFileISO2022), ISO2022))
+        }
+      }
+
+      "PathWrapper should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+        __Verify__
+        noException should be thrownBy {
+          convertImplicitly[Writable](new PathWrapper(readOnlyPath))
+        }
+      }
+
+      "(PathWrapper, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+        __Verify__
+        noException should be thrownBy {
+          convertImplicitly[Writable]((new PathWrapper(readOnlyPathISO2022), ISO2022))
         }
       }
     }
@@ -277,6 +373,30 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
       }
     }
 
+    "Writable by (File, Charset) should" - {
+
+      "NOT close the writer after writeTo() call" in {
+        new WriterFixture {
+          __SetUp__
+          val w = convertFileToWritable((readOnlyFileISO2022, ISO2022))
+          __Exercise__
+          w.writeTo(writer)
+          __Verify__
+          writer should be (opened)
+        }
+      }
+
+      "be appended to the Writer" in new WriterWithContentFixture {
+        __SetUp__
+        val w = convertFileToWritable((readOnlyFileISO2022, ISO2022))
+        __Exercise__
+        w.writeTo(writer)
+        writer.close()
+        __Verify__
+        text(path) should equal (contentAsString + contentAsStringISO2022)
+      }
+    }
+
     "Writable by Path should" - {
 
       "NOT close the writer after writeTo() call" in new WriterFixture {
@@ -298,7 +418,119 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         text(path) should equal (contentAsString + contentAsString)
       }
     }
-  }
 
-  def text(path: Path): String = new String(Files.readAllBytes(path))
+    "Writable by (Path, Charset) should" - {
+
+      "NOT close the writer after writeTo() call" in new WriterFixture {
+        __SetUp__
+        val w = convertPathToWritable((readOnlyPathISO2022, ISO2022))
+        __Exercise__
+        w.writeTo(writer)
+        __Verify__
+        writer should be (opened)
+      }
+
+      "be appended to the Writer" in new WriterWithContentFixture {
+        __SetUp__
+        val w = convertPathToWritable((readOnlyPathISO2022, ISO2022))
+        __Exercise__
+        w.writeTo(writer)
+        writer.close()
+        __Verify__
+        text(path) should equal (contentAsString + contentAsStringISO2022)
+      }
+    }
+
+    "Writable by FileWrapper should" - {
+
+      "NOT close the writer after writeTo() call" in {
+        new WriterFixture {
+          __SetUp__
+          val w = convertFileWrapperToWritable(new FileWrapper(readOnlyFile))
+          __Exercise__
+          w.writeTo(writer)
+          __Verify__
+          writer should be (opened)
+        }
+      }
+
+      "be appended to the Writer" in new WriterWithContentFixture {
+        __SetUp__
+        val w = convertFileWrapperToWritable(new FileWrapper(readOnlyFile))
+        __Exercise__
+        w.writeTo(writer)
+        writer.close()
+        __Verify__
+        text(path) should equal (contentAsString + contentAsString)
+      }
+    }
+
+    "Writable by (FileWrapper, Charset) should" - {
+
+      "NOT close the writer after writeTo() call" in {
+        new WriterFixture {
+          __SetUp__
+          val w = convertFileWrapperToWritable((new FileWrapper(readOnlyFileISO2022), ISO2022))
+          __Exercise__
+          w.writeTo(writer)
+          __Verify__
+          writer should be (opened)
+        }
+      }
+
+      "be appended to the Writer" in new WriterWithContentFixture {
+        __SetUp__
+        val w = convertFileWrapperToWritable((new FileWrapper(readOnlyFileISO2022), ISO2022))
+        __Exercise__
+        w.writeTo(writer)
+        writer.close()
+        __Verify__
+        text(path) should equal (contentAsString + contentAsStringISO2022)
+      }
+    }
+
+    "Writable by PathWrapper should" - {
+
+      "NOT close the writer after writeTo() call" in new WriterFixture {
+        __SetUp__
+        val w = convertPathWrapperToWritable(new PathWrapper(readOnlyPath))
+        __Exercise__
+        w.writeTo(writer)
+        __Verify__
+        writer should be (opened)
+      }
+
+      "be appended to the Writer" in new WriterWithContentFixture {
+        __SetUp__
+        val w = convertPathWrapperToWritable(new PathWrapper(readOnlyPath))
+        __Exercise__
+        w.writeTo(writer)
+        writer.close()
+        __Verify__
+        text(path) should equal (contentAsString + contentAsString)
+      }
+    }
+
+    "Writable by (PathWrapper, Charset) should" - {
+
+      "NOT close the writer after writeTo() call" in new WriterFixture {
+        __SetUp__
+        val w = convertPathWrapperToWritable((new PathWrapper(readOnlyPathISO2022), ISO2022))
+        __Exercise__
+        w.writeTo(writer)
+        __Verify__
+        writer should be (opened)
+      }
+
+      "be appended to the Writer" in new WriterWithContentFixture {
+        __SetUp__
+        val w = convertPathWrapperToWritable((new PathWrapper(readOnlyPathISO2022), ISO2022))
+        __Exercise__
+        w.writeTo(writer)
+        writer.close()
+        __Verify__
+        text(path) should equal (contentAsString + contentAsStringISO2022)
+      }
+    }
+  }
 }

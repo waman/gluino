@@ -85,8 +85,6 @@ trait PrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]
     case c: Closeable => c.close()
     case _ =>
   }
-
-  def text(path: Path): String = new String(Files.readAllBytes(path), defaultCharset)
 }
 
 trait CloseablePrintWriterWrapperLikeSpec[T <: PrintWriterWrapperLike[T]]

@@ -4,17 +4,35 @@ import java.io._
 import java.nio.charset.Charset
 import java.nio.file.{Files, Path, StandardOpenOption}
 
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.enablers.{Existence, Readability, Size, Writability}
 import org.scalatest.matchers.{BeMatcher, MatchResult}
 import org.waman.gluino.GluinoCustomSpec
 import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
 import org.waman.gluino.io.datastream.{DataInputStreamWrapper, DataOutputStreamWrapper}
 import org.waman.gluino.io.objectstream.{ObjectInputStreamWrapper, ObjectOutputStreamWrapper}
-import org.waman.gluino.nio.GluinoPath
+import org.waman.gluino.nio.{DirectoryBuilder, PathWrapper, GluinoPath}
 
 import scala.collection.JavaConversions._
 
-trait GluinoIOCustomSpec extends GluinoCustomSpec{
+import scala.collection.mutable
+
+trait GluinoIOCustomSpec extends GluinoCustomSpec with BeforeAndAfterAll{
+
+  protected def createNotExistingFile(): Path = {
+    val path = GluinoPath.createTempFile(deleteOnExit = true)
+    Files.delete(path)
+    path
+  }
+
+  protected def createNotExistingDirectory(): Path = {
+    val path = GluinoPath.createTempDirectory(deleteOnExit = true)
+    Files.delete(path)
+    path
+  }
+
+  protected def text(path: Path): String = text(path, GluinoIO.defaultCharset)
+  protected def text(path: Path, charset: Charset): String = new String(Files.readAllBytes(path), charset)
 
   //***** Fixtures *****
   // content
@@ -25,7 +43,7 @@ trait GluinoIOCustomSpec extends GluinoCustomSpec{
   lazy val readOnlyFile = readOnlyPath.toFile
 
   def createReadOnlyFile(): Path = {
-    val path = GluinoPath.createTempFile()
+    val path = GluinoPath.createTempFile(deleteOnExit = true)
     Files.write(path, content)
     path
   }
@@ -41,7 +59,7 @@ trait GluinoIOCustomSpec extends GluinoCustomSpec{
 
   // OutputStream, Writer
   trait FileFixture{
-    val path = GluinoPath.createTempFile()
+    val path = GluinoPath.createTempFile(deleteOnExit = true)
   }
 
   trait OutputStreamFixture extends FileFixture{
@@ -72,15 +90,63 @@ trait GluinoIOCustomSpec extends GluinoCustomSpec{
 
   lazy val ISO2022 = Charset.forName("ISO-2022-JP")
   lazy val readOnlyPathISO2022 = createReadOnlyFileISO2022()
+  lazy val readOnlyFileISO2022 = readOnlyPathISO2022.toFile
 
   def createReadOnlyFileISO2022(): Path = {
-    val path = GluinoPath.createTempFile()
+    val path = GluinoPath.createTempFile(deleteOnExit = true)
     Files.write(path, contentISO2022, ISO2022)
     path
   }
 
   trait FileWithContentISO2022Fixture extends FileFixture{
     Files.write(path, contentISO2022, ISO2022)
+  }
+
+  //**** Directory Fixture *****
+  trait DirectoryFixture{
+    val dir = GluinoPath.createTempDirectory(deleteOnExit = true)
+  }
+
+  trait NotEmptyDirectoryFixture extends DirectoryFixture{
+    val childPath = GluinoPath.createTempFile(dir, deleteOnExit = true)
+  }
+
+  private val deleteOnExitDirs = new mutable.MutableList[Path]()
+  val readOnlyDir: Path = initDirectory()
+  override def afterAll{
+    deleteOnExitDirs.foreach(new PathWrapper(_).deleteDir())
+  }
+
+  protected def initDirectory
+      (parent: Path = GluinoPath.createTempDirectory(prefix = "123-", deleteOnExit = true)): Path = {
+    val dir = new DirectoryBuilder{
+      val baseDir = parent
+      file("child1.txt")
+      file("child2.txt")
+      file("child3.txt")
+      dir("dir1"){
+        file("child11.txt")
+        file("child12.txt")
+      }
+      dir("dir2"){
+        file("child21.txt")
+        file("child22.txt")
+        file("child23.txt")
+      }
+      dir("dir3"){
+        file("child31.txt")
+        dir("dir31"){
+          file("child311.txt")
+          file("child312.txt")
+        }
+      }
+    }.baseDir
+    deleteOnExitDirs += dir
+    dir
+  }
+
+  trait DirectoryWithFilesFixture extends DirectoryFixture{
+    initDirectory(dir)
   }
 
   //***** Custom Matchers *****

@@ -7,6 +7,8 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
 
   override protected def getFile: File = file
   override def fileName: String = file.getName
+
+  override protected def from(s: String): File = new File(s)
   override protected def wrap(file: File): FileWrapper = new FileWrapper(file)
 
   override def isFile: Boolean = file.isFile
@@ -18,10 +20,6 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
   //***** Path Operation *****
   def /(child: String): File = new File(file.getPath + "/" + child)
   def \(child: String): File = new File(file.getPath + "\\" + child)
-
-  private def fileNameFilter(fileName: String): FilenameFilter = new FilenameFilter {
-    override def accept(file: File, s: String): Boolean = fileName == s
-  }
 
   //***** byte, InputStream/OutputStream *****
   override def newInputStream: InputStream = new FileInputStream(file)
@@ -38,6 +36,36 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
 
   //***** File Operation *****
   //  override def rename(name: String): Boolean = file.renameTo(new File(name))
+  override def copy(dest: File, isOverride: Boolean = false): Option[IOException] = {
+    if(file == dest) return None
+
+    if(dest.exists()) {
+      if(isOverride)
+        dest.delete()
+      else
+        return Some(new IOException("Dest file already exists: " + dest))
+    }
+
+    file match {
+      case f if f.isFile =>
+        try{
+          withInputStream{ is =>
+            wrap(dest) << is
+            None
+          }
+        }catch{
+          case ex: IOException => Some(ex)
+        }
+
+      case d if d.isDirectory =>
+        val result = dest.mkdir()
+        if(result)
+          None
+        else
+          Some(new IOException())
+    }
+  }
+
   override def delete(): Option[IOException] = {
     file.delete() match {
       case true => None

@@ -12,7 +12,12 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
   protected def getFile: F
   def fileName: String
+
   protected def wrap(file: F): W
+  protected def from(s: String): F
+
+  def directorySize: Long = ???
+  def length: Long = ???
 
   def isFile: Boolean
   def isDirectory: Boolean
@@ -67,11 +72,22 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     newPrintWriter(charset, append = true).withPrintWriter(consumer)
 
   //***** File Operation *****
-//  def renameFileName(fileName: String): F
-//
-//  def rename(dest: F): Option[IOException] = move(dest)
-//  def move(dest: F): Option[IOException]
-//  def copy(dest: F): Option[IOException]
+  def renameTo(fileName: String): Option[IOException] = renameTo(from(fileName))
+  def renameTo(dest: F): Option[IOException] = move(dest, isOverride = false)
+  def renameTo(dest: F, isOverride: Boolean): Option[IOException] = move(dest, isOverride)
+
+  def move(dest: F, isOverride: Boolean = false): Option[IOException] =
+    copy(dest, isOverride) match {
+      case None =>
+        delete() match {
+          case None => None
+          case oex => oex
+        }
+      case oex => oex
+    }
+
+  def copy(dest: F, isOverride: Boolean = false): Option[IOException]
+
   def delete(): Option[IOException]
 
   //***** File Operations through Files and/or Directory Structure *****
@@ -149,6 +165,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     eachFileMatchRecurse(FileType.Directories, filter, visitParentPost)(consumer)
 
 
+  //***** Directory Operations *****
   //  def moveDir(dest: F): Option[IOException]
   //  def copyDir(dest: F): Option[IOException]
 

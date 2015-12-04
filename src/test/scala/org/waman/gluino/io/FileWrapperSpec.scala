@@ -3,9 +3,10 @@ package org.waman.gluino.io
 import java.io.{File, IOException}
 import java.nio.file.{Files, Path}
 
-import org.scalatest.BeforeAndAfterAll
+import scala.collection.JavaConversions._
+
 import org.scalatest.OptionValues._
-import org.waman.gluino.nio.{DirectoryBuilder, GluinoPath, PathWrapper}
+import org.waman.gluino.nio.GluinoPath
 import org.waman.gluino.number.GluinoNumber
 
 import scala.collection.mutable
@@ -13,89 +14,271 @@ import scala.collection.mutable
 trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
     extends InputStreamWrapperLikeSpec
     with OutputStreamWrapperLikeSpec[W]
-    with GluinoNumber with BeforeAndAfterAll{
+    with GluinoNumber{
 
+  protected def asF(path: Path): F
   protected def newFileWrapperLike(path: Path): W
 
   override protected def newInputStreamWrapperLike(path: Path) = newFileWrapperLike(path)
   override protected def newOutputStreamWrapperLike(path: Path) = newFileWrapperLike(path)
 
+  // File Fixture
   trait FileWrapperLike_FileFixture extends FileFixture{
     val sut = newFileWrapperLike(path)
   }
 
-  trait DirectoryFixture{
-    val dir = GluinoPath.createTempDirectory()
+  trait FileWrapperLike_FileWithContentFixture extends FileWithContentFixture{
+    val sut = newFileWrapperLike(path)
   }
 
   trait FileWrapperLike_DirectoryFixture extends DirectoryFixture{
     val sut = newFileWrapperLike(dir)
   }
 
-  trait DirectoryWithAFileFixture extends DirectoryFixture{
-    val childPath = GluinoPath.createTempFile(dir)
-  }
-
-  trait FileWrapperLike_DirectoryWithAFileFixture extends DirectoryWithAFileFixture{
-    val sut = newFileWrapperLike(dir)
-  }
-
-  val readOnlyDir: Path = initDirectory()
-  override def afterAll{ println(new PathWrapper(readOnlyDir).deleteDir()) }
-
+  // Directory Fixture
   trait FileWrapperLike_ReadOnlyDirFixture{
     val sut = newFileWrapperLike(readOnlyDir)
   }
 
-  private def initDirectory(parent: Path = GluinoPath.createTempDirectory(prefix = "123-")): Path = {
-    new DirectoryBuilder{
-      val baseDir = parent
-      file("child1.txt")
-      file("child2.txt")
-      file("child3.txt")
-      dir("dir1"){
-        file("child11.txt")
-        file("child12.txt")
-      }
-      dir("dir2"){
-        file("child21.txt")
-        file("child22.txt")
-        file("child23.txt")
-      }
-      dir("dir3"){
-        file("child31.txt")
-        dir("dir31"){
-          file("child311.txt")
-          file("child312.txt")
-        }
-      }
-    }.baseDir
-  }
-
-  trait DirectoryWithFilesFixture extends DirectoryFixture{
-    initDirectory(dir)
+  trait FileWrapperLike_NotEmptyDirectoryFixture extends NotEmptyDirectoryFixture{
+    val sut = newFileWrapperLike(dir)
   }
 
   trait FileWrapperLike_DirectoryWithFilesFixture extends DirectoryWithFilesFixture{
     val sut = newFileWrapperLike(dir)
   }
 
+  trait NotEmptyDirectoryTargetFixture{
+    val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+    GluinoPath.createTempFile(targetPath, deleteOnExit = true)
+    val target = asF(targetPath)
+  }
+
   "***** File Operations *****" - {
+
+    "renameTo() method should" - {
+
+    }
+
+    "move() method should" - {
+
+    }
+
+    "copy() method should" - {
+
+      "for files" - {
+
+        "copy a file" in new FileWrapperLike_FileWithContentFixture {
+          __SetUp__
+          val targetPath = createNotExistingFile()
+          val target = asF(targetPath)
+          __Exercise__
+          sut.copy(target)
+          __Verify__
+          path should exist
+          targetPath should exist
+          text(path) should equal(contentAsString)
+          text(targetPath) should equal(contentAsString)
+        }
+
+        "RETURN an Option[IOException] if the target file exists and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempFile(deleteOnExit = true))
+            __Exercise__
+            val result = sut.copy(target)
+            __Verify__
+            result.value should be(a[IOException])
+          }
+
+        "RETURN an Option[IOException] if the target file exists and the 'isOverride' arg is false" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempFile(deleteOnExit = true))
+            __Exercise__
+            val result = sut.copy(target, isOverride = false)
+            __Verify__
+            result.value should be(a[IOException])
+          }
+
+        "copy a file even if the target file exists when the 'isOverride' arg is true" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val targetPath = GluinoPath.createTempFile(deleteOnExit = true)
+            Files.write(targetPath, Seq("Some content."))
+            val target = asF(targetPath)
+            __Exercise__
+            sut.copy(target, isOverride = true)
+            __Verify__
+            path should exist
+            targetPath should exist
+            text(path) should equal(contentAsString)
+            text(targetPath) should equal(contentAsString)
+          }
+
+        "do nothing if the source and target are the same file and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val target = asF(path)
+            __Exercise__
+            val result = sut.copy(target)
+            __Verify__
+            result should be (None)
+            path should exist
+            text(path) should equal(contentAsString)
+          }
+
+        "do nothing if the source and target are the same file and the 'isOverride' arg is false" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val target = asF(path)
+            __Exercise__
+            val result = sut.copy(target, isOverride = false)
+            __Verify__
+            result should be (None)
+            path should exist
+            text(path) should equal(contentAsString)
+          }
+
+        "do nothing if the source and target are the same file and the 'isOverride' arg is true" in
+          new FileWrapperLike_FileWithContentFixture {
+            __SetUp__
+            val target = asF(path)
+            __Exercise__
+            val result = sut.copy(target, isOverride = true)
+            __Verify__
+            result should be (None)
+            path should exist
+            text(path) should equal(contentAsString)
+          }
+      }
+
+      "for directories" - {
+
+        "copy the directory" in new FileWrapperLike_DirectoryFixture {
+          __SetUp__
+          val targetPath = createNotExistingDirectory()
+          val target = asF(targetPath)
+          __Exercise__
+          sut.copy(target)
+          __Verify__
+          dir should exist
+          targetPath should exist
+        }
+
+        "RETURN an Option[IOException] if the target directory exists and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempDirectory(deleteOnExit = true))
+            __Exercise__
+            val result = sut.copy(target)
+            __Verify__
+            result.value should be (a [IOException])
+          }
+
+        "RETURN an Option[IOException] if the target directory exists and the 'isOverride' arg is false" in
+          new FileWrapperLike_FileFixture {
+            __SetUp__
+            val target = asF(GluinoPath.createTempDirectory(deleteOnExit = true))
+            __Exercise__
+            val result = sut.copy(target, isOverride = false)
+            __Verify__
+            result.value should be (a [IOException])
+          }
+
+        "copy the directory even if the target directory exists when the 'isOverride' arg is true" in
+          new FileWrapperLike_DirectoryFixture {
+            __SetUp__
+            val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+            val target = asF(targetPath)
+            __Exercise__
+            sut.copy(target, isOverride = true)
+            __Verify__
+            dir should exist
+            targetPath should exist
+          }
+
+        "RETURN an Option[IOException] if the directory is not empty and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_NotEmptyDirectoryFixture{
+            new NotEmptyDirectoryTargetFixture {
+              __Exercise__
+              val result = sut.copy(target)
+              __Verify__
+              result.value should be (a [IOException])
+            }
+          }
+
+        "RETURN an Option[IOException] if the directory is not empty and the 'isOverride' arg is false" in
+          new FileWrapperLike_NotEmptyDirectoryFixture {
+            new NotEmptyDirectoryTargetFixture {
+              __Exercise__
+              val result = sut.copy(target, isOverride = false)
+              __Verify__
+              result.value should be (a [IOException])
+            }
+          }
+
+        "do nothing if the source and target are the same directory and the 'isOverride' arg is omitted" in
+          new FileWrapperLike_DirectoryFixture{
+            __SetUp__
+            val target = asF(dir)
+            __Exercise__
+            val result = sut.copy(target)
+            __Verify__
+            result should be (None)
+            dir should exist
+          }
+
+        "do nothing if the source and target are the same directory and the 'isOverride' arg is false" in
+          new FileWrapperLike_DirectoryFixture{
+            __SetUp__
+            val target = asF(dir)
+            __Exercise__
+            val result = sut.copy(target, isOverride = false)
+            __Verify__
+            result should be (None)
+            dir should exist
+          }
+
+        "do nothing if the source and target are the same directory and the 'isOverride' arg is true" in
+          new FileWrapperLike_DirectoryFixture{
+            __SetUp__
+            val target = asF(dir)
+            __Exercise__
+            val result = sut.copy(target, isOverride = true)
+            __Verify__
+            result should be (None)
+            dir should exist
+          }
+
+        "RETURN an Option[IOException] if the directory is not empty and the 'isOverride' arg is true" in
+          new FileWrapperLike_NotEmptyDirectoryFixture {
+            new NotEmptyDirectoryTargetFixture {
+              __Exercise__
+              val result = sut.copy(target, isOverride = true)
+              __Verify__
+              result.value should be (a [IOException])
+            }
+          }
+      }
+    }
 
     "delete() method should" - {
 
-      "delete the file" in new FileWrapperLike_FileFixture{
+      "delete a file" in new FileWrapperLike_FileFixture{
         __Exercise__
-        sut.delete()
+        val result = sut.delete()
         __Verify__
         path should not (exist)
+        result should be (None)
       }
 
-      "delete the directory" in new FileWrapperLike_DirectoryFixture {
+      "delete a directory" in new FileWrapperLike_DirectoryFixture {
         __Exercise__
-        sut.delete()
+        val result = sut.delete()
         __Verify__
         dir should not (exist)
+        result should be (None)
       }
 
       "RETURN an Option[IOException] if the file does not exist" in
@@ -109,7 +292,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         }
 
       "RETURN an Option[IOException] if the directory is not empty" in
-        new FileWrapperLike_DirectoryWithAFileFixture {
+        new FileWrapperLike_NotEmptyDirectoryFixture {
           __Exercise__
           val result = sut.delete()
           __Verify__
@@ -118,9 +301,9 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
     }
   }
 
-  def wrap(file: F): W
-  def fileNames(files: Seq[F]): Seq[String] = files.map(wrap).map(_.fileName)
-  def fileNameContains(s: String): F => Boolean = wrap(_).fileName.contains(s)
+  protected def wrap(file: F): W
+  protected def fileNames(files: Seq[F]): Seq[String] = files.map(wrap).map(_.fileName)
+  protected def fileNameContains(s: String): F => Boolean = wrap(_).fileName.contains(s)
 
   "***** File Operations through Files and/or Directory Structure *****" - {
 
@@ -556,6 +739,10 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
 
 class FileWrapperSpec extends FileWrapperLikeSpec[File, FileWrapper] with GluinoFile{
 
+  override protected def asF(path: Path) = path.toFile
+  override protected def newFileWrapperLike(path: Path) = new FileWrapper(path.toFile)
+  override protected def wrap(file: File): FileWrapper = new FileWrapper(file)
+
   trait FileOperationFixture{
     val file = new File("path/to/some/dir")
   }
@@ -577,7 +764,4 @@ class FileWrapperSpec extends FileWrapperLikeSpec[File, FileWrapper] with Gluino
       child should equal(new File("path/to/some/dir\\child.txt"))
     }
   }
-
-  override protected def newFileWrapperLike(path: Path) = new FileWrapper(path.toFile)
-  override def wrap(file: File): FileWrapper = new FileWrapper(file)
 }

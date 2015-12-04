@@ -9,18 +9,18 @@ trait GluinoFile extends AppendableConverter{
   val tempDir: File = new File(tmpdir)
 
   def createTempFile(dir: File = tempDir, prefix: String = "gluino-", suffix: String = null,
-                    deleteOnExit: Boolean = true): File = {
+                    deleteOnExit: Boolean = false): File = {
     val file = File.createTempFile(prefix, suffix, dir)
     if(deleteOnExit)file.deleteOnExit()
     file
   }
 
-  def createTempDirectory(dir: File = tempDir, prefix: String = null,
-                          deleteOnExit: Boolean = true): File = {
-    val td = java.nio.file.Files.createTempDirectory(dir.toPath, prefix).toFile
-    if(deleteOnExit)td.deleteOnExit()
-    td
-  }
+//  def createTempDirectory(dir: File = tempDir, prefix: String = null,
+//                          deleteOnExit: Boolean = true): File = {
+//    val td = java.nio.file.Files.createTempDirectory(dir.toPath, prefix).toFile
+//    if(deleteOnExit)td.deleteOnExit()
+//    td
+//  }
 
   implicit def wrapFile(file: File): FileWrapper = new FileWrapper(file)
 

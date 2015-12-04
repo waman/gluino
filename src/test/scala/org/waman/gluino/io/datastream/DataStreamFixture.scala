@@ -11,7 +11,7 @@ trait DataStreamFixture {
   lazy val readOnlyDataFile = readOnlyDataPath.toFile
 
   private def createReadOnlyDataPath(): Path = {
-    val path = GluinoPath.createTempFile()
+    val path = GluinoPath.createTempFile(deleteOnExit = true)
     val oos = new DataOutputStream(Files.newOutputStream(path))
     try{
       oos.writeInt(1)

@@ -90,8 +90,6 @@ trait OutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]
         text(path, ISO2022) should equal(contentAsStringISO2022 + "4行目" + sep)
       }
   }
-
-  def text(path: Path, charset: Charset): String = new String(Files.readAllBytes(path), charset)
 }
 
 trait CloseableOutputStreamWrapperLikeSpec[T <: OutputStreamWrapperLike[T]]

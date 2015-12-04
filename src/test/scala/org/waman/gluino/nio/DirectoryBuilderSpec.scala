@@ -1,7 +1,5 @@
 package org.waman.gluino.nio
 
-import java.nio.file.{Files, Path}
-
 import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
 import org.waman.gluino.io.GluinoIOCustomSpec
 
@@ -12,7 +10,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
     "be able to create nested directory structure" in {
       __Exercise__
       val projectHome = new DirectoryBuilder {
-        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-", deleteOnExit = true)
         dir("src") {
           dir("main") {
             dir("java") {} // {} is necessary even if empty directory
@@ -42,7 +40,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
     "be able to create files under any place of directory structure" in {
       __Exercise__
       val projectHome = new DirectoryBuilder {
-        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-", deleteOnExit = true)
         file("build.sbt")
         file("README.md")
         file(".gitignore")
@@ -76,7 +74,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
     "be able to create file with content when 2 or more Strings are passed" in {
       __Exercise__
       val projectHome = new DirectoryBuilder {
-        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-", deleteOnExit = true)
         file("build.sbt",
           s"""name := "${baseDir.getFileName}"""",
           "",
@@ -113,7 +111,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
     "be able to create file with content by using withWriter method (enhanced by GluinoPath)" in {
       __Exercise__
       val projectHome = new DirectoryBuilder {
-        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-", deleteOnExit = true)
         file("build.sbt",
           s"""name := "${baseDir.getFileName}"""",
           "",
@@ -159,6 +157,4 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
       projectHome.deleteDir()
     }
   }
-
-  def text(path: Path): String = new String(Files.readAllBytes(path))
 }

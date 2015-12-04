@@ -141,15 +141,16 @@ trait InputStreamWrapperLikeSpec
           )
         }
 
-      "splitEachLine() method should split each line by the specified regex" in new InputStreamWrapperLikeISO2022Fixture {
-        __SetUp__
-        val result = new ListBuffer[String]()
-        __Exercise__
-        sut.splitEachLine("行".r, ISO2022)(result ++= _)
-        __Verify__
-        result should contain theSameElementsInOrderAs
-          List("1", "目", "2", "目", "3", "目")
-      }
+      "splitEachLine() method should split each line by the specified regex" in
+        new InputStreamWrapperLikeISO2022Fixture {
+          __SetUp__
+          val result = new ListBuffer[String]
+          __Exercise__
+          sut.splitEachLine("行".r, ISO2022)(result ++= _)
+          __Verify__
+          result should contain theSameElementsInOrderAs
+            List("1", "目", "2", "目", "3", "目")
+        }
 
       "filterLine(String => Boolean) method should filter line and write down to the specified writer" in
         new InputStreamWrapperLikeISO2022Fixture {

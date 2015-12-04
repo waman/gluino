@@ -2,7 +2,7 @@ package org.waman.gluino.nio
 
 import java.io._
 import java.nio.charset.Charset
-import java.nio.file.{Files, Path, Paths, StandardOpenOption}
+import java.nio.file._
 
 import org.waman.gluino.function.GluinoFunction
 import org.waman.gluino.io.{FileTypeFilterProvider, FileWrapperLike}
@@ -14,7 +14,9 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
 
   override protected def getFile = path
   override def fileName: String = path.getFileName.toString
+
   override protected def wrap(path: Path): PathWrapper = new PathWrapper(path)
+  override protected def from(s: String): Path = Paths.get(s)
 
   override def isFile: Boolean = Files.isRegularFile(path)
   override def isDirectory: Boolean = Files.isDirectory(path)
@@ -53,12 +55,25 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
     Files.write(path, List(text), charset)
 
   //***** File Operation *****
-//  override def rename(name: String): Boolean = try {
-//    Files.move(path, Paths.get(name))
-//    true
-//  }catch {
-//    case _: Exception => false
-//  }
+  override def move(dest: Path, isOverride: Boolean = false): Option[IOException] = try{
+    if(isOverride)
+      Files.move(getFile, dest, StandardCopyOption.REPLACE_EXISTING)
+    else
+      Files.move(getFile, dest)
+    None
+  }catch{
+    case ex: IOException => Some(ex)
+  }
+
+  override def copy(dest: Path, isOverride: Boolean = false): Option[IOException] = try{
+    if(isOverride)
+      Files.copy(getFile, dest, StandardCopyOption.REPLACE_EXISTING)
+    else
+      Files.copy(getFile, dest)
+    None
+  }catch{
+    case ex: IOException => Some(ex)
+  }
 
   override def delete(): Option[IOException] = {
     try{

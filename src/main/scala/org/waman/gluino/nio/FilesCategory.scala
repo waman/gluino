@@ -48,8 +48,8 @@ class FilesCategory(path: Path) extends GluinoFunction{
   def	deleteIfExists(): Boolean = Files.deleteIfExists(path)
 
   // copy/move
-  def copy(in: InputStream, options: Set[CopyOption] = Set()): Long = Files.copy(in, path, options.toArray:_*)
-  def copy(out: OutputStream): Long = Files.copy(path, out)
+  def copyFromStream(in: InputStream, options: Set[CopyOption] = Set()): Long = Files.copy(in, path, options.toArray:_*)
+  def copyToStream(out: OutputStream): Long = Files.copy(path, out)
 
   def copyFrom(source: Path, options: Set[CopyOption] = Set()): Path =
     Files.copy(source, path, options.toArray:_*)

@@ -1,13 +1,15 @@
 package org.waman.gluino.io
 
+import org.waman.gluino.nio.GluinoPath
+
 class FileFileTypeSpec extends GluinoIOCustomSpec with GluinoFile{
 
   trait TempFileFixture{
-    val sut = createTempFile()
+    val sut = createTempFile(deleteOnExit = true)
   }
 
   trait TempDirectoryFixture{
-    val sut = createTempDirectory()
+    val sut = GluinoPath.createTempDirectory(deleteOnExit = true).toFile
   }
 
   "FileType.Files should" - {

@@ -11,6 +11,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
 
   "***** POSIX File Permission *****" - {
     "convertStringToPosixFilePermissionSet() method should" - {
+
       "convert String to FileAttribute whose value is Set of PosixFilePermissions" in {
         __Exercise__
         val sut = convertStringToPosixFilePermissionSet("rwx------")
