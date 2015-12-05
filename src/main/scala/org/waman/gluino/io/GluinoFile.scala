@@ -15,12 +15,14 @@ trait GluinoFile extends AppendableConverter{
     file
   }
 
-//  def createTempDirectory(dir: File = tempDir, prefix: String = null,
-//                          deleteOnExit: Boolean = true): File = {
-//    val td = java.nio.file.Files.createTempDirectory(dir.toPath, prefix).toFile
-//    if(deleteOnExit)td.deleteOnExit()
-//    td
-//  }
+  def createTempDirectory(dir: File = tempDir, prefix: String = "gluino-",
+                          deleteOnExit: Boolean = false): File = {
+    val td = File.createTempFile(prefix, "", dir)
+    td.delete()
+    td.mkdir()
+    if(deleteOnExit)td.deleteOnExit()
+    td
+  }
 
   implicit def wrapFile(file: File): FileWrapper = new FileWrapper(file)
 

@@ -1,36 +1,8 @@
 package org.waman.gluino.io
 
-import org.waman.gluino.nio.GluinoPath
-
 class GluinoFileSpec extends GluinoIOCustomSpec with GluinoFile{
 
   "***** Temporal File/Directory *****" - {
-
-//    "createTempDirectory() method should" - {
-//
-//      "create a temporal directory in tempDir if directory is not specified" in {
-//        __Exercise__
-//        val sut = createTempDirectory(deleteOnExit = true)
-//        __Verify__
-//        sut.getParentFile should be (tempDir)
-//      }
-//
-//      "create a temporal directory in the specified directory if directory is specified" in {
-//        __SetUp__
-//        val dir = createTempDirectory(tempDir)
-//        __Exercise__
-//        val sut = createTempDirectory(dir)
-//        __Verify__
-//        sut.getParentFile should be (dir)
-//      }
-//
-//      "create a temporal directory with the prefix if specified" in {
-//        __Exercise__
-//        val sut = createTempDirectory(prefix = "99999")
-//        __Verify__
-//        sut.getName should startWith ("99999")
-//      }
-//    }
 
     "createTempFile() method should" - {
 
@@ -43,7 +15,7 @@ class GluinoFileSpec extends GluinoIOCustomSpec with GluinoFile{
 
       "create a temporal file in the specified directory if directory is specified" in {
         __SetUp__
-        val dir = GluinoPath.createTempDirectory(deleteOnExit = true).toFile
+        val dir = createTempDirectory(deleteOnExit = true)
         __Exercise__
         val sut = createTempFile(dir, deleteOnExit = true)
         __Verify__
@@ -76,6 +48,32 @@ class GluinoFileSpec extends GluinoIOCustomSpec with GluinoFile{
         val sut = createTempFile(deleteOnExit = true)
         __Verify__
         sut.getName should endWith (".tmp")
+      }
+    }
+
+    "createTempDirectory() method should" - {
+
+      "create a temporal directory in tempDir if directory is not specified" in {
+        __Exercise__
+        val sut = createTempDirectory(deleteOnExit = true)
+        __Verify__
+        sut.getParentFile should be (tempDir)
+      }
+
+      "create a temporal directory in the specified directory if directory is specified" in {
+        __SetUp__
+        val dir = createTempDirectory(tempDir, deleteOnExit = true)
+        __Exercise__
+        val sut = createTempDirectory(dir, deleteOnExit = true)
+        __Verify__
+        sut.getParentFile should be (dir)
+      }
+
+      "create a temporal directory with the prefix if specified" in {
+        __Exercise__
+        val sut = createTempDirectory(prefix = "99999", deleteOnExit = true)
+        __Verify__
+        sut.getName should startWith ("99999")
       }
     }
   }
