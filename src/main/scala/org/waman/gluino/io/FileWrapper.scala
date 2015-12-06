@@ -11,18 +11,23 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
   override protected def from(s: String): File = new File(s)
   override protected def wrap(file: File): FileWrapper = new FileWrapper(file)
 
+  override def exists: Boolean = file.exists()
+
   override def isFile: Boolean = file.isFile
   override def isDirectory: Boolean = file.isDirectory
 
   def isOlderThan(arg: File): Boolean = file.lastModified < arg.lastModified
   def isNewerThan(arg: File): Boolean = file.lastModified > arg.lastModified
 
+  override protected def newNotDirectoryException(message: String): IOException =
+    new IOException(message)
+
   override protected def getFileFilterProvider: FileTypeFilterProvider[File] =
     GluinoFile.FileFileTypeFilterProvider
 
   //***** Path Operation *****
-  def /(child: String): File = new File(file.getPath + "/" + child)
-  def \(child: String): File = new File(file.getPath + "\\" + child)
+  override def /(child: String): File = new File(file.getPath + "/" + child)
+  override def \(child: String): File = new File(file.getPath + "\\" + child)
 
   //***** byte, InputStream/OutputStream *****
   override def newInputStream: InputStream = new FileInputStream(file)
@@ -89,5 +94,8 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
     }
   }
 
-  override def eachFile(consumer: File => Unit): Unit = file.listFiles().foreach(consumer(_))
+  override def eachFile(consumer: File => Unit): Unit = file match {
+    case d if d.isDirectory => d.listFiles().foreach(consumer(_))
+    case f => throw new IOException("eachFile() must be called on a directory: " + f)
+  }
 }

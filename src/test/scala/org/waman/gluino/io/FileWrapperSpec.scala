@@ -1238,15 +1238,228 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
 
   "***** Directory Operations *****" - {
 
+    "moveDir() method should" - {
+
+      "move a directory even if not empty" in new FileWrapperLike_DirectoryWithFilesFixture {
+        __SetUp__
+        val targetPath = createNotExistingDirectory()
+        val target = asF(targetPath)
+        __Exercise__
+        val result = sut.moveDir(target)
+        __Verify__
+        result should be (None)
+
+        targetPath should exist
+        (targetPath resolve "child1.txt") should exist
+
+        dir should not (exist)
+        __TearDown__
+        wrap(target).deleteDir()
+      }
+
+      "RETURN an Option[IOException] if the target directory already exists and the 'isOverride' arg is omitted" in
+        new FileWrapperLike_DirectoryWithFilesFixture {
+          __SetUp__
+          val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.moveDir(target)
+          __Verify__
+          result.value should be (an [IOException])
+
+          targetPath should exist
+
+          dir should exist
+          (dir resolve "child1.txt") should exist
+        }
+
+      "RETURN an Option[IOException] if the target directory already exists and the 'isOverride' arg is false" in
+        new FileWrapperLike_DirectoryWithFilesFixture {
+          __SetUp__
+          val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.moveDir(target, isOverride = false)
+          __Verify__
+          result.value should be (an [IOException])
+
+          targetPath should exist
+
+          dir should exist
+          (dir resolve "child1.txt") should exist
+        }
+
+      "move the directory if the target directory already exists when the 'isOverride' arg is true" in
+        new FileWrapperLike_DirectoryWithFilesFixture {
+          __SetUp__
+          val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.moveDir(target, isOverride = true)
+          __Verify__
+          result should be (None)
+
+          targetPath should exist
+          (targetPath resolve "child1.txt") should exist
+
+          dir should not (exist)
+        }
+
+      "do nothing if the source directory does not exist" in {
+        __SetUp__
+        val dir = createNotExistingDirectory()
+        val sut = newFileWrapperLike(dir)
+        val targetPath = createNotExistingDirectory()
+        val target = asF(targetPath)
+        __Exercise__
+        val result = sut.moveDir(target)
+        __Verify__
+        result should be (None)
+        dir should not (exist)
+        targetPath should not (exist)
+      }
+
+      "RETURN an Option[IOException] if the source is a file (not a directory)" in
+        new FileWrapperLike_FileFixture {
+          __SetUp__
+          val targetPath = createNotExistingDirectory()
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.moveDir(target)
+          __Verify__
+          result.value should be (a [IOException])
+          path should exist
+          targetPath should not (exist)
+        }
+    }
+
+    "copyDir() method should" - {
+
+      "copy a directory even if not empty" in new FileWrapperLike_DirectoryWithFilesFixture {
+        __SetUp__
+        val targetPath = createNotExistingDirectory()
+        val target = asF(targetPath)
+        __Exercise__
+        val result = sut.copyDir(target)
+        __Verify__
+        result should be (None)
+
+        targetPath should exist
+        (targetPath resolve "child1.txt") should exist
+
+        dir should exist
+        (dir resolve "child1.txt") should exist
+        __TearDown__
+        wrap(target).deleteDir()
+      }
+
+      "RETURN an Option[IOException] if the target directory already exists and the 'isOverride' arg is omitted" in
+        new FileWrapperLike_DirectoryWithFilesFixture {
+          __SetUp__
+          val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.copyDir(target)
+          __Verify__
+          result.value should be (an [IOException])
+
+          targetPath should exist
+
+          dir should exist
+          (dir resolve "child1.txt") should exist
+        }
+
+      "RETURN an Option[IOException] if the target directory already exists and the 'isOverride' arg is false" in
+        new FileWrapperLike_DirectoryWithFilesFixture {
+          __SetUp__
+          val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.copyDir(target, isOverride = false)
+          __Verify__
+          result.value should be (an [IOException])
+
+          targetPath should exist
+
+          dir should exist
+          (dir resolve "child1.txt") should exist
+        }
+
+      "copy the directory if the target directory already exists when the 'isOverride' arg is true" in
+        new FileWrapperLike_DirectoryWithFilesFixture {
+          __SetUp__
+          val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.copyDir(target, isOverride = true)
+          __Verify__
+          result should be (None)
+
+          targetPath should exist
+          (targetPath resolve "child1.txt") should exist
+
+          dir should exist
+          (dir resolve "child1.txt") should exist
+        }
+
+      "do nothing if the source directory does not exist" in {
+        __SetUp__
+        val dir = createNotExistingDirectory()
+        val sut = newFileWrapperLike(dir)
+        val targetPath = createNotExistingDirectory()
+        val target = asF(targetPath)
+        __Exercise__
+        val result = sut.copyDir(target)
+        __Verify__
+        result should be (None)
+        dir should not (exist)
+        targetPath should not (exist)
+      }
+
+      "RETURN an Option[IOException] if the source is a file (not a directory)" in
+        new FileWrapperLike_FileFixture {
+          __SetUp__
+          val targetPath = createNotExistingDirectory()
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.copyDir(target)
+          __Verify__
+          result.value should be (a [IOException])
+          path should exist
+          targetPath should not (exist)
+        }
+    }
+
     "deleteDir() method should" - {
 
-      "delete the directory even if not empty" in new FileWrapperLike_DirectoryFixture {
+      "delete a directory even if not empty" in
+        new FileWrapperLike_DirectoryWithFilesFixture {
+          __Exercise__
+          val result = sut.deleteDir()
+          __Verify__
+          result should be (None)
+          dir should not (exist)
+        }
+
+      "do nothing if the source directory does not exist" in {
+        __SetUp__
+        val dir = createNotExistingDirectory()
+        val sut = newFileWrapperLike(dir)
         __Exercise__
         val result = sut.deleteDir()
         __Verify__
-        dir should not (exist)
         result should be (None)
+        dir should not (exist)
       }
+
+      "RETURN an Option[IOException] if the source is a file (not a directory)" in
+        new FileWrapperLike_FileFixture {
+          __Exercise__
+          val result = sut.deleteDir()
+          __Verify__
+          result.value should be (a [IOException])
+          path should exist
+        }
     }
   }
 }

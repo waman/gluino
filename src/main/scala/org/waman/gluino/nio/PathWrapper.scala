@@ -18,6 +18,8 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   override protected def wrap(path: Path): PathWrapper = new PathWrapper(path)
   override protected def from(s: String): Path = Paths.get(s)
 
+  override def exists: Boolean = Files.exists(path)
+
   override def isFile: Boolean = Files.isRegularFile(path)
   override def isDirectory: Boolean = Files.isDirectory(path)
 
@@ -27,14 +29,17 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   def isNewerThan(arg: Path): Boolean =
     Files.getLastModifiedTime(path).toMillis > Files.getLastModifiedTime(arg).toMillis
 
+  override protected def newNotDirectoryException(message: String): IOException =
+    new NotDirectoryException(message)
+
   override protected def getFileFilterProvider: FileTypeFilterProvider[Path] =
     GluinoPath.PathFileTypeFilterProvider
 
   //***** Path Operation *****
-  def /(child: String): Path = /(Paths.get(child))
-  def /(child: Path)  : Path = path.resolve(child)
-  def \(child: String): Path = /(child)
-  def \(child: Path)  : Path = /(child)
+  override def /(child: String): Path = /(Paths.get(child))
+  def /(child: Path): Path = path.resolve(child)
+  override def \(child: String): Path = /(child)
+  def \(child: Path): Path = /(child)
 
   //***** byte, InputStream/OutputStream *****
   override def newInputStream = Files.newInputStream(path)

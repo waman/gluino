@@ -40,7 +40,7 @@ class FilesCategory(path: Path) extends GluinoFunction{
 
   //***** Operation *****
   // exist/delete
-  def exists: Boolean = Files.exists(path)
+//  def exists: Boolean = Files.exists(path)
   def exists(options: Set[LinkOption]): Boolean = Files.exists(path, options.toArray:_*)
   def notExists: Boolean = Files.notExists(path)
   def	notExists(options: Set[LinkOption]): Boolean = Files.notExists(path, options.toArray:_*)

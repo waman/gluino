@@ -8,16 +8,22 @@ import scala.language.implicitConversions
 trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     with AppendableConverter
     with InputStreamWrapperLike with OutputStreamWrapperLike[W]
-    with ReaderWrapperLike with WriterWrapperLike[W] with PrintWriterWrapperLike[W]{ self: W =>
+    with ReaderWrapperLike with WriterWrapperLike[W] with PrintWriterWrapperLike[W] {
+  self: W =>
 
   protected def getFile: F
-  def fileName: String
-
   protected def wrap(file: F): W
   protected def from(s: String): F
 
+  def fileName: String
+
+  def /(child: String): F
+  def \(child: String): F
+
   def directorySize: Long = ???
   def length: Long = ???
+
+  def exists: Boolean
 
   def isFile: Boolean
   def isDirectory: Boolean
@@ -29,9 +35,11 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
   //***** Byte, InputStream/OutputStream *****
   def newInputStream: InputStream
+
   def newOutputStream(append: Boolean = false): OutputStream
 
   override protected def getInputStream: InputStream = newInputStream
+
   override protected def getOutputStream: OutputStream = newOutputStream(false)
 
   def withOutputStreamAppend[R](consumer: OutputStream => R): R =
@@ -46,9 +54,11 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
   //***** String, Reader/Writer *****
   def newReader(charset: Charset): BufferedReader
+
   def newWriter(charset: Charset, append: Boolean): BufferedWriter
 
   override protected def getReader: BufferedReader = newReader(defaultCharset)
+
   override protected def getWriter: BufferedWriter = newWriter(defaultCharset, append = false)
 
   def withWriterAppend[R](consumer: BufferedWriter => R): R =
@@ -58,11 +68,15 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     newWriter(charset, append = true).withWriter(consumer)
 
   override def text: String = super.text
+
   override def text(charset: Charset): String = super.text(charset)
+
   def text_=(text: String): Unit = setText(text, defaultCharset)
+
   def setText(text: String, charset: Charset) = withWriter(_.write(text))
 
   override def readLines: Seq[String] = super.readLines
+
   override def readLines(charset: Charset): Seq[String] = super.readLines(charset)
 
   override def append(input: Writable): Unit = withWriterAppend(input.writeTo(_))
@@ -76,14 +90,18 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
   //***** File Operation *****
   def renameTo(fileName: String): Option[IOException] = renameTo(fileName, isOverride = false)
+
   def renameTo(fileName: String, isOverride: Boolean): Option[IOException] = renameTo(from(fileName), isOverride)
+
   def renameTo(dest: F): Option[IOException] = move(dest, isOverride = false)
 
   // it is necessary to implement at least one of renameTo(F, Boolean) and move(F, Boolean)
   def renameTo(dest: F, isOverride: Boolean): Option[IOException] = move(dest, isOverride)
+
   def move(dest: F, isOverride: Boolean = false): Option[IOException] = renameTo(dest, isOverride)
 
   def copy(dest: F, isOverride: Boolean = false): Option[IOException]
+
   def delete(): Option[IOException]
 
   //***** File Operations through Files and/or Directory Structure *****
@@ -99,7 +117,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     f => toFilter(fileType)(f) && filter(f)
 
   private def consumeIfFileTypeMatches(file: F, filter: F => Boolean, consumer: F => Unit): Unit =
-    if(filter(file))consumer(file)
+    if (filter(file)) consumer(file)
 
   // eachFiles
   def eachFile(consumer: F => Unit): Unit
@@ -113,7 +131,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def eachFileMatch(fileType: FileType, filter: F => Boolean)(consumer: F => Unit): Unit =
     doEachFileMatch(toFilter(fileType, filter), consumer)
 
-  private def doEachFileMatch(filter: F => Boolean, consumer: F => Unit): Unit = eachFile{ file =>
+  private def doEachFileMatch(filter: F => Boolean, consumer: F => Unit): Unit = eachFile { file =>
     consumeIfFileTypeMatches(file, filter, consumer)
   }
 
@@ -126,11 +144,11 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     doEachFileMatchRecurse(toFilter(fileType, filter), visitDirectoryPost)(consumer)
 
   private def doEachFileMatchRecurse(filter: F => Boolean, visitDirectoryPost: Boolean = false)
-                          (consumer: F => Unit): Unit = {
-    if(!visitDirectoryPost)
+                                    (consumer: F => Unit): Unit = {
+    if (!visitDirectoryPost)
       consumeIfFileTypeMatches(getFile, filter, consumer)
 
-    eachFile{ f =>
+    eachFile { f =>
       wrap(f) match {
         case file if file.isFile =>
           consumeIfFileTypeMatches(f, filter, consumer)
@@ -140,7 +158,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
       }
     }
 
-    if(visitDirectoryPost)
+    if (visitDirectoryPost)
       consumeIfFileTypeMatches(getFile, filter, consumer)
   }
 
@@ -162,19 +180,99 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
 
   //***** Directory Operations *****
-  //  def moveDir(dest: F): Option[IOException]
-  //  def copyDir(dest: F): Option[IOException]
+  protected def newNotDirectoryException(message: String): IOException
 
-  def deleteDir(): Option[IOException] =
-    try {
-      eachFileRecurse(FileType.Any, visitDirectoryPost = true) { file =>
-        wrap(file).delete() match {
-          case Some(ex) => throw ex
-          case _ =>
+  private def validateResult(oex: Option[IOException]): Unit = oex match {
+    case Some(x) => throw x
+    case None =>
+  }
+
+  def moveDir(dest: F, isOverride: Boolean = false): Option[IOException] = {
+    if(!exists)
+      return None
+    if(!isDirectory)
+      return Some(newNotDirectoryException(
+        "moveDir() method must be called on a directory: " + getFile.toString))
+
+    @throws(classOf[IOException])
+    def _moveDir(src: W, dest: F, isOverride: Boolean): Unit = {
+      validateResult(src.copy(dest, isOverride))
+
+      src.eachFile { c =>
+        val child = wrap(c)
+        val targetChild = wrap(dest) / child.fileName
+        child match {
+          case f if f.isFile =>
+            validateResult(f.move(targetChild, isOverride))
+          case d if d.isDirectory =>
+            validateResult(d.moveDir(targetChild, isOverride))
         }
       }
+
+      validateResult(src.delete())
+    }
+
+    try {
+      _moveDir(this, dest, isOverride)
       None
-    }catch {
+    }catch{
       case ex: IOException => Some(ex)
     }
+  }
+
+  def copyDir(dest: F, isOverride: Boolean = false): Option[IOException] = {
+    if(!exists)
+      return None
+    if(!isDirectory)
+      return Some(newNotDirectoryException(
+        "copyDir() method must be called on a directory: " + getFile.toString))
+
+
+    @throws(classOf[IOException])
+    def _copyDir(src: W, dest: F, isOverride: Boolean): Unit = {
+      validateResult(src.copy(dest, isOverride))
+
+      src.eachFile { c =>
+        val child = wrap(c)
+        val targetChild = wrap(dest) / child.fileName
+        child match {
+          case f if f.isFile =>
+            validateResult(f.copy(targetChild, isOverride))
+          case d if d.isDirectory =>
+            validateResult(d.copyDir(targetChild, isOverride))
+        }
+      }
+    }
+
+    try {
+      _copyDir(this, dest, isOverride)
+      None
+    }catch{
+      case ex: IOException => Some(ex)
+    }
+  }
+
+  def deleteDir(): Option[IOException] = {
+    if(!exists)return None
+
+    @throws(classOf[IOException])
+    def _deleteDir(dir: W): Unit = {
+      dir.eachFile { child =>
+        wrap(child) match {
+          case f if f.isFile =>
+            validateResult(f.delete())
+          case d if d.isDirectory =>
+            validateResult(d.deleteDir())
+        }
+      }
+      validateResult(dir.delete())
+    }
+
+    try {
+      _deleteDir(this)
+      None
+    }catch{
+      case ex: IOException => Some(ex)
+    }
+  }
 }

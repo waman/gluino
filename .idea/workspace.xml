@@ -3,8 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="04fdf3ea-2091-491b-880f-2592d225098d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoFileSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoFileSpec.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapper.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapper.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapperLike.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapperLike.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala" />
     </list>
     <ignored path="gluino.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,33 +41,8 @@
         <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapperLike.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="88" column="56" selection-start-line="88" selection-start-column="56" selection-end-line="88" selection-end-column="56" />
+              <caret line="182" column="16" selection-start-line="182" selection-start-column="16" selection-end-line="182" selection-end-column="16" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PathWrapperSpec.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="93" column="19" selection-start-line="93" selection-start-column="19" selection-end-line="93" selection-end-column="19" />
-              <folding>
-                <element signature="e#30#52#0" expanded="false" />
-                <element signature="e#3993#6368#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FileWrapperSpec.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="208" column="21" selection-start-line="208" selection-start-column="21" selection-end-line="208" selection-end-column="21" />
-              <folding>
-                <element signature="e#29#63#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -72,27 +51,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapper.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="42" column="19" selection-start-line="42" selection-start-column="19" selection-end-line="42" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GluinoFile.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="55" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="55" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GluinoFileSpec.scala" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoFileSpec.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.41131106">
-              <caret line="60" column="7" selection-start-line="60" selection-start-column="7" selection-end-line="60" selection-end-column="7" />
+              <caret line="19" column="71" selection-start-line="19" selection-start-column="71" selection-end-line="19" selection-end-column="71" />
               <folding />
             </state>
           </provider>
@@ -102,17 +61,29 @@
         <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="64" column="18" selection-start-line="64" selection-start-column="18" selection-end-line="64" selection-end-column="18" />
+              <caret line="32" column="38" selection-start-line="32" selection-start-column="38" selection-end-line="32" selection-end-column="38" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GluinoCustomSpec.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala">
+      <file leaf-file-name="FileWrapperSpec.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="41" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
+              <caret line="1385" column="9" selection-start-line="1353" selection-start-column="7" selection-end-line="1385" selection-end-column="9" />
+              <folding>
+                <element signature="e#29#63#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PathWrapperSpec.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="1.2180451">
+              <caret line="280" column="66" selection-start-line="280" selection-start-column="66" selection-end-line="280" selection-end-column="66" />
               <folding />
             </state>
           </provider>
@@ -173,7 +144,6 @@
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/OutputStreamWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/GluinoPath.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoIOCustomSpec.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/AppendableConverterSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/datastream/DataStreamFixture.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/objectstream/ObjectStreamFixture.scala" />
@@ -185,13 +155,14 @@
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/InputStreamWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/AttributeConverterSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapperLike.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapper.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoFileSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapperLike.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapper.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala" />
       </list>
     </option>
   </component>
@@ -234,6 +205,7 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -266,142 +238,6 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="number" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="objectstream" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -426,36 +262,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="number" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -486,138 +292,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="nio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GluinoFile.scala" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="io" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GluinoFile.scala" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GluinoFile" />
-              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$TypeDefinitionTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scala" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gluino" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="function" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -641,7 +315,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -655,6 +328,22 @@
     <property name="restartRequiresConfirmation" value="true" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="99" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="125" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="130" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="921" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="116" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="120" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="124" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="915" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -665,7 +354,7 @@
       <recent name="org.waman.gluino.nio" />
     </key>
   </component>
-  <component name="RunManager" selected="ScalaTest.GluinoFileSpec">
+  <component name="RunManager" selected="ScalaTest.PathWrapperSpec">
     <configuration default="false" name="FileWrapperSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
@@ -1038,10 +727,10 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="ScalaTest.GluinoFileSpec" />
-        <item index="1" class="java.lang.String" itemvalue="ScalaTest.GluinoFileSpec.***** Temporal File/Directory ***** createTempDirectory() method should create a temporal directory in tempDir if directory is not specified&#10;***** Temporal File/Directory ***** createTempDirectory() method should create a temporal directory in the specified directory if directory is specified&#10;***** Temporal File/Directory ***** createTempDirectory() method should create a temporal directory with the prefix if specified" />
-        <item index="2" class="java.lang.String" itemvalue="ScalaTest.FileWrapperSpec" />
-        <item index="3" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec" />
+        <item index="0" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec" />
+        <item index="1" class="java.lang.String" itemvalue="ScalaTest.FileWrapperSpec" />
+        <item index="2" class="java.lang.String" itemvalue="ScalaTest.GluinoFileSpec" />
+        <item index="3" class="java.lang.String" itemvalue="ScalaTest.GluinoFileSpec.***** Temporal File/Directory ***** createTempDirectory() method should create a temporal directory in tempDir if directory is not specified&#10;***** Temporal File/Directory ***** createTempDirectory() method should create a temporal directory in the specified directory if directory is specified&#10;***** Temporal File/Directory ***** createTempDirectory() method should create a temporal directory with the prefix if specified" />
         <item index="4" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec.***** File Operations for PathWrapper ***** copy() method should RETURN an Option[DirectoryNotEmptyException] if the directory is not empty" />
       </list>
     </recent_temporary>
@@ -1340,38 +1029,44 @@
       <option name="project" value="LOCAL" />
       <updated>1449272563039</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Add createTempDirectory() method for java.io.File in GluinoFile">
+      <created>1449274942053</created>
+      <option name="number" value="00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1449274942053</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="FileWrapperSpec - 2015.12.05 at 08h 28m 43s.xml">
+    <history-entry file="FileWrapperSpec - 2015.12.06 at 09h 38m 02s.xml">
       <configuration name="FileWrapperSpec" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="GluinoFileSpec - 2015.12.05 at 09h 11m 29s.xml">
-      <configuration name="GluinoFileSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="GluinoFileSpec - 2015.12.05 at 09h 12m 29s.xml">
-      <configuration name="GluinoFileSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="GluinoFileSpec - 2015.12.05 at 09h 15m 22s.xml">
-      <configuration name="GluinoFileSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="GluinoFileSpec - 2015.12.05 at 09h 16m 54s.xml">
-      <configuration name="GluinoFileSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="GluinoFileSpec - 2015.12.05 at 09h 20m 27s.xml">
-      <configuration name="GluinoFileSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="GluinoFileSpec - 2015.12.05 at 09h 21m 35s.xml">
-      <configuration name="GluinoFileSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="PathWrapperSpec - 2015.12.05 at 08h 16m 46s.xml">
+    <history-entry file="PathWrapperSpec - 2015.12.06 at 04h 18m 20s.xml">
       <configuration name="PathWrapperSpec" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="PathWrapperSpec - 2015.12.05 at 08h 24m 33s.xml">
+    <history-entry file="PathWrapperSpec - 2015.12.06 at 04h 23m 47s.xml">
       <configuration name="PathWrapperSpec" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="PathWrapperSpec - 2015.12.05 at 08h 25m 34s.xml">
+    <history-entry file="PathWrapperSpec - 2015.12.06 at 04h 43m 40s.xml">
+      <configuration name="PathWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="PathWrapperSpec - 2015.12.06 at 04h 46m 09s.xml">
+      <configuration name="PathWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="PathWrapperSpec - 2015.12.06 at 04h 49m 16s.xml">
+      <configuration name="PathWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="PathWrapperSpec - 2015.12.06 at 04h 59m 37s.xml">
+      <configuration name="PathWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="PathWrapperSpec - 2015.12.06 at 05h 03m 23s.xml">
+      <configuration name="PathWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="PathWrapperSpec - 2015.12.06 at 09h 38m 21s.xml">
+      <configuration name="PathWrapperSpec" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="PathWrapperSpec - 2015.12.06 at 09h 48m 56s.xml">
       <configuration name="PathWrapperSpec" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
   </component>
@@ -1386,8 +1081,8 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31928688" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3517018" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30307943" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34359807" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37277147" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22382398" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1395,7 +1090,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39546192" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43435982" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1419,7 +1114,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="Add tests of stream closing in loan patterns." />
     <MESSAGE value="Add tests for Reader#readLines etc." />
     <MESSAGE value="Add tests for Reader#eachChar etc." />
     <MESSAGE value="Add tests for AppendableConverter" />
@@ -1444,11 +1138,12 @@
     <MESSAGE value="Implement copy methods of FileWrapper and PathWrapper" />
     <MESSAGE value="Add isOlderThan() and isNewerThan() method to FileWrapperLike trait" />
     <MESSAGE value="Implement renameTo() and move() methods of FileWrapperLike trait" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement renameTo() and move() methods of FileWrapperLike trait" />
+    <MESSAGE value="Add createTempDirectory() method for java.io.File in GluinoFile" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add createTempDirectory() method for java.io.File in GluinoFile" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="43" />
+      <option name="time" value="46" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1530,31 +1225,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalatest/scalatest_2.11/bundles/scalatest_2.11-2.2.4.jar!/org/scalatest/Suite.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.71153843">
-          <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalatest/scalatest_2.11/bundles/scalatest_2.11-2.2.4.jar!/org/scalatest/OutcomeOf.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3846154">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalatest/scalatest_2.11/bundles/scalatest_2.11-2.2.4.jar!/org/scalatest/Transformer.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.25641027">
           <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalatest/scalatest_2.11/bundles/scalatest_2.11-2.2.4.jar!/org/scalatest/FreeSpecLike.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.78205127">
-          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1576,13 +1250,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="22" column="46" selection-start-line="22" selection-start-column="46" selection-end-line="22" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3651877">
-          <caret line="59" column="48" selection-start-line="59" selection-start-column="48" selection-end-line="59" selection-end-column="48" />
         </state>
       </provider>
     </entry>
@@ -1754,71 +1421,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="41" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoIOCustomSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3327645">
-          <caret line="60" column="8" selection-start-line="60" selection-start-column="8" selection-end-line="60" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="64" column="18" selection-start-line="64" selection-start-column="18" selection-end-line="64" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="93" column="19" selection-start-line="93" selection-start-column="19" selection-end-line="93" selection-end-column="19" />
-          <folding>
-            <element signature="e#30#52#0" expanded="false" />
-            <element signature="e#3993#6368#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="208" column="21" selection-start-line="208" selection-start-column="21" selection-end-line="208" selection-end-column="21" />
-          <folding>
-            <element signature="e#29#63#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapperLike.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="88" column="56" selection-start-line="88" selection-start-column="56" selection-end-line="88" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapper.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="42" column="19" selection-start-line="42" selection-start-column="19" selection-end-line="42" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/GluinoFile.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="55" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="55" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1826,6 +1432,89 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.41131106">
           <caret line="60" column="7" selection-start-line="60" selection-start-column="7" selection-end-line="60" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.102827765">
+          <caret line="2" column="41" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/GluinoIOCustomSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0162601">
+          <caret line="147" column="8" selection-start-line="147" selection-start-column="8" selection-end-line="147" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalatest/scalatest_2.11/bundles/scalatest_2.11-2.2.4.jar!/org/scalatest/Suite.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.5666666">
+          <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalatest/scalatest_2.11/bundles/scalatest_2.11-2.2.4.jar!/org/scalatest/FreeSpecLike.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8645833">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/org.scalatest/scalatest_2.11/bundles/scalatest_2.11-2.2.4.jar!/org/scalatest/OutcomeOf.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.41666666">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/FilesCategory.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="45" column="32" selection-start-line="45" selection-start-column="32" selection-end-line="45" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapper.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="71" selection-start-line="19" selection-start-column="71" selection-end-line="19" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="38" selection-start-line="32" selection-start-column="38" selection-end-line="32" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapperLike.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="182" column="16" selection-start-line="182" selection-start-column="16" selection-end-line="182" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileWrapperSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1385" column="9" selection-start-line="1353" selection-start-column="7" selection-end-line="1385" selection-end-column="9" />
+          <folding>
+            <element signature="e#29#63#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/PathWrapperSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.2180451">
+          <caret line="280" column="66" selection-start-line="280" selection-start-column="66" selection-end-line="280" selection-end-column="66" />
           <folding />
         </state>
       </provider>

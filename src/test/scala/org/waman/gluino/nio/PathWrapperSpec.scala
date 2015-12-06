@@ -254,4 +254,84 @@ class PathWrapperSpec
         }
     }
   }
+
+  "***** Directory Operation *****" - {
+
+    "moveDir() method should" - {
+
+      "RETURN an Option[FileAlreadyExistsException] if the target directory already exists and the 'isOverride' arg is omitted" in
+        new FileWrapperLike_DirectoryWithFilesFixture {
+          __SetUp__
+          val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.moveDir(target)
+          __Verify__
+          result.value should be (an [FileAlreadyExistsException])
+        }
+
+      "RETURN an Option[FileAlreadyExistsException] if the target directory already exists and the 'isOverride' arg is false" in
+        new FileWrapperLike_DirectoryWithFilesFixture {
+          __SetUp__
+          val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.moveDir(target, isOverride = false)
+          __Verify__
+          result.value should be (an [FileAlreadyExistsException])
+        }
+
+      "RETURN an Option[NotDirectoryException] if this is a file (not a directory)" in
+        new FileWrapperLike_FileFixture {
+          __Exercise__
+          val result = sut.deleteDir()
+          __Verify__
+          result.value should be (a [NotDirectoryException])
+        }
+    }
+
+    "copyDir() method should" - {
+
+      "RETURN an Option[FileAlreadyExistsException] if the target directory already exists and the 'isOverride' arg is omitted" in
+        new FileWrapperLike_DirectoryWithFilesFixture {
+          __SetUp__
+          val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.copyDir(target)
+          __Verify__
+          result.value should be (an [FileAlreadyExistsException])
+        }
+
+      "RETURN an Option[FileAlreadyExistsException] if the target directory already exists and the 'isOverride' arg is false" in
+        new FileWrapperLike_DirectoryWithFilesFixture {
+          __SetUp__
+          val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.copyDir(target, isOverride = false)
+          __Verify__
+          result.value should be (an [FileAlreadyExistsException])
+        }
+
+      "RETURN an Option[NotDirectoryException] if this is a file (not a directory)" in
+        new FileWrapperLike_FileFixture {
+          __Exercise__
+          val result = sut.deleteDir()
+          __Verify__
+          result.value should be (a [NotDirectoryException])
+        }
+    }
+
+    "deleteDir() method should" - {
+
+      "RETURN an Option[NotDirectoryException] if this is a file (not a directory)" in
+        new FileWrapperLike_FileFixture {
+          __Exercise__
+          val result = sut.deleteDir()
+          __Verify__
+          result.value should be (a [NotDirectoryException])
+        }
+    }
+  }
 }
