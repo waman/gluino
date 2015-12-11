@@ -1,23 +1,122 @@
 package org.waman.gluino.nio
 
-import java.nio.file.attribute.FileTime
+import java.nio.file.attribute.{AclEntry, FileAttribute, FileTime}
 import java.nio.file.attribute.PosixFilePermission._
 import java.time.{Instant, OffsetDateTime, ZoneId, ZonedDateTime}
+import java.{util => jcf}
 
-import org.waman.gluino.ImplicitConversion
+import org.waman.gluino.{WindowsAssumption, WindowsSpecific, ImplicitConversion}
 import org.waman.gluino.io.GluinoIOCustomSpec
+
+import org.scalatest.LoneElement._
 
 class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
 
-  "***** POSIX File Permission *****" - {
-    "convertStringToPosixFilePermissionSet() method should" - {
+  "***** FileAttribute *****" - {
 
-      "convert String to FileAttribute whose value is Set of PosixFilePermissions" in {
+    "posix(String) method should" - {
+
+      "convert String 'r--------' to a file attribute of java.util.Set of OWNER_READ" in {
         __Exercise__
-        val sut = convertStringToPosixFilePermissionSet("rwx------")
+        val sut = posix("r--------")
         __Verify__
-        sut.value() should contain only(OWNER_READ, OWNER_WRITE, OWNER_EXECUTE)
+        sut.value().loneElement should be (OWNER_READ)
       }
+
+      "convert String '-w-------' to a file attribute of java.util.Set of OWNER_WRITE" in {
+        __Exercise__
+        val sut = posix("-w-------")
+        __Verify__
+        sut.value().loneElement should be (OWNER_WRITE)
+      }
+
+      "convert String '--x------' to a file attribute of java.util.Set of OWNER_EXECUTE" in {
+        __Exercise__
+        val sut = posix("--x------")
+        __Verify__
+        sut.value().loneElement should be (OWNER_EXECUTE)
+      }
+
+      "convert String '---r-----' to a file attribute of java.util.Set of GROUP_READ" in {
+        __Exercise__
+        val sut = posix("---r-----")
+        __Verify__
+        sut.value().loneElement should be (GROUP_READ)
+      }
+
+      "convert String '----w----' to a file attribute of java.util.Set of GROUP_WRITE" in {
+        __Exercise__
+        val sut = posix("----w----")
+        __Verify__
+        sut.value().loneElement should be (GROUP_WRITE)
+      }
+
+      "convert String '-----x---' to a file attribute of java.util.Set of GROUP_EXECUTE" in {
+        __Exercise__
+        val sut = posix("-----x---")
+        __Verify__
+        sut.value().loneElement should be (GROUP_EXECUTE)
+      }
+
+      "convert String '------r--' to a file attribute of java.util.Set of OTHERS_READ" in {
+        __Exercise__
+        val sut = posix("------r--")
+        __Verify__
+        sut.value().loneElement should be (OTHERS_READ)
+      }
+
+      "convert String '-------w-' to a file attribute of java.util.Set of OTHERS_READ" in {
+        __Exercise__
+        val sut = posix("-------w-")
+        __Verify__
+        sut.value().loneElement should be (OTHERS_WRITE)
+      }
+
+      "convert String '--------x' to a file attribute of java.util.Set of OTHERS_READ" in {
+        __Exercise__
+        val sut = posix("--------x")
+        __Verify__
+        sut.value().loneElement should be (OTHERS_EXECUTE)
+      }
+
+      "convert String 'rwx------' to a file attribute of java.util.Set of OWNER_READ, OWNER_WRITE and OWNER_EXECUTE" in {
+        __Exercise__
+        val sut = posix("rwx------")
+        __Verify__
+        sut.value() should contain theSameElementsAs Set(OWNER_READ, OWNER_WRITE, OWNER_EXECUTE)
+      }
+    }
+
+    "acl(String) method should" - {
+
+      // User
+      "create ACL file attribute for Guest user by a string 'u:Guest:---'" taggedAs WindowsSpecific in
+        new WindowsAssumption {
+          __Exercise__
+          val sut: FileAttribute[jcf.List[AclEntry]] = acl("u:Guest:---")
+          __Verify__
+          sut.value().loneElement.principal().getName should fullyMatch regex """.+\\Guest"""
+        }
+
+      "create ACL file attribute for Guest user by a string 'user:Guest:---'" taggedAs WindowsSpecific in
+        new WindowsAssumption {
+          __Exercise__
+          val sut: FileAttribute[jcf.List[AclEntry]] = acl("user:Guest:---")
+          __Verify__
+          sut.value().loneElement.principal().getName should fullyMatch regex """.+\\Guest"""
+        }
+
+      "create ACL file attributes for users by a string 'u:Guest:---, u:{user}:---'" taggedAs WindowsSpecific in
+        new WindowsAssumption {
+          __SetUp__
+          val me = System.getProperty("user.name")
+          __Exercise__
+          val sut = acl(s"u:Guest:---, u:$me:---")
+          __Verify__
+          sut.value() should have size 2
+          sut.value().get(0).principal().getName should fullyMatch regex """.+\\Guest"""
+          sut.value().get(1).principal().getName should fullyMatch regex s""".+\\\\$me"""
+        }
     }
   }
 

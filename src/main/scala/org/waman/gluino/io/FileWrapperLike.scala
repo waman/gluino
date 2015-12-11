@@ -90,14 +90,12 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
   //***** File Operation *****
   def renameTo(fileName: String): Option[IOException] = renameTo(fileName, isOverride = false)
-
   def renameTo(fileName: String, isOverride: Boolean): Option[IOException] = renameTo(from(fileName), isOverride)
 
-  def renameTo(dest: F): Option[IOException] = move(dest, isOverride = false)
+  def renameTo(dest: F): Option[IOException] = renameTo(dest, isOverride = false)
 
   // it is necessary to implement at least one of renameTo(F, Boolean) and move(F, Boolean)
   def renameTo(dest: F, isOverride: Boolean): Option[IOException] = move(dest, isOverride)
-
   def move(dest: F, isOverride: Boolean = false): Option[IOException] = renameTo(dest, isOverride)
 
   def copy(dest: F, isOverride: Boolean = false): Option[IOException]
@@ -182,7 +180,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   //***** Directory Operations *****
   protected def newNotDirectoryException(message: String): IOException
 
-  private def validateResult(oex: Option[IOException]): Unit = oex match {
+  private def checkResult(oex: Option[IOException]): Unit = oex match {
     case Some(x) => throw x
     case None =>
   }
@@ -196,20 +194,20 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
     @throws(classOf[IOException])
     def _moveDir(src: W, dest: F, isOverride: Boolean): Unit = {
-      validateResult(src.copy(dest, isOverride))
+      checkResult(src.copy(dest, isOverride))
 
       src.eachFile { c =>
         val child = wrap(c)
         val targetChild = wrap(dest) / child.fileName
         child match {
           case f if f.isFile =>
-            validateResult(f.move(targetChild, isOverride))
+            checkResult(f.move(targetChild, isOverride))
           case d if d.isDirectory =>
-            validateResult(d.moveDir(targetChild, isOverride))
+            checkResult(d.moveDir(targetChild, isOverride))
         }
       }
 
-      validateResult(src.delete())
+      checkResult(src.delete())
     }
 
     try {
@@ -230,16 +228,16 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
     @throws(classOf[IOException])
     def _copyDir(src: W, dest: F, isOverride: Boolean): Unit = {
-      validateResult(src.copy(dest, isOverride))
+      checkResult(src.copy(dest, isOverride))
 
       src.eachFile { c =>
         val child = wrap(c)
         val targetChild = wrap(dest) / child.fileName
         child match {
           case f if f.isFile =>
-            validateResult(f.copy(targetChild, isOverride))
+            checkResult(f.copy(targetChild, isOverride))
           case d if d.isDirectory =>
-            validateResult(d.copyDir(targetChild, isOverride))
+            checkResult(d.copyDir(targetChild, isOverride))
         }
       }
     }
@@ -260,12 +258,12 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
       dir.eachFile { child =>
         wrap(child) match {
           case f if f.isFile =>
-            validateResult(f.delete())
+            checkResult(f.delete())
           case d if d.isDirectory =>
-            validateResult(d.deleteDir())
+            checkResult(d.deleteDir())
         }
       }
-      validateResult(dir.delete())
+      checkResult(dir.delete())
     }
 
     try {

@@ -1,24 +1,24 @@
 package org.waman.gluino.nio
 
+import java.nio.file.attribute.FileAttribute
 import java.nio.file.{Files, Path}
-import scala.collection.JavaConversions._
 
 abstract class DirectoryBuilder{
 
   val baseDir: Path
   private var currentDir: Path = null
 
-  private def initCurrentDir(): Unit =
+  private def initCurrentDirIfNull(): Unit =
     if(this.currentDir == null)
       this.currentDir = this.baseDir
 
-  protected def emptyDir(name: String): Path = {
-    initCurrentDir()
-    Files.createDirectory(this.currentDir.resolve(name))
+  protected def emptyDir(name: String, attrs: FileAttribute[_]*): Path = {
+    initCurrentDirIfNull()
+    Files.createDirectory(this.currentDir.resolve(name), attrs:_*)
   }
 
-  protected def dir(name: String)(buildDir: => Unit): Path = {
-    val newDir = emptyDir(name)
+  protected def dir(name: String, attrs: FileAttribute[_]*)(buildDir: => Unit): Path = {
+    val newDir = emptyDir(name, attrs:_*)
 
     val oldDir = this.currentDir
     this.currentDir = newDir
@@ -28,11 +28,18 @@ abstract class DirectoryBuilder{
     newDir
   }
 
-  protected def file(name: String): Path = {
-    initCurrentDir()
-    Files.createFile(this.currentDir.resolve(name))
+  protected def file(name: String, attrs: FileAttribute[_]*): Path = {
+    initCurrentDirIfNull()
+    Files.createFile(this.currentDir.resolve(name), attrs:_*)
   }
-
-  protected def file(name: String, content: String*): Path =
-    Files.write(file(name), content)
+  
+  protected def link(name: String, target: Path): Path = {
+    initCurrentDirIfNull()
+    Files.createLink(this.currentDir.resolve(name), target)
+  }
+  
+  protected def symbolicLink(name: String, target: Path, attrs: FileAttribute[_]*): Path = {
+    initCurrentDirIfNull()
+    Files.createSymbolicLink(this.currentDir.resolve(name), target, attrs:_*)
+  }
 }

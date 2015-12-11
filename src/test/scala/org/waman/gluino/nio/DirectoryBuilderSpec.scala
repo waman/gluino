@@ -1,6 +1,12 @@
 package org.waman.gluino.nio
 
-import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
+import java.nio.file.attribute.{AclEntryType, AclEntry, AclFileAttributeView}
+import java.nio.file.{FileSystems, Files}
+import java.util
+
+import org.scalatest.LoneElement._
+import org.waman.gluino.{WindowsAssumption, WindowsSpecific}
+
 import org.waman.gluino.io.GluinoIOCustomSpec
 
 class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
@@ -10,7 +16,9 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
     "be able to create nested directory structure" in {
       __Exercise__
       val projectHome = new DirectoryBuilder {
-        val baseDir = GluinoPath.createTempDirectory(prefix = "project-", deleteOnExit = true)
+
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+
         dir("src") {
           dir("main") {
             dir("java") {} // {} is necessary even if empty directory
@@ -40,7 +48,9 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
     "be able to create files under any place of directory structure" in {
       __Exercise__
       val projectHome = new DirectoryBuilder {
-        val baseDir = GluinoPath.createTempDirectory(prefix = "project-", deleteOnExit = true)
+
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+
         file("build.sbt")
         file("README.md")
         file(".gitignore")
@@ -74,18 +84,21 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
     "be able to create file with content when 2 or more Strings are passed" in {
       __Exercise__
       val projectHome = new DirectoryBuilder {
-        val baseDir = GluinoPath.createTempDirectory(prefix = "project-", deleteOnExit = true)
-        file("build.sbt",
-          s"""name := "${baseDir.getFileName}"""",
-          "",
-          """version := "0.1-SNAPSHOT"""",
-          "",
-          """libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test""""
-        )
-        file("README.md", "Read me!")
-        file(".gitignore", "target/")
+
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+
+        file("build.sbt") <<
+          s"""name := "${baseDir.getFileName}"
+             |
+             |version := "0.1-SNAPSHOT"
+             |
+             |libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
+             |""".stripMargin
+
+        file("README.md") << "Read me!"
+        file(".gitignore") << "target/"
         dir("project") {
-          file("build.properties", "sbt.version=0.13.8")
+          file("build.properties") << "sbt.version=0.13.8"
         }
         dir("src") {
           dir("main") {
@@ -101,9 +114,9 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
         }
       }.baseDir
       __Verify__
-      text(projectHome / "README.md") should equal("Read me!" + sep)
-      text(projectHome / ".gitignore") should equal("target/" + sep)
-      text(projectHome / "project" / "build.properties") should equal("sbt.version=0.13.8" + sep)
+      text(projectHome / "README.md") should equal("Read me!")
+      text(projectHome / ".gitignore") should equal("target/")
+      text(projectHome / "project" / "build.properties") should equal("sbt.version=0.13.8")
       __TearDown__
       projectHome.deleteDir()
     }
@@ -111,37 +124,39 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
     "be able to create file with content by using withWriter method (enhanced by GluinoPath)" in {
       __Exercise__
       val projectHome = new DirectoryBuilder {
-        val baseDir = GluinoPath.createTempDirectory(prefix = "project-", deleteOnExit = true)
-        file("build.sbt",
-          s"""name := "${baseDir.getFileName}"""",
-          "",
-          """version := "0.1-SNAPSHOT"""",
-          "",
-          """libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test""""
-        )
-        file("README.md", "Read me!")
-        file(".gitignore", "target/")
+
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+
+        file("build.sbt") <<
+          s"""name := "${baseDir.getFileName}"
+              |
+              |version := "0.1-SNAPSHOT"
+              |
+              |libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
+              |""".stripMargin
+
+        file("README.md") << "Read me!"
+        file(".gitignore") << "target/"
         dir("project") {
-          file("build.properties", "sbt.version=0.13.8")
+          file("build.properties") << "sbt.version=0.13.8"
         }
         dir("src") {
           dir("main") {
             dir("scala") {
-              file("MyFirstApp.scala").withWriter{ w =>
-                w.write("class MyFirstApp extends App{" + sep)
-                w.write("  println(\"Hello World!\")" + sep)
-                w.write("}" + sep)
-              }
+              file("MyFirstApp.scala") <<
+                """class MyFirstApp extends App{
+                  |  println("Hello World!")
+                  |}""".stripMargin
             }
           }
           dir("test") {
             dir("scala") {
-              file("MyFirstAppSpec.scala",
+              file("MyFirstAppSpec.scala") <<
                 """import org.scalatest.{FlatSpec, Matchers}
                   |
                   |class MyFirstAppSpec extends FlatSpec with Matchers{
                   |
-                  |}""".stripMargin)
+                  |}""".stripMargin
             }
           }
         }
@@ -156,5 +171,72 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
       __TearDown__
       projectHome.deleteDir()
     }
+
+//    "be able to create file with posix permission" in {
+//      __SetUp__
+//      assume(FileSystems.getDefault.supportedFileAttributeViews() contains "posix")
+//      __Exercise__
+//      val projectHome = new DirectoryBuilder {
+//
+//        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+//
+//        file("build.sbt", posix("rwx------"))
+//      }.baseDir
+//      val sut = projectHome / "build.sbt"
+//      __Verify__
+//      import java.nio.file.attribute.PosixFilePermission._
+//      Files.getAttribute(sut, "posix:permissions") should contain theSameElementsAs
+//        Set(OWNER_READ, OWNER_WRITE, OWNER_EXECUTE)
+//      __TearDown__
+//      projectHome.deleteDir()
+//    }
+
+    "be able to create file with ACL permission (Guest on Windows)" taggedAs WindowsSpecific in new WindowsAssumption {
+      import java.nio.file.attribute.AclEntryPermission._
+      __SetUp__
+      val guest = FileSystems.getDefault.getUserPrincipalLookupService.lookupPrincipalByName("Guest")
+      val aclEntry = AclEntry.newBuilder()
+                             .setPrincipal(guest)
+                             .setPermissions(READ_DATA, WRITE_DATA)
+                             .setType(AclEntryType.ALLOW)
+                             .build()
+      val fileAttr = new java.nio.file.attribute.FileAttribute[util.List[AclEntry]]{
+        override def name(): String = "acl:acl"
+        override def value(): util.List[AclEntry] = util.Collections.singletonList(aclEntry)
+      }
+      __Exercise__
+      val projectHome = new DirectoryBuilder {
+
+        val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+
+        file("build.sbt", fileAttr)
+      }.baseDir
+
+      __Verify__
+      val aclAttr = Files.getFileAttributeView(projectHome / "build.sbt", classOf[AclFileAttributeView])
+      aclAttr.getAcl.loneElement.permissions() should contain allOf (READ_DATA, WRITE_DATA)
+      __TearDown__
+      projectHome.deleteDir()
+    }
+
+    "be able to create file with ACL permission by acl(String) method (Guest on Windows)" taggedAs WindowsSpecific in
+      new WindowsAssumption {
+        import java.nio.file.attribute.AclEntryPermission._
+        __SetUp__
+        val guest = FileSystems.getDefault.getUserPrincipalLookupService.lookupPrincipalByName("Guest")
+        __Exercise__
+        val projectHome = new DirectoryBuilder {
+
+          val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+
+          file("build.sbt", acl("u:Guest:r--"))
+        }.baseDir
+
+        __Verify__
+        val aclAttr = Files.getFileAttributeView(projectHome / "build.sbt", classOf[AclFileAttributeView])
+        aclAttr.getAcl.loneElement.permissions() should contain (READ_DATA)
+        __TearDown__
+        projectHome.deleteDir()
+      }
   }
 }

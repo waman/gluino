@@ -1303,6 +1303,8 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
           (targetPath resolve "child1.txt") should exist
 
           dir should not (exist)
+          __TearDown__
+          wrap(target).deleteDir()
         }
 
       "do nothing if the source directory does not exist" in {
@@ -1400,6 +1402,8 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
 
           dir should exist
           (dir resolve "child1.txt") should exist
+          __TearDown__
+          wrap(target).deleteDir()
         }
 
       "do nothing if the source directory does not exist" in {
