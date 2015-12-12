@@ -28,26 +28,29 @@ trait InputStreamWrapperLike extends GluinoIO
   }
 
   //***** Byte *****
-  def eachByte(consumer: Byte => Unit): Unit = withInputStream{ input =>
+  def eachByte(consumer: Byte => Unit): Unit = withInputStream{ is =>
     @tailrec
-    def consumeByte(byte: Int): Unit = byte match {
-      case -1 =>
-      case _ =>
-        consumer(byte.asInstanceOf[Byte])
-        consumeByte(input.read())
+    def consumeByte(is: InputStream): Unit = {
+      val byte = is.read()
+      byte match {
+        case -1 =>
+        case _ =>
+          consumer(byte.asInstanceOf[Byte])
+          consumeByte(is)
+      }
     }
 
-    consumeByte(input.read())
+    consumeByte(is)
   }
 
   def bytes: Array[Byte] = withInputStream{ is =>
     @tailrec
-    def readByteRecurse(bytes: Seq[Byte]): Seq[Byte] = is.read() match {
+    def readByteRecurse(is: InputStream, bytes: Seq[Byte]): Seq[Byte] = is.read() match {
       case -1 => bytes
-      case b  => readByteRecurse(bytes :+ b.asInstanceOf[Byte])
+      case b  => readByteRecurse(is, bytes :+ b.asInstanceOf[Byte])
     }
 
-    readByteRecurse(Nil).toArray
+    readByteRecurse(is, Nil).toArray
   }
 
   //***** ObjectInputStream, DataInputStream *****

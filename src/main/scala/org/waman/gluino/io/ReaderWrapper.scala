@@ -19,16 +19,16 @@ trait ReaderWrapperLike extends GluinoIO{
   }
 
   //***** text (String) *****
-  def eachChar(consumer: Char => Unit): Unit = withReader{ r =>
+  def eachChar(consumer: Char => Unit): Unit = withReader{ reader =>
     @tailrec
-    def consumeChar(ch: Int): Unit = ch match {
+    def consumeChar(r: BufferedReader): Unit = r.read() match {
       case -1 =>
-      case _  =>
+      case ch =>
         consumer(ch.asInstanceOf[Char])
-        consumeChar(r.read())
+        consumeChar(r)
     }
 
-    consumeChar(r.read())
+    consumeChar(reader)
   }
 
   def transformChar(writer: Writer)(map: Char => Char): Unit =
@@ -41,26 +41,26 @@ trait ReaderWrapperLike extends GluinoIO{
   //***** lines *****
   def eachLine(consumer: String => Unit): Unit = withReader { reader =>
     @tailrec
-    def consumeLine(line: String): Unit = line match {
+    def consumeLine(r: BufferedReader): Unit = r.readLine() match {
       case null =>
-      case _    =>
+      case line =>
         consumer(line)
-        consumeLine(reader.readLine())
+        consumeLine(reader)
     }
 
-    consumeLine(reader.readLine())
+    consumeLine(reader)
   }
 
   def eachLine(n0: Int = 0)(consumer: (String, Int) => Unit) = withReader{ reader =>
     @tailrec
-    def consumeLineWithIndex(line: String, n: Int): Unit = line match {
-      case null =>
-      case _    =>
-        consumer(line, n)
-        consumeLineWithIndex(reader.readLine(), n+1)
-    }
+    def consumeLineWithIndex(r: BufferedReader, n: Int): Unit = r.readLine() match {
+        case null =>
+        case line =>
+          consumer(line, n)
+          consumeLineWithIndex(r, n+1)
+      }
 
-    consumeLineWithIndex(reader.readLine(), n0)
+    consumeLineWithIndex(reader, n0)
   }
 
   def splitEachLine(regex: Regex)(consumer: List[String] => Unit): Unit =
@@ -85,14 +85,15 @@ trait ReaderWrapperLike extends GluinoIO{
       }
     }
 
-  def readLines: Seq[String] = withReader{ r =>
+  def readLines: Seq[String] = withReader{ reader =>
     @tailrec
-    def readLineRecurse(lines: Seq[String]): Seq[String] = r.readLine() match {
-      case null => lines
-      case line => readLineRecurse(lines :+ line)
-    }
+    def readLineRecurse(r: BufferedReader, lines: Seq[String]): Seq[String] =
+      r.readLine() match {
+        case null => lines
+    case line => readLineRecurse(r, lines :+ line)
+  }
 
-    readLineRecurse(Nil)
+    readLineRecurse(reader, Nil)
   }
 }
 

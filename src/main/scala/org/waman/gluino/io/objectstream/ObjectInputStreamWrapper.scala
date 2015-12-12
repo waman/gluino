@@ -35,12 +35,12 @@ trait ObjectInputStreamWrapperLike{
     if(n < 0) throw new IllegalArgumentException("Argument integer must be greater than or equal to 0, actual: "+n)
 
     @tailrec
-    def readAnyRefRecurse(accum: Seq[AnyRef], i: Int): Seq[AnyRef] = i match {
+    def readAnyRefRecurse(ois: ObjectInputStream, accum: Seq[AnyRef], i: Int): Seq[AnyRef] = i match {
       case 0 => accum
-      case _ => readAnyRefRecurse(accum :+ ois.readObject(), i-1)
+      case _ => readAnyRefRecurse(ois, accum :+ ois.readObject(), i-1)
     }
 
-    readAnyRefRecurse(Nil, n)
+    readAnyRefRecurse(ois, Nil, n)
   }
 }
 
