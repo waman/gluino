@@ -1,5 +1,7 @@
 package org.waman.gluino.nio
 
+import java.nio.ByteBuffer
+import java.nio.charset.StandardCharsets
 import java.nio.file._
 
 import org.scalatest.OptionValues._
@@ -47,6 +49,62 @@ class PathWrapperSpec
       val child = path \ Paths.get("child.txt")
       __Verify__
       child should equal(expectedChild)
+    }
+  }
+
+  "***** User Defined File Attribute *****" - {
+
+    def assumeFileSystemSupportsUserDefinedFileAttribute(): Unit =
+      assume(FileSystems.getDefault.supportedFileAttributeViews() contains "user")
+
+    "getUserDefinedFileAttribute(String, Charset) method should" - {
+
+      "return a value of a user-defined file attribute as String" in new FileFixture {
+        assumeFileSystemSupportsUserDefinedFileAttribute()
+        __SetUp__
+        val byteBuffer = ByteBuffer.wrap("倭マン".getBytes(ISO2022))
+        Files.setAttribute(path, "user:author", byteBuffer)
+        __Exercise__
+        val value = path.getUserDefinedFileAttribute("author", ISO2022)
+        __Verify__
+        value should equal ("倭マン")
+      }
+
+      "return a value of a user-defined file attribute as String with UTF-8 encoding if the charset arg is omitted" in
+        new FileFixture {
+          assumeFileSystemSupportsUserDefinedFileAttribute()
+          __SetUp__
+          val byteBuffer = ByteBuffer.wrap("倭マン".getBytes(StandardCharsets.UTF_8))
+          Files.setAttribute(path, "user:author", byteBuffer)
+          __Exercise__
+          val value = path.getUserDefinedFileAttribute("author")
+          __Verify__
+          value should equal ("倭マン")
+        }
+    }
+
+    "setUserDefinedFileAttribute(String, String, Charset) method should" - {
+
+      "set the specified attribute to the specified String" in new FileFixture {
+        assumeFileSystemSupportsUserDefinedFileAttribute()
+        __Exercise__
+        path.setUserDefinedFileAttribute("author", "倭マン", ISO2022)
+        __Verify__
+        val bytes = Files.getAttribute(path, "user:author").asInstanceOf[Array[Byte]]
+        val s = new String(bytes, ISO2022)
+        s should equal ("倭マン")
+      }
+
+      "set the specified attribute to the specified String with UTF-8 encoding if the charset arg is omitted" in
+        new FileFixture {
+          assumeFileSystemSupportsUserDefinedFileAttribute()
+          __Exercise__
+          path.setUserDefinedFileAttribute("author", "倭マン")
+          __Verify__
+          val bytes = Files.getAttribute(path, "user:author").asInstanceOf[Array[Byte]]
+          val s = new String(bytes, StandardCharsets.UTF_8)
+          s should equal ("倭マン")
+        }
     }
   }
 

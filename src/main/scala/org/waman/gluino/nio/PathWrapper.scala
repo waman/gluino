@@ -1,8 +1,10 @@
 package org.waman.gluino.nio
 
 import java.io._
-import java.nio.charset.Charset
+import java.nio.ByteBuffer
+import java.nio.charset.{StandardCharsets, Charset}
 import java.nio.file._
+import java.nio.file.attribute.UserDefinedFileAttributeView
 
 import org.waman.gluino.function.GluinoFunction
 import org.waman.gluino.io.{FileTypeFilterProvider, FileWrapperLike}
@@ -40,6 +42,21 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   def /(child: Path): Path = path.resolve(child)
   override def \(child: String): Path = /(child)
   def \(child: Path): Path = /(child)
+
+  //***** File Attributes *****
+  def getUserDefinedFileAttribute(name: String, charset: Charset = StandardCharsets.UTF_8): String = {
+    val att = Files.getFileAttributeView(path, classOf[UserDefinedFileAttributeView])
+    val n = att.size(name)
+    val byteBuffer = ByteBuffer.allocate(n)
+    att.read(name, byteBuffer)
+    new String(byteBuffer.array(), charset)
+  }
+
+  def setUserDefinedFileAttribute(name: String, value: String, charset: Charset = StandardCharsets.UTF_8): Unit = {
+    val att = Files.getFileAttributeView(path, classOf[UserDefinedFileAttributeView])
+    val byteBuffer = ByteBuffer.wrap(value.getBytes(charset))
+    att.write(name, byteBuffer)
+  }
 
   //***** byte, InputStream/OutputStream *****
   override def newInputStream = Files.newInputStream(path)
