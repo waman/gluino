@@ -11,7 +11,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
 
     "Outputtable can be implicitly converted from some types" - {
 
-      "Array[Byte] should be implicitly converted to Outputtable" taggedAs ImplicitConversion in {
+      "Array[Byte] should be implicitly converted to Outputtable" taggedAs ImplicitConversion ignore {
         __SetUp__
         val bytes: Array[Byte] = "first line.".getBytes()
         __Verify__
@@ -20,7 +20,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         }
       }
 
-      "Seq[Byte] should be implicitly converted to Outputtable" taggedAs ImplicitConversion in {
+      "Seq[Byte] should be implicitly converted to Outputtable" taggedAs ImplicitConversion ignore {
         __SetUp__
         val byteSeq: Seq[Byte] = "first line.".getBytes().toSeq
         __Verify__
@@ -29,7 +29,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
         }
       }
 
-      "InputStream should be implicitly converted to Outputtable" taggedAs ImplicitConversion in
+      "InputStream should be implicitly converted to Outputtable" taggedAs ImplicitConversion ignore
         new InputStreamFixture {
           __Verify__
           noException should be thrownBy {
@@ -37,21 +37,21 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
           }
         }
 
-      "File should be implicitly converted to Outputtable" taggedAs ImplicitConversion in {
+      "File should be implicitly converted to Outputtable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Outputtable](readOnlyFile)
         }
       }
 
-      "Path should be implicitly converted to Outputtable" taggedAs ImplicitConversion in {
+      "Path should be implicitly converted to Outputtable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Outputtable](readOnlyPath)
         }
       }
 
-      "FileWrapperLike should be implicitly converted to Outputtable" taggedAs ImplicitConversion in {
+      "FileWrapperLike should be implicitly converted to Outputtable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Outputtable](new PathWrapper(readOnlyPath))
@@ -229,7 +229,7 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
 
     "can be implicitly converted from some types" - {
 
-      "String should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "String should be implicitly converted to Writable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Writable]("first line.")
@@ -237,63 +237,63 @@ class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverte
       }
 
       "BufferedReader should be implicitly converted to Writable" taggedAs
-        ImplicitConversion in new ReaderFixture{
+        ImplicitConversion ignore new ReaderFixture{
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Writable](reader)
         }
       }
 
-      "File should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "File should be implicitly converted to Writable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Writable](readOnlyFile)
         }
       }
 
-      "(File, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "(File, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Writable]((readOnlyFileISO2022, ISO2022))
         }
       }
 
-      "Path should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "Path should be implicitly converted to Writable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Writable](readOnlyPath)
         }
       }
 
-      "(Path, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "(Path, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Writable]((readOnlyPathISO2022, ISO2022))
         }
       }
 
-      "FileWrapper should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "FileWrapper should be implicitly converted to Writable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Writable](new FileWrapper(readOnlyFile))
         }
       }
 
-      "(FileWrapper, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "(FileWrapper, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Writable]((new FileWrapper(readOnlyFileISO2022), ISO2022))
         }
       }
 
-      "PathWrapper should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "PathWrapper should be implicitly converted to Writable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Writable](new PathWrapper(readOnlyPath))
         }
       }
 
-      "(PathWrapper, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion in {
+      "(PathWrapper, Charset) should be implicitly converted to Writable" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Writable]((new PathWrapper(readOnlyPathISO2022), ISO2022))

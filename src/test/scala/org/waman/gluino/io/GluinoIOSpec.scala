@@ -26,7 +26,7 @@ class GluinoIOSpec extends GluinoIOCustomSpec with GluinoIO with MockFactory{
 
     "convertStringToCharset() method should" - {
 
-      "implicitly convert the specified String to Charset" taggedAs ImplicitConversion in {
+      "implicitly convert the specified String to Charset" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Charset]("UTF-8")
@@ -45,7 +45,7 @@ class GluinoIOSpec extends GluinoIOCustomSpec with GluinoIO with MockFactory{
       }
     }
 
-    "InputStream should implicitly converted to InputStreamWrapper" taggedAs ImplicitConversion in {
+    "InputStream should implicitly converted to InputStreamWrapper" taggedAs ImplicitConversion ignore {
       __SetUp__
       val is = mock[InputStream]
       __Verify__
@@ -54,7 +54,7 @@ class GluinoIOSpec extends GluinoIOCustomSpec with GluinoIO with MockFactory{
       }
     }
 
-    "OutputStream should implicitly converted to OutputStreamWrapper" taggedAs ImplicitConversion in {
+    "OutputStream should implicitly converted to OutputStreamWrapper" taggedAs ImplicitConversion ignore {
       __SetUp__
       val os = mock[OutputStream]
       __Verify__
@@ -63,7 +63,7 @@ class GluinoIOSpec extends GluinoIOCustomSpec with GluinoIO with MockFactory{
       }
     }
 
-    "Reader should implicitly converted to ReaderWrapper" taggedAs ImplicitConversion in {
+    "Reader should implicitly converted to ReaderWrapper" taggedAs ImplicitConversion ignore {
       __SetUp__
       val reader = mock[Reader]
       __Verify__
@@ -72,7 +72,7 @@ class GluinoIOSpec extends GluinoIOCustomSpec with GluinoIO with MockFactory{
       }
     }
 
-    "Writer should implicitly converted to WriterWrapper" taggedAs ImplicitConversion in {
+    "Writer should implicitly converted to WriterWrapper" taggedAs ImplicitConversion ignore {
       __SetUp__
       val writer = mock[Writer]
       __Verify__
@@ -81,7 +81,7 @@ class GluinoIOSpec extends GluinoIOCustomSpec with GluinoIO with MockFactory{
       }
     }
 
-    "PrintWriter should implicitly converted to PrintWriterWrapper" taggedAs ImplicitConversion in {
+    "PrintWriter should implicitly converted to PrintWriterWrapper" taggedAs ImplicitConversion ignore {
       __SetUp__
       val pw = new PrintWriter(mock[Writer])
       __Verify__

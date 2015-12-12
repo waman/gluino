@@ -101,7 +101,7 @@ class GluinoPathSpec extends GluinoIOCustomSpec with GluinoPath{
         sut should equal (expected)
       }
 
-      "implicitly convert a string representing a path to Path object" taggedAs ImplicitConversion in {
+      "implicitly convert a string representing a path to Path object" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Path]("path/to/some/file.txt")
@@ -117,7 +117,7 @@ class GluinoPathSpec extends GluinoIOCustomSpec with GluinoPath{
         sut should equal (expected)
       }
 
-      "implicitly convert Seq[String] representing a path to Path object" taggedAs ImplicitConversion in {
+      "implicitly convert Seq[String] representing a path to Path object" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[Path](Seq("path", "to", "some", "file.txt"))

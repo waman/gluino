@@ -146,7 +146,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" taggedAs ImplicitConversion in {
+      "should implicitly convert to FileTime" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[FileTime](instant)
@@ -176,7 +176,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" taggedAs ImplicitConversion in {
+      "should implicitly convert to FileTime" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[FileTime](zdt)
@@ -192,7 +192,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" taggedAs ImplicitConversion in {
+      "should implicitly convert to FileTime" taggedAs ImplicitConversion ignore {
         __Verify__
         noException should be thrownBy {
           convertImplicitly[FileTime](odt)
@@ -215,7 +215,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
         sut should equal (fileTime)
       }
 
-      "should implicitly convert to FileTime" taggedAs ImplicitConversion in new DateFixture{
+      "should implicitly convert to FileTime" taggedAs ImplicitConversion ignore new DateFixture{
         __Verify__
         noException should be thrownBy{
           convertImplicitly[FileTime](date)
