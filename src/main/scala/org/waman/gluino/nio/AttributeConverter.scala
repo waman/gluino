@@ -27,9 +27,6 @@ trait AttributeConverter {
     PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString(s))
 
   // ACL
-  private def newAclAttr(entries: Array[AclEntry]): FileAttribute[jcf.List[AclEntry]] =
-    fileAttribute[jcf.List[AclEntry]]("acl:acl", jcf.Arrays.asList(entries:_*))
-
   private val lookupService = FileSystems.getDefault.getUserPrincipalLookupService
   private val userAcl = """u(?:ser)?:(\w+):([r-][w-][x-])""".r
   private val groupAcl = """g(?:roup)?:(\w+):([r-][w-][x-])""".r
@@ -74,6 +71,33 @@ trait AttributeConverter {
         toAclEntry(group, rwx)
     }
   }
+
+  private def newAclAttr(entries: Array[AclEntry]): FileAttribute[jcf.List[AclEntry]] =
+    fileAttribute[jcf.List[AclEntry]]("acl:acl", jcf.Arrays.asList(entries:_*))
+
+  private def newAclAttr(entry: AclEntry): FileAttribute[jcf.List[AclEntry]] =
+    newAclAttr(Array(entry))
+
+  def acl(principal: UserPrincipal, permissions: Set[AclEntryPermission], aclType: AclEntryType):
+      FileAttribute[jcf.List[AclEntry]] =
+    newAclAttr(
+      AclEntry.newBuilder()
+        .setPrincipal(principal)
+        .setPermissions(permissions)
+        .setType(aclType)
+        .build()
+    )
+
+  def acl(principal: UserPrincipal, permissions: Set[AclEntryPermission], aclType: AclEntryType, flags: AclEntryFlag*):
+      FileAttribute[jcf.List[AclEntry]] =
+    newAclAttr(
+      AclEntry.newBuilder()
+        .setPrincipal(principal)
+        .setPermissions(permissions)
+        .setType(aclType)
+        .setFlags(flags:_*)
+        .build()
+    )
 
   //***** FileTime conversions *****
   // java.time.Instant

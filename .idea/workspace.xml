@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="04fdf3ea-2091-491b-880f-2592d225098d" name="Default" comment="Ignore tests tagged as ImplicitConversion">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/PosixFileSystemSpecific.scala" />
+    <list default="true" id="04fdf3ea-2091-491b-880f-2592d225098d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/AppendableConverter.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/AppendableConverter.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/AttributeConverter.scala" afterPath="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/AttributeConverter.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/WindowsSpecific.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/WindowsSpecific.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/AttributeConverterSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/AttributeConverterSpec.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala" afterPath="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala" />
     </list>
@@ -38,25 +34,45 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="DirectoryBuilder.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/DirectoryBuilder.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="30" column="70" selection-start-line="30" selection-start-column="70" selection-end-line="30" selection-end-column="70" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="DirectoryBuilderSpec.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="247" column="9" selection-start-line="247" selection-start-column="9" selection-end-line="247" selection-end-column="9" />
+              <caret line="19" column="36" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
               <folding>
-                <element signature="e#30#128#0" expanded="false" />
+                <element signature="e#30#128#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AttributeConverterSpec.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AttributeConverter.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/AttributeConverter.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="1.7965686">
+              <caret line="96" column="25" selection-start-line="96" selection-start-column="25" selection-end-line="96" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AttributeConverterSpec.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/AttributeConverterSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7205882">
-              <caret line="157" column="84" selection-start-line="157" selection-start-column="84" selection-end-line="157" selection-end-column="84" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="263" column="64" selection-start-line="263" selection-start-column="64" selection-end-line="263" selection-end-column="64" />
               <folding>
-                <element signature="e#30#116#0" expanded="true" />
+                <element signature="e#30#62#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -90,7 +106,6 @@
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/FileTypeSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/PathFileTypeSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/ReaderWrapperSpec.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/datastream/DataInputStreamWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/datastream/DataOutputStreamWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/objectstream/ObjectOutputStreamWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/WriterWrapperSpec.scala" />
@@ -120,7 +135,6 @@
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/DirectoryBuilder.scala" />
         <option value="$PROJECT_DIR$/build.sbt" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/FileWrapperLike.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/AttributeConverter.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/PathWrapper.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/ImplicitConversion.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/AppendableConverterSpec.scala" />
@@ -135,6 +149,8 @@
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/GluinoCustomSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/PosixFileSystemSpecific.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/AttributeConverter.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/datastream/DataInputStreamWrapperSpec.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/AttributeConverterSpec.scala" />
       </list>
     </option>
@@ -298,6 +314,162 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datastream" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datastream" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DataInputStreamWrapperSpec.scala" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DataInputStreamWrapperSpec" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$TypeDefinitionTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datastream" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DataInputStreamWrapperSpec.scala" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DataInputStreamWrapperLikeSpec" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$TypeDefinitionTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datastream" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DataInputStreamWrapperSpec.scala" />
+              <option name="myItemType" value="org.jetbrains.plugins.scala.components.ScalaDefsProjectViewProvider$ScalaFileTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gluino" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -432,22 +604,7 @@
       <recent name="org.waman.gluino.nio" />
     </key>
   </component>
-  <component name="RunManager" selected="ScalaTest.AttributeConverterSpec.***** FileAttribute ***** posix(String) method should convert String 'r--------' to a file attribute of java.util.Set of OWNER_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-w-------' to a file attribute of java.util.Set of OWNER_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '--x------' to a file attribute of java.util.Set of OWNER_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '---r-----' to a file attribute of java.util.Set of GROUP_READ&#10;***** FileAttribute ***** posix(String) method should convert String '----w----' to a file attribute of java.util.Set of GROUP_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '-----x---' to a file attribute of java.util.Set of GROUP_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '------r--' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-------w-' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '--------x' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String 'rwx------' to a file attribute of java.util.Set of OWNER_READ, OWNER_WRITE and OWNER_EXECUTE">
-    <configuration default="false" name="PathWrapperSpec.***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set attribute value to the specified String" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="gluino" />
-      <setting name="path" value="org.waman.gluino.nio.PathWrapperSpec" />
-      <setting name="package" value="" />
-      <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <setting name="searchForTest" value="Across module dependencies" />
-      <setting name="testName" value="***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set attribute value to the specified String" />
-      <setting name="testKind" value="Test name" />
-      <setting name="showProgressMessages" value="true" />
-      <envs />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="ScalaTest.AttributeConverterSpec">
     <configuration default="false" name="PathWrapperSpec.***** User Defined File Attribute ***** getUserDefinedFileAttribute(String, Charset) method should return a value of a user-defined file attribute as String&#10;***** User Defined File Attribute ***** getUserDefinedFileAttribute(String, Charset) method should return a value of a user-defined file attribute as String with UTF-8 encoding if the charset arg is omitted&#10;***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set the specified attribute to the specified String&#10;***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set the specified attribute to the specified String with UTF-8 encoding if the charset arg is omitted" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="gluino" />
@@ -504,6 +661,21 @@
       <setting name="searchForTest" value="Across module dependencies" />
       <setting name="testName" value="***** FileAttribute ***** posix(String) method should convert String 'r--------' to a file attribute of java.util.Set of OWNER_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-w-------' to a file attribute of java.util.Set of OWNER_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '--x------' to a file attribute of java.util.Set of OWNER_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '---r-----' to a file attribute of java.util.Set of GROUP_READ&#10;***** FileAttribute ***** posix(String) method should convert String '----w----' to a file attribute of java.util.Set of GROUP_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '-----x---' to a file attribute of java.util.Set of GROUP_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '------r--' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-------w-' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '--------x' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String 'rwx------' to a file attribute of java.util.Set of OWNER_READ, OWNER_WRITE and OWNER_EXECUTE" />
       <setting name="testKind" value="Test name" />
+      <setting name="showProgressMessages" value="true" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="AttributeConverterSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="gluino" />
+      <setting name="path" value="org.waman.gluino.nio.AttributeConverterSpec" />
+      <setting name="package" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <setting name="searchForTest" value="Across module dependencies" />
+      <setting name="testName" value="" />
+      <setting name="testKind" value="Class" />
       <setting name="showProgressMessages" value="true" />
       <envs />
       <method />
@@ -797,19 +969,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec.***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set attribute value to the specified String" />
-      <item index="1" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec.***** User Defined File Attribute ***** getUserDefinedFileAttribute(String, Charset) method should return a value of a user-defined file attribute as String&#10;***** User Defined File Attribute ***** getUserDefinedFileAttribute(String, Charset) method should return a value of a user-defined file attribute as String with UTF-8 encoding if the charset arg is omitted&#10;***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set the specified attribute to the specified String&#10;***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set the specified attribute to the specified String with UTF-8 encoding if the charset arg is omitted" />
-      <item index="2" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should (Directories) be able to create nested directory structure&#10;DirectoryBuilder should (Files) be able to create files under any place of directory structure&#10;DirectoryBuilder should (Files) be able to create file with content when 2 or more Strings are passed&#10;DirectoryBuilder should (Files) be able to create file with content by using withWriter method (enhanced by GluinoPath)" />
-      <item index="3" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec" />
-      <item index="4" class="java.lang.String" itemvalue="ScalaTest.AttributeConverterSpec.***** FileAttribute ***** posix(String) method should convert String 'r--------' to a file attribute of java.util.Set of OWNER_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-w-------' to a file attribute of java.util.Set of OWNER_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '--x------' to a file attribute of java.util.Set of OWNER_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '---r-----' to a file attribute of java.util.Set of GROUP_READ&#10;***** FileAttribute ***** posix(String) method should convert String '----w----' to a file attribute of java.util.Set of GROUP_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '-----x---' to a file attribute of java.util.Set of GROUP_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '------r--' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-------w-' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '--------x' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String 'rwx------' to a file attribute of java.util.Set of OWNER_READ, OWNER_WRITE and OWNER_EXECUTE" />
+      <item index="0" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec.***** User Defined File Attribute ***** getUserDefinedFileAttribute(String, Charset) method should return a value of a user-defined file attribute as String&#10;***** User Defined File Attribute ***** getUserDefinedFileAttribute(String, Charset) method should return a value of a user-defined file attribute as String with UTF-8 encoding if the charset arg is omitted&#10;***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set the specified attribute to the specified String&#10;***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set the specified attribute to the specified String with UTF-8 encoding if the charset arg is omitted" />
+      <item index="1" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should (Directories) be able to create nested directory structure&#10;DirectoryBuilder should (Files) be able to create files under any place of directory structure&#10;DirectoryBuilder should (Files) be able to create file with content when 2 or more Strings are passed&#10;DirectoryBuilder should (Files) be able to create file with content by using withWriter method (enhanced by GluinoPath)" />
+      <item index="2" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec" />
+      <item index="3" class="java.lang.String" itemvalue="ScalaTest.AttributeConverterSpec.***** FileAttribute ***** posix(String) method should convert String 'r--------' to a file attribute of java.util.Set of OWNER_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-w-------' to a file attribute of java.util.Set of OWNER_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '--x------' to a file attribute of java.util.Set of OWNER_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '---r-----' to a file attribute of java.util.Set of GROUP_READ&#10;***** FileAttribute ***** posix(String) method should convert String '----w----' to a file attribute of java.util.Set of GROUP_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '-----x---' to a file attribute of java.util.Set of GROUP_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '------r--' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-------w-' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '--------x' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String 'rwx------' to a file attribute of java.util.Set of OWNER_READ, OWNER_WRITE and OWNER_EXECUTE" />
+      <item index="4" class="java.lang.String" itemvalue="ScalaTest.AttributeConverterSpec" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="ScalaTest.AttributeConverterSpec.***** FileAttribute ***** posix(String) method should convert String 'r--------' to a file attribute of java.util.Set of OWNER_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-w-------' to a file attribute of java.util.Set of OWNER_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '--x------' to a file attribute of java.util.Set of OWNER_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '---r-----' to a file attribute of java.util.Set of GROUP_READ&#10;***** FileAttribute ***** posix(String) method should convert String '----w----' to a file attribute of java.util.Set of GROUP_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '-----x---' to a file attribute of java.util.Set of GROUP_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '------r--' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-------w-' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '--------x' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String 'rwx------' to a file attribute of java.util.Set of OWNER_READ, OWNER_WRITE and OWNER_EXECUTE" />
-        <item index="1" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec" />
-        <item index="2" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should (Directories) be able to create nested directory structure&#10;DirectoryBuilder should (Files) be able to create files under any place of directory structure&#10;DirectoryBuilder should (Files) be able to create file with content when 2 or more Strings are passed&#10;DirectoryBuilder should (Files) be able to create file with content by using withWriter method (enhanced by GluinoPath)" />
-        <item index="3" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec.***** User Defined File Attribute ***** getUserDefinedFileAttribute(String, Charset) method should return a value of a user-defined file attribute as String&#10;***** User Defined File Attribute ***** getUserDefinedFileAttribute(String, Charset) method should return a value of a user-defined file attribute as String with UTF-8 encoding if the charset arg is omitted&#10;***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set the specified attribute to the specified String&#10;***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set the specified attribute to the specified String with UTF-8 encoding if the charset arg is omitted" />
-        <item index="4" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec.***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set attribute value to the specified String" />
+        <item index="0" class="java.lang.String" itemvalue="ScalaTest.AttributeConverterSpec" />
+        <item index="1" class="java.lang.String" itemvalue="ScalaTest.AttributeConverterSpec.***** FileAttribute ***** posix(String) method should convert String 'r--------' to a file attribute of java.util.Set of OWNER_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-w-------' to a file attribute of java.util.Set of OWNER_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '--x------' to a file attribute of java.util.Set of OWNER_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '---r-----' to a file attribute of java.util.Set of GROUP_READ&#10;***** FileAttribute ***** posix(String) method should convert String '----w----' to a file attribute of java.util.Set of GROUP_WRITE&#10;***** FileAttribute ***** posix(String) method should convert String '-----x---' to a file attribute of java.util.Set of GROUP_EXECUTE&#10;***** FileAttribute ***** posix(String) method should convert String '------r--' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '-------w-' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String '--------x' to a file attribute of java.util.Set of OTHERS_READ&#10;***** FileAttribute ***** posix(String) method should convert String 'rwx------' to a file attribute of java.util.Set of OWNER_READ, OWNER_WRITE and OWNER_EXECUTE" />
+        <item index="2" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec" />
+        <item index="3" class="java.lang.String" itemvalue="ScalaTest.DirectoryBuilderSpec.DirectoryBuilder should (Directories) be able to create nested directory structure&#10;DirectoryBuilder should (Files) be able to create files under any place of directory structure&#10;DirectoryBuilder should (Files) be able to create file with content when 2 or more Strings are passed&#10;DirectoryBuilder should (Files) be able to create file with content by using withWriter method (enhanced by GluinoPath)" />
+        <item index="4" class="java.lang.String" itemvalue="ScalaTest.PathWrapperSpec.***** User Defined File Attribute ***** getUserDefinedFileAttribute(String, Charset) method should return a value of a user-defined file attribute as String&#10;***** User Defined File Attribute ***** getUserDefinedFileAttribute(String, Charset) method should return a value of a user-defined file attribute as String with UTF-8 encoding if the charset arg is omitted&#10;***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set the specified attribute to the specified String&#10;***** User Defined File Attribute ***** setUserDefinedFileAttribute(String, String, Charset) method should set the specified attribute to the specified String with UTF-8 encoding if the charset arg is omitted" />
       </list>
     </recent_temporary>
   </component>
@@ -1149,24 +1321,30 @@
       <option name="project" value="LOCAL" />
       <updated>1449933000162</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Add acl(String) method to AttributeConverter trait to specify ACL entry by String">
+      <created>1449970417516</created>
+      <option name="number" value="00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1449970417516</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="DirectoryBuilderSpec - 2015.12.11 at 10h 28m 27s.xml">
-      <configuration name="DirectoryBuilderSpec" configurationId="ScalaTestRunConfiguration" />
+    <history-entry file="AttributeConverterSpec - 2015.12.13 at 11h 33m 12s.xml">
+      <configuration name="AttributeConverterSpec" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="DirectoryBuilderSpec - 2015.12.12 at 15h 05m 19s.xml">
-      <configuration name="DirectoryBuilderSpec" configurationId="ScalaTestRunConfiguration" />
+    <history-entry file="AttributeConverterSpec - 2015.12.13 at 11h 34m 13s.xml">
+      <configuration name="AttributeConverterSpec" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="DirectoryBuilderSpec - 2015.12.13 at 00h 19m 44s.xml">
-      <configuration name="DirectoryBuilderSpec" configurationId="ScalaTestRunConfiguration" />
+    <history-entry file="AttributeConverterSpec - 2015.12.13 at 11h 36m 58s.xml">
+      <configuration name="AttributeConverterSpec" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="DirectoryBuilderSpec - 2015.12.13 at 00h 32m 57s.xml">
-      <configuration name="DirectoryBuilderSpec" configurationId="ScalaTestRunConfiguration" />
+    <history-entry file="AttributeConverterSpec - 2015.12.13 at 11h 39m 13s.xml">
+      <configuration name="AttributeConverterSpec" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
-    <history-entry file="DirectoryBuilderSpec_DirectoryBuilder_should_Acl_test - 2015.12.11 at 10h 12m 12s.xml">
-      <configuration name="DirectoryBuilderSpec.DirectoryBuilder should Acl test" configurationId="ScalaTestRunConfiguration" />
+    <history-entry file="AttributeConverterSpec - 2015.12.13 at 11h 41m 51s.xml">
+      <configuration name="AttributeConverterSpec" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
     <history-entry file="DirectoryBuilderSpec_DirectoryBuilder_should_be_able_to_create_file_with_acl_permission_of_user_(Guest_on_Windows) - 2015.12.11 at 10h 17m 24s.xml">
       <configuration name="DirectoryBuilderSpec.DirectoryBuilder should be able to create file with acl permission of user (Guest on Windows)" configurationId="ScalaTestRunConfiguration" />
@@ -1206,7 +1384,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2979066" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36714977" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36655948" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36553946" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22163388" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1237,7 +1415,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="Add tests for concrete subclasses of ReaderWrapperLike trait" />
     <MESSAGE value="Add tests for concrete subclasses of InputStreamWrapperLike trait" />
     <MESSAGE value="Add method declarations related to ObjectStream/DataStream" />
     <MESSAGE value="Refactor tests of InputStreamWrapper and ReaderWrapper" />
@@ -1262,7 +1439,8 @@
     <MESSAGE value="Ignore tests tagged as ImplicitConversion" />
     <MESSAGE value="Add get/setUserDefinedFileAttribute() methods to easily access user-defined file attributes" />
     <MESSAGE value="Refactor recursive methods" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor recursive methods" />
+    <MESSAGE value="Add acl(String) method to AttributeConverter trait to specify ACL entry by String" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add acl(String) method to AttributeConverter trait to specify ACL entry by String" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1275,13 +1453,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/OutputStreamWrapperSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.003413">
-          <caret line="94" column="6" selection-start-line="94" selection-start-column="6" selection-end-line="94" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/PrintWriterWrapperSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="2.9010239">
@@ -1520,20 +1691,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/AttributeConverter.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.6936027">
-          <caret line="28" column="8" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/DirectoryBuilder.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25925925">
-          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/io/ReaderWrapper.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.7508417">
@@ -1618,23 +1775,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/DirectoryBuilder.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="70" selection-start-line="30" selection-start-column="70" selection-end-line="30" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/io/datastream/DataInputStreamWrapperSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.49726775">
+          <caret line="58" column="16" selection-start-line="58" selection-start-column="16" selection-end-line="58" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/DirectoryBuilderSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="247" column="9" selection-start-line="247" selection-start-column="9" selection-end-line="247" selection-end-column="9" />
+          <caret line="19" column="36" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
           <folding>
-            <element signature="e#30#128#0" expanded="false" />
+            <element signature="e#30#128#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/org/waman/gluino/nio/AttributeConverterSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7205882">
-          <caret line="157" column="84" selection-start-line="157" selection-start-column="84" selection-end-line="157" selection-end-column="84" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="263" column="64" selection-start-line="263" selection-start-column="64" selection-end-line="263" selection-end-column="64" />
           <folding>
-            <element signature="e#30#116#0" expanded="true" />
+            <element signature="e#30#62#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/org/waman/gluino/nio/AttributeConverter.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.7965686">
+          <caret line="96" column="25" selection-start-line="96" selection-start-column="25" selection-end-line="96" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>
