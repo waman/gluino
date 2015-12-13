@@ -16,20 +16,25 @@ import java.nio.file.attribute.AclEntryPermission._
 trait AttributeConverter {
 
   //***** Utilities for file attributes *****
+  // FileAttribute
+  private case class FileAttributeImpl[T](name: String, value: T) extends FileAttribute[T]
+
+  def fileAttribute[T](name: String, value: T): FileAttribute[T] =
+    new FileAttributeImpl[T](name, value)
+
   // POSIX
   def posix(s: String): FileAttribute[java.util.Set[PosixFilePermission]] =
     PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString(s))
 
   // ACL
-  private case class FileAttributeImpl[T](name: String, value: T) extends FileAttribute[T]
   private def newAclAttr(entries: Array[AclEntry]): FileAttribute[jcf.List[AclEntry]] =
-    new FileAttributeImpl[jcf.List[AclEntry]]("acl:acl", jcf.Arrays.asList(entries:_*))
+    fileAttribute[jcf.List[AclEntry]]("acl:acl", jcf.Arrays.asList(entries:_*))
 
   private val lookupService = FileSystems.getDefault.getUserPrincipalLookupService
   private val userAcl = """u(?:ser)?:(\w+):([r-][w-][x-])""".r
   private val groupAcl = """g(?:roup)?:(\w+):([r-][w-][x-])""".r
 
-  lazy val permissionMap: Map[String, jcf.Set[AclEntryPermission]] = {
+  private lazy val permissionMap: Map[String, jcf.Set[AclEntryPermission]] = {
     val r = Set(READ_ACL, READ_NAMED_ATTRS, READ_DATA, SYNCHRONIZE)
     val w = Set(READ_ACL, READ_ATTRIBUTES, WRITE_ATTRIBUTES, WRITE_NAMED_ATTRS, WRITE_DATA, APPEND_DATA, SYNCHRONIZE)
     val x = Set(READ_ACL, READ_ATTRIBUTES, EXECUTE, SYNCHRONIZE)

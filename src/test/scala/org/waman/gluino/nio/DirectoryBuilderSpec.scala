@@ -5,9 +5,10 @@ import java.nio.file.{FileSystems, Files}
 import java.{util => jcf}
 
 import org.scalatest.LoneElement._
-import org.waman.gluino.{PosixFileSystemAssumption, PosixFileSystemSpecific, WindowsAssumption, WindowsSpecific}
+import org.waman.gluino.{PosixFileSystemSpecific, WindowsSpecific}
 
 import org.waman.gluino.io.GluinoIOCustomSpec
+import java.nio.file.attribute.AclEntryPermission._
 
 class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
 
@@ -198,11 +199,14 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
           projectHome.deleteDir()
         }
 
+      val lookupService = FileSystems.getDefault.getUserPrincipalLookupService
+      def getUser(name: String) = lookupService.lookupPrincipalByName(name)
+      def getGroup(name: String) = lookupService.lookupPrincipalByGroupName(name)
+
       "be able to create file with ACL permission (Guest on Windows)" taggedAs WindowsSpecific in
         new WindowsAssumption {
-          import java.nio.file.attribute.AclEntryPermission._
           __SetUp__
-          val guest = FileSystems.getDefault.getUserPrincipalLookupService.lookupPrincipalByName("Guest")
+          val guest = getUser("Guest")
           val aclEntry = AclEntry.newBuilder()
             .setPrincipal(guest)
             .setPermissions(READ_DATA, WRITE_DATA)
@@ -227,11 +231,8 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
           projectHome.deleteDir()
         }
 
-      "be able to create file with ACL permission by acl(String) method (Guest on Windows)" taggedAs WindowsSpecific in
+      "be able to create file with ACL permission by acl(String) method" taggedAs WindowsSpecific in
         new WindowsAssumption {
-          import java.nio.file.attribute.AclEntryPermission._
-          __SetUp__
-          val guest = FileSystems.getDefault.getUserPrincipalLookupService.lookupPrincipalByName("Guest")
           __Exercise__
           val projectHome = new DirectoryBuilder {
 
@@ -239,7 +240,6 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
 
             file("build.sbt", acl("u:Guest:r--"))
           }.baseDir
-
           __Verify__
           val aclAttr = Files.getFileAttributeView(projectHome / "build.sbt", classOf[AclFileAttributeView])
           aclAttr.getAcl.loneElement.permissions() should contain (READ_DATA)

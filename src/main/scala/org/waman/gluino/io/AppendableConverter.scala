@@ -20,7 +20,7 @@ trait AppendableConverter extends GluinoIO{
     override def outputTo(output: OutputStream): Unit = output.write(byteSeq.toArray)
   }
 
-  private val bufferSize = 1024 * 1024
+  private val bufferSize = 1024
 
   implicit def convertInputStreamToOutputtable(input: InputStream): Outputtable = new Outputtable{
     override def outputTo(output: OutputStream): Unit = {
@@ -31,17 +31,17 @@ trait AppendableConverter extends GluinoIO{
 
       bis.withInputStream{ is =>
         @tailrec
-        def copyBytes(bytes: Array[Byte]): Unit = {
+        def copyBytes(is: InputStream, bytes: Array[Byte]): Unit = {
           val n = is.read(bytes)
           n match {
             case -1 =>
             case _ if n >= 0 =>
               output.write(bytes, 0, n)
-              copyBytes(bytes)
+              copyBytes(is, bytes)
           }
         }
 
-        copyBytes(new Array[Byte](bufferSize))
+        copyBytes(is, new Array[Byte](bufferSize))
       }
     }
   }
