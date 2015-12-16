@@ -15,7 +15,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
 
   "DirectoryBuilder should" - {
 
-    "(Directories)" - {
+    "(for Directories)" - {
 
       "be able to create nested directory structure" in {
         __Exercise__
@@ -50,7 +50,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
       }
     }
 
-    "(Files)" - {
+    "(for Files)" - {
 
       "create files under any place of directory structure" in {
         __Exercise__
@@ -140,7 +140,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
       }
     }
 
-    "(Files with Permission)" - {
+    "(for Files with Permission)" - {
 
       "create file with posix permission" taggedAs PosixFileSystemSpecific in
         new PosixFileSystemRequirement{
@@ -199,7 +199,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
         }
     }
 
-    "(Link and Symbolic Link)" - {
+    "(for Links and Symbolic Links)" - {
 
       "create a link to a file under the specified directory" in {
         __Exercise__

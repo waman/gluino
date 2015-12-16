@@ -25,6 +25,8 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   override def isFile: Boolean = Files.isRegularFile(path)
   override def isDirectory: Boolean = Files.isDirectory(path)
 
+  override def size: Long = Files.size(path)
+
   def isOlderThan(arg: Path): Boolean =
     Files.getLastModifiedTime(path).toMillis < Files.getLastModifiedTime(arg).toMillis
 

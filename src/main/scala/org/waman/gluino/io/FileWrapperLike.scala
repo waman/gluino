@@ -22,6 +22,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def /(child: String): F
   def \(child: String): F
 
+  def size: Long
   def directorySize: Long = ???
   def length: Long = ???
 

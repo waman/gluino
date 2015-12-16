@@ -3,6 +3,8 @@ package org.waman.gluino.io
 import java.io.{File, IOException}
 import java.nio.file.{Files, Path}
 
+import org.waman.gluino.WindowsAdministrated
+
 import scala.collection.JavaConversions._
 
 import org.scalatest.OptionValues._
@@ -31,11 +33,11 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
     val sut = newFileWrapperLike(path)
   }
 
+  // Directory Fixture
   trait FileWrapperLike_DirectoryFixture extends DirectoryFixture{
     val sut = newFileWrapperLike(dir)
   }
 
-  // Directory Fixture
   trait FileWrapperLike_ReadOnlyDirFixture{
     val sut = newFileWrapperLike(readOnlyDir)
   }
@@ -52,6 +54,25 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
     val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
     GluinoPath.createTempFile(targetPath, deleteOnExit = true)
     val target = asF(targetPath)
+  }
+
+  // Link and Symbolic Link Fixture
+  trait FileWrapperLike_LinkFixture extends LinkFixture{
+    val sut = newFileWrapperLike(link)
+  }
+
+  trait FileWrapperLike_SymbolicLinkFixture extends SymbolicLinkFixture{
+    val sut = newFileWrapperLike(symbolicLink)
+  }
+
+  "File size" - {
+
+    "size method should" in {
+      __SetUp__
+      val sut = newFileWrapperLike(readOnlyBigPath)
+      __Verify__
+      sut.size should equal (26000L)
+    }
   }
 
   "isOlder/NewerThan() methods" - {
@@ -129,7 +150,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
 
     "renameTo() method should" - {
 
-      "for files" - {
+      "(for Files)" - {
 
         "rename a file" in new FileWrapperLike_FileWithContentFixture {
           __SetUp__
@@ -147,23 +168,27 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "RETURN an Option[IOException] if the target file exists and the 'isOverride' arg is omitted" in
           new FileWrapperLike_FileFixture {
             __SetUp__
-            val target = asF(GluinoPath.createTempFile(deleteOnExit = true))
+            val targetPath = GluinoPath.createTempFile(deleteOnExit = true)
+            val target = asF(targetPath)
             __Exercise__
             val result = sut.renameTo(target)
             __Verify__
             result.value should be(a[IOException])
             path should exist
+            targetPath should exist
           }
 
         "RETURN an Option[IOException] if the target file exists and the 'isOverride' arg is false" in
           new FileWrapperLike_FileFixture {
             __SetUp__
-            val target = asF(GluinoPath.createTempFile(deleteOnExit = true))
+            val targetPath = GluinoPath.createTempFile(deleteOnExit = true)
+            val target = asF(targetPath)
             __Exercise__
             val result = sut.renameTo(target, isOverride = false)
             __Verify__
             result.value should be(a[IOException])
             path should exist
+            targetPath should exist
           }
 
         "rename a file even if the target file exists when the 'isOverride' arg is true" in
@@ -243,7 +268,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         }
       }
 
-      "for directories" - {
+      "(for Directories)" - {
 
         "rename the directory" in new FileWrapperLike_DirectoryFixture {
           __SetUp__
@@ -260,23 +285,27 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "RETURN an Option[IOException] if the target directory exists and the 'isOverride' arg is omitted" in
           new FileWrapperLike_FileFixture {
             __SetUp__
-            val target = asF(GluinoPath.createTempDirectory(deleteOnExit = true))
+            val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+            val target = asF(targetPath)
             __Exercise__
             val result = sut.renameTo(target)
             __Verify__
             result.value should be (a [IOException])
             path should exist
+            targetPath should exist
           }
 
         "RETURN an Option[IOException] if the target directory exists and the 'isOverride' arg is false" in
           new FileWrapperLike_FileFixture {
             __SetUp__
-            val target = asF(GluinoPath.createTempDirectory(deleteOnExit = true))
+            val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
+            val target = asF(targetPath)
             __Exercise__
             val result = sut.renameTo(target, isOverride = false)
             __Verify__
             result.value should be (a [IOException])
             path should exist
+            targetPath should exist
           }
 
         "rename the directory even if the target directory exists when the 'isOverride' arg is true" in
@@ -300,6 +329,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
               __Verify__
               result.value should be (a [IOException])
               dir should exist
+              targetPath should exist
             }
           }
 
@@ -308,6 +338,18 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
             new NotEmptyDirectoryTargetFixture {
               __Exercise__
               val result = sut.renameTo(target, isOverride = false)
+              __Verify__
+              result.value should be (a [IOException])
+              dir should exist
+              targetPath should exist
+            }
+          }
+
+        "RETURN an Option[IOException] if the directory is not empty and the 'isOverride' arg is true" in
+          new FileWrapperLike_NotEmptyDirectoryFixture {
+            new NotEmptyDirectoryTargetFixture {
+              __Exercise__
+              val result = sut.renameTo(target, isOverride = true)
               __Verify__
               result.value should be (a [IOException])
               dir should exist
@@ -346,23 +388,55 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
             result should be (None)
             dir should exist
           }
+      }
 
-        "RETURN an Option[IOException] if the directory is not empty and the 'isOverride' arg is true" in
-          new FileWrapperLike_NotEmptyDirectoryFixture {
-            new NotEmptyDirectoryTargetFixture {
+      "(for Links)" - {
+
+        "rename a link" in new FileWrapperLike_LinkFixture {
+          __SetUp__
+          val targetPath = createNotExistingFile(suffix = ".lnk")
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.renameTo(target)
+          __Verify__
+          result should be (None)
+          link should not (exist)
+          targetPath should exist
+          text(targetPath) should equal (contentAsString)
+          linkTarget should exist
+          text(linkTarget) should equal (contentAsString)
+        }
+
+        // TODO
+      }
+
+      "(for Symbolic Links)" - {
+
+        "rename a symbolic link" taggedAs WindowsAdministrated in
+          new WindowsAdministratorRequirement {
+            new FileWrapperLike_SymbolicLinkFixture {
+              __SetUp__
+              val targetPath = createNotExistingFile(suffix = ".symlink")
+              val target = asF(targetPath)
               __Exercise__
-              val result = sut.renameTo(target, isOverride = true)
+              val result = sut.renameTo(target)
               __Verify__
-              result.value should be (a [IOException])
-              dir should exist
+              result should be(None)
+              symbolicLink should not(exist)
+              targetPath should exist
+              text(targetPath) should equal(contentAsString)
+              linkTarget should exist
+              text(linkTarget) should equal(contentAsString)
             }
           }
+
+        // TODO
       }
     }
 
     "move() method should" - {
 
-      "for files" - {
+      "(for Files)" - {
 
         "move a file" in new FileWrapperLike_FileWithContentFixture {
           __SetUp__
@@ -451,7 +525,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
           }
       }
 
-      "for directories" - {
+      "(for Directories)" - {
 
         "move the directory" in new FileWrapperLike_DirectoryFixture {
           __SetUp__
@@ -566,11 +640,54 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
             }
           }
       }
+
+      "(for Links)" - {
+
+        "move a link" in new FileWrapperLike_LinkFixture {
+          __SetUp__
+          val targetPath = createNotExistingFile(suffix = ".lnk")
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.move(target)
+          __Verify__
+          result should be (None)
+          link should not (exist)
+          targetPath should exist
+          text(targetPath) should equal (contentAsString)
+          linkTarget should exist
+          text(linkTarget) should equal (contentAsString)
+        }
+
+        // TODO
+      }
+
+      "(for Symbolic Links)" - {
+
+        "move a symbolic link" taggedAs WindowsAdministrated in
+          new WindowsAdministratorRequirement {
+            new FileWrapperLike_SymbolicLinkFixture {
+              __SetUp__
+              val targetPath = createNotExistingFile(suffix = ".symlink")
+              val target = asF(targetPath)
+              __Exercise__
+              val result = sut.move(target)
+              __Verify__
+              result should be(None)
+              symbolicLink should not(exist)
+              targetPath should exist
+              text(targetPath) should equal(contentAsString)
+              linkTarget should exist
+              text(linkTarget) should equal(contentAsString)
+            }
+          }
+
+        // TODO
+      }
     }
 
     "copy() method should" - {
 
-      "for files" - {
+      "(for Files)" - {
 
         "copy a file" in new FileWrapperLike_FileWithContentFixture {
           __SetUp__
@@ -660,7 +777,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
           }
       }
 
-      "for directories" - {
+      "(for Directories)" - {
 
         "copy the directory" in new FileWrapperLike_DirectoryFixture {
           __SetUp__
@@ -775,6 +892,51 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
             }
           }
       }
+
+      "(for Links)" - {
+
+        "copy a link" in new FileWrapperLike_LinkFixture {
+          __SetUp__
+          val targetPath = createNotExistingFile(suffix = ".lnk")
+          val target = asF(targetPath)
+          __Exercise__
+          val result = sut.copy(target)
+          __Verify__
+          result should be (None)
+          link should exist
+          text(link) should equal (contentAsString)
+          targetPath should exist
+          text(targetPath) should equal (contentAsString)
+          linkTarget should exist
+          text(linkTarget) should equal (contentAsString)
+        }
+
+        // TODO
+      }
+
+      "(for Symbolic Links)" - {
+
+        "copy a symbolic link" taggedAs WindowsAdministrated in
+          new WindowsAdministratorRequirement {
+            new FileWrapperLike_SymbolicLinkFixture {
+              __SetUp__
+              val targetPath = createNotExistingFile(suffix = ".symlink")
+              val target = asF(targetPath)
+              __Exercise__
+              val result = sut.copy(target)
+              __Verify__
+              result should be(None)
+              symbolicLink should exist
+              text(symbolicLink) should equal (contentAsString)
+              targetPath should exist
+              text(targetPath) should equal(contentAsString)
+              linkTarget should exist
+              text(linkTarget) should equal(contentAsString)
+            }
+          }
+
+        // TODO
+      }
     }
 
     "delete() method should" - {
@@ -794,6 +956,29 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         dir should not (exist)
         result should be (None)
       }
+
+      "delete a link" in new FileWrapperLike_LinkFixture {
+        __Exercise__
+        val result = sut.delete()
+        __Verify__
+        result should be (None)
+        link should not (exist)
+        linkTarget should exist
+        text(linkTarget) should equal (contentAsString)
+      }
+
+      "delete a symbolic link" taggedAs WindowsAdministrated in
+        new WindowsAdministratorRequirement {
+          new FileWrapperLike_SymbolicLinkFixture {
+            __Exercise__
+            val result = sut.delete()
+            __Verify__
+            result should be(None)
+            symbolicLink should not(exist)
+            linkTarget should exist
+            text(linkTarget) should equal(contentAsString)
+          }
+        }
 
       "RETURN an Option[IOException] if the file does not exist" in
         new FileWrapperLike_FileFixture {

@@ -22,7 +22,6 @@ trait GluinoPath extends AttributeConverter with AppendableConverter{
 
   //***** Path Wrappers *****
   implicit def wrapPath(path: Path): PathWrapper = new PathWrapper(path)
-  implicit def convertPathToFilesCategory(path: Path): FilesCategory = new FilesCategory(path)
 
   //***** FileType *****
   implicit object PathFileTypeFilterProvider extends FileTypeFilterProvider[Path] {

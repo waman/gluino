@@ -12,6 +12,7 @@ import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
 import org.waman.gluino.io.datastream.{DataInputStreamWrapper, DataOutputStreamWrapper}
 import org.waman.gluino.io.objectstream.{ObjectInputStreamWrapper, ObjectOutputStreamWrapper}
 import org.waman.gluino.nio.{DirectoryBuilder, PathWrapper, GluinoPath}
+import org.waman.gluino.number.GluinoNumber._
 
 import scala.collection.JavaConversions._
 
@@ -19,8 +20,8 @@ import scala.collection.mutable
 
 trait GluinoIOCustomSpec extends GluinoCustomSpec with BeforeAndAfterAll{
 
-  protected def createNotExistingFile(): Path = {
-    val path = GluinoPath.createTempFile(deleteOnExit = true)
+  protected def createNotExistingFile(suffix: String = null): Path = {
+    val path = GluinoPath.createTempFile(suffix = suffix, deleteOnExit = true)
     Files.delete(path)
     path
   }
@@ -81,6 +82,19 @@ trait GluinoIOCustomSpec extends GluinoCustomSpec with BeforeAndAfterAll{
 
   trait WriterWithContentFixture extends FileWithContentFixture{
     val writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)
+  }
+
+  lazy val readOnlyBigPath: Path = createBigFile()
+
+  def createBigFile(): Path = {
+    val path = GluinoPath.createTempFile(deleteOnExit = true)
+    val writer = Files.newBufferedWriter(path)
+    try{
+      1000 times {
+        writer.write("abcdefghijklmnopqrstuvwxyz")
+      }
+    }finally writer.close()
+    path
   }
 
   //***** Encoded File Fixture *****
@@ -147,6 +161,19 @@ trait GluinoIOCustomSpec extends GluinoCustomSpec with BeforeAndAfterAll{
 
   trait DirectoryWithFilesFixture extends DirectoryFixture{
     initDirectory(dir)
+  }
+
+  //***** Link and Symbolic Link Fixture
+  trait LinkFixture{
+    val linkTarget = readOnlyPath
+    val link = createNotExistingFile(suffix = ".lnk")
+    Files.createLink(link, linkTarget)
+  }
+
+  trait SymbolicLinkFixture{
+    val linkTarget = readOnlyPath
+    val symbolicLink = createNotExistingFile(suffix = ".symlink")
+    Files.createSymbolicLink(symbolicLink, linkTarget)
   }
 
   //***** Custom Matchers *****
