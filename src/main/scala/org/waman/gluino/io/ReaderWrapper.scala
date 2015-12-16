@@ -3,6 +3,8 @@ package org.waman.gluino.io
 import java.io._
 import java.nio.file.{Files, Path}
 
+import org.waman.gluino.io.GluinoIO.lineSeparator
+
 import scala.annotation.tailrec
 import scala.util.matching.Regex
 

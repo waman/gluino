@@ -4,8 +4,9 @@ import java.nio.file.{Path, Paths}
 
 import org.waman.gluino.ImplicitConversion
 import org.waman.gluino.io.GluinoIOCustomSpec
+import org.waman.gluino.nio.GluinoPath._
 
-class GluinoPathSpec extends GluinoIOCustomSpec with GluinoPath{
+class GluinoPathSpec extends GluinoIOCustomSpec{
 
   "***** Temporal File/Directory *****" - {
 

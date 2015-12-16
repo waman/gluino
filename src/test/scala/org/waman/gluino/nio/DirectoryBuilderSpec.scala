@@ -1,15 +1,15 @@
 package org.waman.gluino.nio
 
-import java.nio.file.attribute.{PosixFilePermission, AclEntryType, AclEntry, AclFileAttributeView}
+import java.nio.file.attribute.AclEntryPermission._
+import java.nio.file.attribute.AclEntryType.ALLOW
+import java.nio.file.attribute.PosixFilePermission._
+import java.nio.file.attribute.{AclFileAttributeView, PosixFilePermission}
 import java.nio.file.{FileSystems, Files}
 import java.{util => jcf}
 
 import org.scalatest.LoneElement._
-import org.waman.gluino.{PosixFileSystemSpecific, WindowsSpecific}
-
 import org.waman.gluino.io.GluinoIOCustomSpec
-import java.nio.file.attribute.PosixFilePermission._
-import java.nio.file.attribute.AclEntryPermission._
+import org.waman.gluino.{WindowsAdministrated, PosixFileSystemSpecific, WindowsSpecific}
 
 class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
 
@@ -143,7 +143,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
     "(Files with Permission)" - {
 
       "create file with posix permission" taggedAs PosixFileSystemSpecific in
-        new PosixFileSystemAssumption{
+        new PosixFileSystemRequirement{
           __Exercise__
           val projectHome = new DirectoryBuilder {
 
@@ -164,24 +164,15 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
       def getGroup(name: String) = lookupService.lookupPrincipalByGroupName(name)
 
       "create file with ACL permission (Guest on Windows)" taggedAs WindowsSpecific in
-        new WindowsAssumption {
+        new WindowsAclRequirement {
           __SetUp__
           val guest = getUser("Guest")
-          val aclEntry = AclEntry.newBuilder()
-            .setPrincipal(guest)
-            .setPermissions(READ_DATA, WRITE_DATA)
-            .setType(AclEntryType.ALLOW)
-            .build()
-          val fileAttr = new java.nio.file.attribute.FileAttribute[jcf.List[AclEntry]]{
-            override def name(): String = "acl:acl"
-            override def value(): jcf.List[AclEntry] = jcf.Collections.singletonList(aclEntry)
-          }
           __Exercise__
           val projectHome = new DirectoryBuilder {
 
             val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
 
-            file("build.sbt", fileAttr)
+            file("build.sbt", acl(guest, Set(READ_DATA, WRITE_DATA), ALLOW))
           }.baseDir
 
           __Verify__
@@ -192,7 +183,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
         }
 
       "create file with ACL permission by acl(String) method" taggedAs WindowsSpecific in
-        new WindowsAssumption {
+        new WindowsAclRequirement {
           __Exercise__
           val projectHome = new DirectoryBuilder {
 
@@ -210,7 +201,51 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
 
     "(Link and Symbolic Link)" - {
 
-      "create"
+      "create a link to a file under the specified directory" in {
+        __Exercise__
+        val projectHome = new DirectoryBuilder {
+
+          val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+
+          dir("target"){
+            file("target-file.txt") << "Some content."
+          }
+
+          dir("src") {
+            link("test-link.lnk", baseDir / "target" / "target-file.txt")
+          }
+        }.baseDir
+        __Verify__
+        val sut = projectHome / "src" / "test-link.lnk"
+        sut should exist
+        text(sut) should equal ("Some content.")
+        __TearDown__
+        projectHome.deleteDir()
+      }
+
+      "create a symbolic link to a file under the specified directory" taggedAs WindowsAdministrated in
+        new WindowsAdministratorRequirement {
+          __Exercise__
+          val projectHome = new DirectoryBuilder {
+
+            val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
+
+            dir("target"){
+              file("target-file.txt") << "Some content."
+            }
+
+            dir("src") {
+              symbolicLink("test-symlink.symlink", baseDir / "target" / "target-file.txt")
+            }
+          }.baseDir
+          __Verify__
+          val sut = projectHome / "src" / "test-symlink.symlink"
+          sut should exist
+          Files.isSymbolicLink(sut) should equal (true)
+          text(sut) should equal ("Some content.")
+          __TearDown__
+          projectHome.deleteDir()
+        }
     }
   }
 }

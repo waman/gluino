@@ -7,7 +7,7 @@ import java.nio.file._
 import java.nio.file.attribute.UserDefinedFileAttributeView
 
 import org.waman.gluino.function.GluinoFunction
-import org.waman.gluino.io.{FileTypeFilterProvider, FileWrapperLike}
+import org.waman.gluino.io.{GluinoIO, FileTypeFilterProvider, FileWrapperLike}
 
 import scala.collection.JavaConversions._
 
@@ -75,7 +75,7 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
     if(append)Files.newBufferedWriter(path, charset, StandardOpenOption.APPEND)
     else Files.newBufferedWriter(path, charset)
 
-  override def readLines: Seq[String] = Files.readAllLines(path, defaultCharset)
+  override def readLines: Seq[String] = Files.readAllLines(path, GluinoIO.defaultCharset)
   override def readLines(charset: Charset): Seq[String] = Files.readAllLines(path, charset)
 
   override def text_= (text: String) = Files.write(path, List(text))

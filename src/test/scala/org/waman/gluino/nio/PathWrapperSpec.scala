@@ -6,10 +6,10 @@ import java.nio.file._
 
 import org.scalatest.OptionValues._
 import org.waman.gluino.io.FileWrapperLikeSpec
+import org.waman.gluino.nio.GluinoPath._
 
 class PathWrapperSpec
-    extends FileWrapperLikeSpec[Path, PathWrapper]
-    with GluinoPath {
+    extends FileWrapperLikeSpec[Path, PathWrapper]{
 
   override protected def wrap(path: Path): PathWrapper = new PathWrapper(path)
   override protected def asF(path: Path): Path = path

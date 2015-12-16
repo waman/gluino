@@ -2,8 +2,9 @@ package org.waman.gluino.io
 
 import java.io._
 import java.nio.charset.Charset
-import java.nio.file.{StandardOpenOption, Files, Path}
+import java.nio.file.{Files, Path, StandardOpenOption}
 
+import org.waman.gluino.io.GluinoIO.defaultCharset
 import org.waman.gluino.io.datastream.DataOutputStreamWrapperLike
 import org.waman.gluino.io.objectstream.ObjectOutputStreamWrapperLike
 

@@ -16,8 +16,5 @@ trait ObjectOutputExtension[T <: ObjectOutputExtension[T]]
     this
   }
 
-  override def close(): Unit = {
-    getObjectOutput.flush()
-    getObjectOutput.close()
-  }
+  override def close(): Unit = getObjectOutput.close()
 }

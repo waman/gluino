@@ -1,6 +1,8 @@
 package org.waman.gluino.io
 
-class GluinoFileSpec extends GluinoIOCustomSpec with GluinoFile{
+import org.waman.gluino.io.GluinoFile._
+
+class GluinoFileSpec extends GluinoIOCustomSpec{
 
   "***** Temporal File/Directory *****" - {
 

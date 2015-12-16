@@ -3,6 +3,8 @@ package org.waman.gluino.io
 import java.io._
 import java.nio.charset.Charset
 
+import org.waman.gluino.io.GluinoIO.defaultCharset
+
 import scala.language.implicitConversions
 
 trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
@@ -200,10 +202,10 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
         val child = wrap(c)
         val targetChild = wrap(dest) / child.fileName
         child match {
-          case f if f.isFile =>
-            checkResult(f.move(targetChild, isOverride))
           case d if d.isDirectory =>
             checkResult(d.moveDir(targetChild, isOverride))
+          case f =>
+            checkResult(f.move(targetChild, isOverride))
         }
       }
 
@@ -234,10 +236,10 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
         val child = wrap(c)
         val targetChild = wrap(dest) / child.fileName
         child match {
-          case f if f.isFile =>
-            checkResult(f.copy(targetChild, isOverride))
           case d if d.isDirectory =>
             checkResult(d.copyDir(targetChild, isOverride))
+          case f =>
+            checkResult(f.copy(targetChild, isOverride))
         }
       }
     }
@@ -257,10 +259,10 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     def _deleteDir(dir: W): Unit = {
       dir.eachFile { child =>
         wrap(child) match {
-          case f if f.isFile =>
-            checkResult(f.delete())
           case d if d.isDirectory =>
             checkResult(d.deleteDir())
+          case f =>
+            checkResult(f.delete())
         }
       }
       checkResult(dir.delete())

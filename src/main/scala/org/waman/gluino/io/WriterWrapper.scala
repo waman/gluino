@@ -3,6 +3,8 @@ package org.waman.gluino.io
 import java.io._
 import java.nio.file.{Files, Path}
 
+import org.waman.gluino.io.GluinoIO.lineSeparator
+
 trait WriterWrapperLike[T <: WriterWrapperLike[T]]
   extends GluinoIO with PrintWriterWrapperLike[T]{ self: T =>
 

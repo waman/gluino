@@ -6,24 +6,6 @@ import scala.language.implicitConversions
 
 trait GluinoFile extends AppendableConverter{
 
-  val tempDir: File = new File(tmpdir)
-
-  def createTempFile(dir: File = tempDir, prefix: String = "gluino-", suffix: String = null,
-                    deleteOnExit: Boolean = false): File = {
-    val file = File.createTempFile(prefix, suffix, dir)
-    if(deleteOnExit)file.deleteOnExit()
-    file
-  }
-
-  def createTempDirectory(dir: File = tempDir, prefix: String = "gluino-",
-                          deleteOnExit: Boolean = false): File = {
-    val td = File.createTempFile(prefix, "", dir)
-    td.delete()
-    td.mkdir()
-    if(deleteOnExit)td.deleteOnExit()
-    td
-  }
-
   implicit def wrapFile(file: File): FileWrapper = new FileWrapper(file)
 
   //***** FileType *****
@@ -37,4 +19,23 @@ trait GluinoFile extends AppendableConverter{
   }
 }
 
-object GluinoFile extends GluinoFile
+object GluinoFile extends GluinoFile{
+
+  val tempDir: File = new File(GluinoIO.tmpdir)
+
+  def createTempFile(dir: File = tempDir, prefix: String = "gluino-", suffix: String = null,
+                     deleteOnExit: Boolean = false): File = {
+    val file = File.createTempFile(prefix, suffix, dir)
+    if(deleteOnExit)file.deleteOnExit()
+    file
+  }
+
+  def createTempDirectory(dir: File = tempDir, prefix: String = "gluino-",
+                          deleteOnExit: Boolean = false): File = {
+    val td = File.createTempFile(prefix, "", dir)
+    td.delete()
+    td.mkdir()
+    if(deleteOnExit)td.deleteOnExit()
+    td
+  }
+}

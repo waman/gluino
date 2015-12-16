@@ -4,35 +4,12 @@ import java.net.URI
 import java.nio.file._
 import java.nio.file.attribute._
 
-import org.waman.gluino.io.{AppendableConverter, FileTypeFilterProvider}
+import org.waman.gluino.io.{GluinoIO, AppendableConverter, FileTypeFilterProvider}
 
 import scala.collection.JavaConversions._
 import scala.language.implicitConversions
 
 trait GluinoPath extends AttributeConverter with AppendableConverter{
-
-  //***** Temporal File/Directory *****
-  val tempDir: Path = Paths.get(tmpdir)
-  
-  def createTempFile(dir: Path = tempDir,
-                     prefix: String = null,
-                     suffix: String = null,
-                     deleteOnExit: Boolean = false,
-                     attrs: Seq[FileAttribute[_]] = Seq()): Path = {
-    val file = Files.createTempFile(dir, prefix, suffix, attrs.toArray:_*)
-    if(deleteOnExit)file.toFile.deleteOnExit()
-    file
-  }
-
-  def createTempDirectory(dir: Path = tempDir,
-                          prefix: String = null,
-                          deleteOnExit: Boolean = false,
-                          attrs: Seq[FileAttribute[_]] = Seq()): Path = {
-    val td = Files.createTempDirectory(dir, prefix, attrs.toArray:_*)
-    if(deleteOnExit)td.toFile.deleteOnExit()
-    td
-  }
-
 
   //***** Path Creation *****
   def path(s: String): Path = Paths.get(s)
@@ -69,4 +46,27 @@ trait GluinoPath extends AttributeConverter with AppendableConverter{
     directoryStream.iterator.toStream
 }
 
-object GluinoPath extends GluinoPath
+object GluinoPath extends GluinoPath{
+
+  //***** Temporal File/Directory *****
+  val tempDir: Path = Paths.get(GluinoIO.tmpdir)
+
+  def createTempFile(dir: Path = tempDir,
+                     prefix: String = null,
+                     suffix: String = null,
+                     deleteOnExit: Boolean = false,
+                     attrs: Seq[FileAttribute[_]] = Seq()): Path = {
+    val file = Files.createTempFile(dir, prefix, suffix, attrs.toArray:_*)
+    if(deleteOnExit)file.toFile.deleteOnExit()
+    file
+  }
+
+  def createTempDirectory(dir: Path = tempDir,
+                          prefix: String = null,
+                          deleteOnExit: Boolean = false,
+                          attrs: Seq[FileAttribute[_]] = Seq()): Path = {
+    val td = Files.createTempDirectory(dir, prefix, attrs.toArray:_*)
+    if(deleteOnExit)td.toFile.deleteOnExit()
+    td
+  }
+}

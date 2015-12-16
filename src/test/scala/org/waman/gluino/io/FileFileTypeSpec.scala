@@ -5,7 +5,7 @@ import org.waman.gluino.nio.GluinoPath
 class FileFileTypeSpec extends GluinoIOCustomSpec with GluinoFile{
 
   trait TempFileFixture{
-    val sut = createTempFile(deleteOnExit = true)
+    val sut = GluinoFile.createTempFile(deleteOnExit = true)
   }
 
   trait TempDirectoryFixture{

@@ -106,7 +106,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
       def getUser(name: String) = lookupService.lookupPrincipalByName(name)
 
       "create FileAttribute of ACL without AclEntryFlag" taggedAs WindowsSpecific in
-        new WindowsAssumption {
+        new WindowsAclRequirement {
           __SetUp__
           val guest = getUser("Guest")
           __Exercise__
@@ -119,7 +119,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
         }
 
       "create FileAttribute of ACL with AclEntryFlag" taggedAs WindowsSpecific in
-        new WindowsAssumption {
+        new WindowsAclRequirement {
           __SetUp__
           val guest = getUser("Guest")
           __Exercise__
@@ -139,7 +139,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
 
         // User
         "create ACL file attribute for 'Guest' user by a string 'u:Guest:---'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut: FileAttribute[jcf.List[AclEntry]] = acl("u:Guest:---")
             __Verify__
@@ -147,7 +147,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
           }
 
         "create ACL file attribute for 'Guest' user by a string 'user:Guest:---'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut: FileAttribute[jcf.List[AclEntry]] = acl("user:Guest:---")
             __Verify__
@@ -155,7 +155,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
           }
 
         "create ACL file attributes for users by a string 'u:Guest:---, u:{user}:---'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __SetUp__
             val me = System.getProperty("user.name")
             __Exercise__
@@ -168,7 +168,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
 
         // Group
         "create ACL file attribute for 'Guests' group by a string 'g:Guests:---'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut: FileAttribute[jcf.List[AclEntry]] = acl("g:Guests:---")
             __Verify__
@@ -176,7 +176,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
           }
 
         "create ACL file attribute for 'Guests' Group by a string 'group:Guests:---'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut: FileAttribute[jcf.List[AclEntry]] = acl("group:Guests:---")
             __Verify__
@@ -184,7 +184,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
           }
 
         "create ACL file attributes for user and group by a string 'u:Guest:---, g:Guests:---'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut = acl("u:Guest:---, g:Guests:---")
             __Verify__
@@ -201,7 +201,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
         val __x = Set(READ_ACL, READ_ATTRIBUTES, EXECUTE, SYNCHRONIZE)
 
         "create ACL file attributes with permissions '---'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut = acl("u:Guest:---")
             __Verify__
@@ -209,7 +209,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
           }
 
         "create ACL file attributes with permissions 'r--'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut = acl("u:Guest:r--")
             __Verify__
@@ -217,7 +217,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
           }
 
         "create ACL file attributes with permissions '-w-'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut = acl("u:Guest:-w-")
             __Verify__
@@ -225,7 +225,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
           }
 
         "create ACL file attributes with permissions '--x'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut = acl("u:Guest:--x")
             __Verify__
@@ -233,7 +233,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
           }
 
         "create ACL file attributes with permissions 'rw-'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut = acl("u:Guest:rw-")
             __Verify__
@@ -241,7 +241,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
           }
 
         "create ACL file attributes with permissions 'r-x'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut = acl("u:Guest:r-x")
             __Verify__
@@ -249,7 +249,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
           }
 
         "create ACL file attributes with permissions '-wx'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut = acl("u:Guest:-wx")
             __Verify__
@@ -257,7 +257,7 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
           }
 
         "create ACL file attributes with permissions 'rwx'" taggedAs WindowsSpecific in
-          new WindowsAssumption {
+          new WindowsAclRequirement {
             __Exercise__
             val sut = acl("u:Guest:rwx")
             __Verify__

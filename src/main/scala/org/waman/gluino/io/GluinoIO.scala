@@ -10,10 +10,6 @@ import java.io._
 
 trait GluinoIO{
 
-  val lineSeparator: String = System.getProperty("line.separator")
-  val tmpdir: String = System.getProperty("java.io.tmpdir")
-  val defaultCharset: Charset = StandardCharsets.UTF_8
-
   implicit def convertStringToCharset(charset: String): Charset = charset match {
     case "default" => Charset.defaultCharset
     case _ => Charset.forName(charset)
@@ -42,4 +38,9 @@ trait GluinoIO{
     ObjectOutputStreamWrapper(oos)
 }
 
-object GluinoIO extends GluinoIO
+object GluinoIO extends GluinoIO{
+
+  val lineSeparator: String = System.getProperty("line.separator")
+  val tmpdir: String = System.getProperty("java.io.tmpdir")
+  val defaultCharset: Charset = StandardCharsets.UTF_8
+}

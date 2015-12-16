@@ -68,7 +68,7 @@ trait InputStreamWrapperLike extends GluinoIO
   def newDataInputStream(): DataInputStream = new DataInputStream(getInputStream)
 
   //***** Reader factory/accessor *****
-  override protected def getReader: BufferedReader = newReader(defaultCharset)
+  override protected def getReader: BufferedReader = newReader(GluinoIO.defaultCharset)
 
   def newReader(charset: Charset): BufferedReader =
     new BufferedReader(new InputStreamReader(getInputStream, charset))
