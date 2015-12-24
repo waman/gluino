@@ -20,18 +20,6 @@ import scala.collection.mutable
 
 trait GluinoIOCustomSpec extends GluinoCustomSpec with BeforeAndAfterAll{
 
-  protected def createNotExistingFile(suffix: String = null): Path = {
-    val path = GluinoPath.createTempFile(suffix = suffix, deleteOnExit = true)
-    Files.delete(path)
-    path
-  }
-
-  protected def createNotExistingDirectory(): Path = {
-    val path = GluinoPath.createTempDirectory(deleteOnExit = true)
-    Files.delete(path)
-    path
-  }
-
   protected def text(path: Path): String = text(path, GluinoIO.defaultCharset)
   protected def text(path: Path, charset: Charset): String = new String(Files.readAllBytes(path), charset)
 
@@ -58,11 +46,22 @@ trait GluinoIOCustomSpec extends GluinoCustomSpec with BeforeAndAfterAll{
     val reader = Files.newBufferedReader(readOnlyPath)
   }
 
-  // OutputStream, Writer
+  // File Fixture per each test case
   trait FileFixture{
     val path = GluinoPath.createTempFile(deleteOnExit = true)
   }
 
+  protected def createNotExistingFile(suffix: String = null): Path = {
+    val path = GluinoPath.createTempFile(suffix = suffix, deleteOnExit = true)
+    Files.delete(path)
+    path
+  }
+
+  trait NotExistingFileFixture{
+    val path = createNotExistingFile()
+  }
+
+  // OutputStream, Writer
   trait OutputStreamFixture extends FileFixture{
     val output = Files.newOutputStream(path)
   }
@@ -119,6 +118,16 @@ trait GluinoIOCustomSpec extends GluinoCustomSpec with BeforeAndAfterAll{
   //**** Directory Fixture *****
   trait DirectoryFixture{
     val dir = GluinoPath.createTempDirectory(deleteOnExit = true)
+  }
+
+  trait NotExistingDirectoryFixture{
+    val dir = createNotExistingDirectory()
+  }
+
+  protected def createNotExistingDirectory(): Path = {
+    val path = GluinoPath.createTempDirectory(deleteOnExit = true)
+    Files.delete(path)
+    path
   }
 
   trait NotEmptyDirectoryFixture extends DirectoryFixture{

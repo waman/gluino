@@ -9,10 +9,10 @@ import java.nio.file.attribute.AclEntryFlag._
 import java.time.{Instant, OffsetDateTime, ZoneId, ZonedDateTime}
 import java.{util => jcf}
 
-import org.waman.gluino.{WindowsSpecific, ImplicitConversion}
 import org.waman.gluino.io.GluinoIOCustomSpec
 
 import org.scalatest.LoneElement._
+import org.waman.scalatest_util.{ImplicitConversion, WindowsSpecific}
 
 class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
 

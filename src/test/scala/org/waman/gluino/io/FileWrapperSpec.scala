@@ -3,14 +3,12 @@ package org.waman.gluino.io
 import java.io.{File, IOException}
 import java.nio.file.{Files, Path}
 
-import org.waman.gluino.WindowsAdministrated
-
-import scala.collection.JavaConversions._
-
 import org.scalatest.OptionValues._
 import org.waman.gluino.nio.GluinoPath
 import org.waman.gluino.number.GluinoNumber
+import org.waman.scalatest_util.WindowsAdministrated
 
+import scala.collection.JavaConversions._
 import scala.collection.mutable
 
 trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]

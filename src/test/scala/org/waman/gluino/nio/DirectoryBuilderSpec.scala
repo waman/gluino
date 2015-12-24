@@ -9,7 +9,7 @@ import java.{util => jcf}
 
 import org.scalatest.LoneElement._
 import org.waman.gluino.io.GluinoIOCustomSpec
-import org.waman.gluino.{WindowsAdministrated, PosixFileSystemSpecific, WindowsSpecific}
+import org.waman.scalatest_util.{WindowsAdministrated, WindowsSpecific, PosixFileSystemSpecific}
 
 class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
 

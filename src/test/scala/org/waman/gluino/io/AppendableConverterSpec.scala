@@ -2,8 +2,8 @@ package org.waman.gluino.io
 
 import java.nio.file.Files
 
-import org.waman.gluino.ImplicitConversion
 import org.waman.gluino.nio.PathWrapper
+import org.waman.scalatest_util.ImplicitConversion
 
 class AppendableConverterSpec extends GluinoIOCustomSpec with AppendableConverter{
 

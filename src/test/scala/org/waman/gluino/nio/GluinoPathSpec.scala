@@ -2,9 +2,9 @@ package org.waman.gluino.nio
 
 import java.nio.file.{Path, Paths}
 
-import org.waman.gluino.ImplicitConversion
 import org.waman.gluino.io.GluinoIOCustomSpec
 import org.waman.gluino.nio.GluinoPath._
+import org.waman.scalatest_util.ImplicitConversion
 
 class GluinoPathSpec extends GluinoIOCustomSpec{
 

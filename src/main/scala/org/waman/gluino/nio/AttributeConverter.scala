@@ -23,7 +23,7 @@ trait AttributeConverter {
     new FileAttributeImpl[T](name, value)
 
   // POSIX
-  def posix(s: String): FileAttribute[java.util.Set[PosixFilePermission]] =
+  def posix(s: String): FileAttribute[jcf.Set[PosixFilePermission]] =
     PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString(s))
 
   // ACL

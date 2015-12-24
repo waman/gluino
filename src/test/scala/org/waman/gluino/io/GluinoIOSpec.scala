@@ -4,7 +4,7 @@ import java.io._
 import java.nio.charset.{StandardCharsets, Charset}
 
 import org.scalamock.scalatest.MockFactory
-import org.waman.gluino.ImplicitConversion
+import org.waman.scalatest_util.ImplicitConversion
 
 class GluinoIOSpec extends GluinoIOCustomSpec with GluinoIO with MockFactory{
 
