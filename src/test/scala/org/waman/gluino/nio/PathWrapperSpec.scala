@@ -110,6 +110,28 @@ class PathWrapperSpec
 
   "***** File Operations for PathWrapper *****" - {
 
+    "createFile() method should" - {
+
+      "RETURN an Option[FileAlreadyExistsException] if the file already exist" in
+        new FileWrapperLike_FileFixture {
+          __Exercise__
+          val result = sut.createFile()
+          __Verify__
+          result.value should be (a [FileAlreadyExistsException])
+        }
+    }
+
+    "createDirectory() method should" - {
+
+      "RETURN an Option[FileAlreadyExistsException] if the directory already exist" in
+        new FileWrapperLike_FileFixture {
+          __Exercise__
+          val result = sut.createDirectory()
+          __Verify__
+          result.value should be (a [FileAlreadyExistsException])
+        }
+    }
+
     "renameTo() method should" - {
 
       // for files

@@ -23,8 +23,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def \(child: String): F
 
   def size: Long
-  def directorySize: Long = ???
-  def length: Long = ???
+  def directorySize: Long = eachFileRecurse(FileType.Files)(wrap(_).size).sum
 
   def exists: Boolean
 
@@ -36,13 +35,14 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
   protected def getFileFilterProvider: FileTypeFilterProvider[F]
 
+  //***** Create *****
+  def createFile(): Option[IOException]
+  def createDirectory(): Option[IOException]
+
   //***** Byte, InputStream/OutputStream *****
   def newInputStream: InputStream
-
   def newOutputStream(append: Boolean = false): OutputStream
-
   override protected def getInputStream: InputStream = newInputStream
-
   override protected def getOutputStream: OutputStream = newOutputStream(false)
 
   def withOutputStreamAppend[R](consumer: OutputStream => R): R =
@@ -53,15 +53,15 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
   override def append(input: Outputtable): Unit = withOutputStreamAppend(_.append(input))
 
-  def asWritable(charset: Charset = defaultCharset): Writable = newReader(charset)
+  def asOutputtable(): Outputtable = newInputStream
+
+  def <<(file: F): W = <<(wrap(file))
+  def <<(wrapper: W): W = <<(wrapper.asOutputtable())
 
   //***** String, Reader/Writer *****
   def newReader(charset: Charset): BufferedReader
-
   def newWriter(charset: Charset, append: Boolean): BufferedWriter
-
   override protected def getReader: BufferedReader = newReader(defaultCharset)
-
   override protected def getWriter: BufferedWriter = newWriter(defaultCharset, append = false)
 
   def withWriterAppend[R](consumer: BufferedWriter => R): R =
@@ -71,18 +71,16 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     newWriter(charset, append = true).withWriter(consumer)
 
   override def text: String = super.text
-
   override def text(charset: Charset): String = super.text(charset)
-
   def text_=(text: String): Unit = setText(text, defaultCharset)
-
   def setText(text: String, charset: Charset) = withWriter(_.write(text))
 
   override def readLines: Seq[String] = super.readLines
-
   override def readLines(charset: Charset): Seq[String] = super.readLines(charset)
 
   override def append(input: Writable): Unit = withWriterAppend(input.writeTo(_))
+
+  def asWritable(charset: Charset = defaultCharset): Writable = newReader(charset)
 
   //***** PrintWriter *****
   def newPrintWriter(charset: Charset, append: Boolean): PrintWriter =
@@ -117,67 +115,74 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   private def toFilter(fileType: FileType, filter: F => Boolean): F => Boolean =
     f => toFilter(fileType)(f) && filter(f)
 
-  private def consumeIfFileTypeMatches(file: F, filter: F => Boolean, consumer: F => Unit): Unit =
-    if (filter(file)) consumer(file)
+  private def consumeIfFileTypeMatches[R](file: F, filter: F => Boolean, consumer: F => R): Seq[R] =
+    if (filter(file)) Seq(consumer(file))
+    else Nil
 
   // eachFiles
-  def eachFile(consumer: F => Unit): Unit
+  def eachFile[R](consumer: F => R): Seq[R]
 
-  def eachFile(fileType: FileType)(consumer: F => Unit): Unit =
+  def eachFile[R](fileType: FileType)(consumer: F => R): Seq[R] =
     doEachFileMatch(toFilter(fileType), consumer)
 
-  def eachFileMatch(filter: F => Boolean)(consumer: F => Unit): Unit =
+  def eachFileMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
     doEachFileMatch(toFilter(FileType.Any, filter), consumer)
 
-  def eachFileMatch(fileType: FileType, filter: F => Boolean)(consumer: F => Unit): Unit =
+  def eachFileMatch[R](fileType: FileType, filter: F => Boolean)(consumer: F => R): Seq[R] =
     doEachFileMatch(toFilter(fileType, filter), consumer)
 
-  private def doEachFileMatch(filter: F => Boolean, consumer: F => Unit): Unit = eachFile { file =>
-    consumeIfFileTypeMatches(file, filter, consumer)
+  private def doEachFileMatch[R](filter: F => Boolean, consumer: F => R): Seq[R] = {
+    var result = Seq[R]()
+    eachFile(result ++= consumeIfFileTypeMatches(_, filter, consumer))
+    result
   }
 
-  def eachFileRecurse(fileType: FileType = FileType.Any, visitDirectoryPost: Boolean = false)
-                     (consumer: F => Unit): Unit =
-    doEachFileMatchRecurse(toFilter(fileType), visitDirectoryPost)(consumer)
+  def eachFileRecurse[R](fileType: FileType = FileType.Any, visitDirectoryLater: Boolean = false)
+                     (consumer: F => R): Seq[R] =
+    doEachFileMatchRecurse(toFilter(fileType), visitDirectoryLater)(consumer)
 
-  def eachFileMatchRecurse(fileType: FileType, filter: F => Boolean, visitDirectoryPost: Boolean = false)
-                          (consumer: F => Unit): Unit =
-    doEachFileMatchRecurse(toFilter(fileType, filter), visitDirectoryPost)(consumer)
+  def eachFileMatchRecurse[R](fileType: FileType, filter: F => Boolean, visitDirectoryLater: Boolean = false)
+                          (consumer: F => R): Seq[R] =
+    doEachFileMatchRecurse(toFilter(fileType, filter), visitDirectoryLater)(consumer)
 
-  private def doEachFileMatchRecurse(filter: F => Boolean, visitDirectoryPost: Boolean = false)
-                                    (consumer: F => Unit): Unit = {
-    if (!visitDirectoryPost)
-      consumeIfFileTypeMatches(getFile, filter, consumer)
+  private def doEachFileMatchRecurse[R](filter: F => Boolean, visitDirectoryLater: Boolean)
+                                    (consumer: F => R): Seq[R] = {
+    var result = Seq[R]()
+
+    if (!visitDirectoryLater)
+      result ++= consumeIfFileTypeMatches(getFile, filter, consumer)
 
     eachFile { f =>
       wrap(f) match {
         case file if file.isFile =>
-          consumeIfFileTypeMatches(f, filter, consumer)
+          result ++= consumeIfFileTypeMatches(f, filter, consumer)
         case dir if dir.isDirectory =>
-          dir.doEachFileMatchRecurse(filter, visitDirectoryPost)(consumer)
+          result ++= dir.doEachFileMatchRecurse(filter, visitDirectoryLater)(consumer)
         case _ =>
       }
     }
 
-    if (visitDirectoryPost)
-      consumeIfFileTypeMatches(getFile, filter, consumer)
+    if (visitDirectoryLater)
+      result ++= consumeIfFileTypeMatches(getFile, filter, consumer)
+
+    result
   }
 
   // eachDir
-  def eachDir(consumer: F => Unit): Unit = eachFile(FileType.Directories)(consumer)
+  def eachDir[R](consumer: F => R): Seq[R] = eachFile(FileType.Directories)(consumer)
 
-  def eachDirMatch(filter: F => Boolean)(consumer: F => Unit): Unit =
+  def eachDirMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
     eachFileMatch(FileType.Directories, filter)(consumer)
 
-  def eachDirRecurse(consumer: F => Unit): Unit =
-    eachDirRecurse(visitParentPost = false)(consumer)
+  def eachDirRecurse[R](consumer: F => R): Seq[R] =
+    eachDirRecurse(visitParentLater = false)(consumer)
 
-  def eachDirRecurse(visitParentPost: Boolean)(consumer: F => Unit): Unit =
-    eachFileRecurse(FileType.Directories, visitParentPost)(consumer)
+  def eachDirRecurse[R](visitParentLater: Boolean)(consumer: F => R): Seq[R] =
+    eachFileRecurse(FileType.Directories, visitParentLater)(consumer)
 
-  def eachDirMatchRecurse(filter: F => Boolean, visitParentPost: Boolean = false)
-                         (consumer: F => Unit): Unit =
-    eachFileMatchRecurse(FileType.Directories, filter, visitParentPost)(consumer)
+  def eachDirMatchRecurse[R](filter: F => Boolean, visitParentLater: Boolean = false)
+                         (consumer: F => R): Seq[R] =
+    eachFileMatchRecurse(FileType.Directories, filter, visitParentLater)(consumer)
 
 
   //***** Directory Operations *****
@@ -188,12 +193,15 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     case None =>
   }
 
+  /** This method is equivalent to <code>moveDir</code>() method */
+  def renameDirTo(dest: F, isOverride: Boolean = false): Option[IOException] = moveDir(dest, isOverride)
+
   def moveDir(dest: F, isOverride: Boolean = false): Option[IOException] = {
     if(!exists)
       return None
     if(!isDirectory)
       return Some(newNotDirectoryException(
-        "moveDir() method must be called on a directory: " + getFile.toString))
+        "moveDir()/renameDirTo() method must be called on a directory: " + getFile.toString))
 
     @throws(classOf[IOException])
     def _moveDir(src: W, dest: F, isOverride: Boolean): Unit = {

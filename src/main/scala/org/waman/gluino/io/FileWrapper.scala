@@ -3,22 +3,26 @@ package org.waman.gluino.io
 import java.io._
 import java.nio.charset.Charset
 
-class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
+class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper] {
 
   override protected def getFile: File = file
+
   override def fileName: String = file.getName
 
   override protected def from(s: String): File = new File(s)
+
   override protected def wrap(file: File): FileWrapper = new FileWrapper(file)
 
   override def exists: Boolean = file.exists()
 
   override def isFile: Boolean = file.isFile
+
   override def isDirectory: Boolean = file.isDirectory
 
   override def size: Long = file.length
 
   def isOlderThan(arg: File): Boolean = file.lastModified < arg.lastModified
+
   def isNewerThan(arg: File): Boolean = file.lastModified > arg.lastModified
 
   override protected def newNotDirectoryException(message: String): IOException =
@@ -29,22 +33,52 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
 
   //***** Path Operation *****
   override def /(child: String): File = new File(file.getPath + "/" + child)
+
   override def \(child: String): File = new File(file.getPath + "\\" + child)
 
   //***** byte, InputStream/OutputStream *****
-  override def newInputStream: InputStream = new FileInputStream(file)
+  override def newInputStream: InputStream = {
+    createFileIfNotExist()
+    new FileInputStream(file)
+  }
 
-  override def newOutputStream(append: Boolean = false): OutputStream =
+  override def newOutputStream(append: Boolean = false): OutputStream = {
+    createFileIfNotExist()
     new FileOutputStream(file, append)
+  }
 
   //***** String(text), Reader/Writer *****
-  override def newReader(charset: Charset): BufferedReader =
+  override def newReader(charset: Charset): BufferedReader = {
+    createFileIfNotExist()
     new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))
+  }
 
-  override def newWriter(charset: Charset, append: Boolean): BufferedWriter =
+  override def newWriter(charset: Charset, append: Boolean): BufferedWriter = {
+    createFileIfNotExist()
     new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), charset))
+  }
 
   //***** File Operation *****
+  private def createFileIfNotExist(): Unit = if(!exists)createFile()
+
+  override def createFile(): Option[IOException] = {
+    val result = file.createNewFile()
+
+    if(result) None
+    else Some(new IOException(
+      s"""Fail to create file:
+          |\t$file""".stripMargin))
+  }
+
+  override def createDirectory(): Option[IOException] = {
+    val result = file.mkdir()
+
+    if(result) None
+    else Some(new IOException(
+      s"""Fail to create directory:
+          |\t$file""".stripMargin))
+  }
+
   override def renameTo(dest: File, isOverride: Boolean): Option[IOException] = {
     if(isOverride && dest.exists() && file != dest)
       dest.delete()
@@ -96,8 +130,9 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper]{
     }
   }
 
-  override def eachFile(consumer: File => Unit): Unit = file match {
-    case d if d.isDirectory => d.listFiles().foreach(consumer(_))
-    case f => throw new IOException("eachFile() must be called on a directory: " + f)
+  override def eachFile[R](consumer: File => R): Seq[R] = file match {
+    case d if d.isDirectory => d.listFiles().map(consumer)
+    case f =>
+      throw new IOException("eachFile() must be called on a directory: " + f)
   }
 }

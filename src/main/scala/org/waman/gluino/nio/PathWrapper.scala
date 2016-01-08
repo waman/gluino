@@ -2,12 +2,13 @@ package org.waman.gluino.nio
 
 import java.io._
 import java.nio.ByteBuffer
-import java.nio.charset.{StandardCharsets, Charset}
+import java.nio.charset.Charset
+import java.nio.file.StandardOpenOption._
 import java.nio.file._
 import java.nio.file.attribute.UserDefinedFileAttributeView
 
 import org.waman.gluino.function.GluinoFunction
-import org.waman.gluino.io.{GluinoIO, FileTypeFilterProvider, FileWrapperLike}
+import org.waman.gluino.io.{FileTypeFilterProvider, FileWrapperLike, GluinoIO}
 
 import scala.collection.JavaConversions._
 
@@ -46,7 +47,7 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   def \(child: Path): Path = /(child)
 
   //***** File Attributes *****
-  def getUserDefinedFileAttribute(name: String, charset: Charset = StandardCharsets.UTF_8): String = {
+  def getUserDefinedFileAttribute(name: String, charset: Charset = GluinoIO.defaultCharset): String = {
     val att = Files.getFileAttributeView(path, classOf[UserDefinedFileAttributeView])
     val n = att.size(name)
     val byteBuffer = ByteBuffer.allocate(n)
@@ -54,28 +55,31 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
     new String(byteBuffer.array(), charset)
   }
 
-  def setUserDefinedFileAttribute(name: String, value: String, charset: Charset = StandardCharsets.UTF_8): Unit = {
+  def setUserDefinedFileAttribute(name: String, value: String, charset: Charset = GluinoIO.defaultCharset): Unit = {
     val att = Files.getFileAttributeView(path, classOf[UserDefinedFileAttributeView])
     val byteBuffer = ByteBuffer.wrap(value.getBytes(charset))
     att.write(name, byteBuffer)
   }
 
   //***** byte, InputStream/OutputStream *****
-  override def newInputStream = Files.newInputStream(path)
+  override def newInputStream = Files.newInputStream(path, CREATE)
 
   override def newOutputStream(append: Boolean = false) =
-    if(append)Files.newOutputStream(path, StandardOpenOption.APPEND)
-    else Files.newOutputStream(path)
+    if(append)Files.newOutputStream(path, CREATE, APPEND)
+    else Files.newOutputStream(path, CREATE)
 
   override def bytes: Array[Byte] = Files.readAllBytes(path)
   override def bytes_=(bytes: Array[Byte]): Unit = Files.write(path, bytes)
 
   //***** text(String), Reader/Writer *****
-  override def newReader(charset: Charset): BufferedReader = Files.newBufferedReader(path, charset)
+  override def newReader(charset: Charset): BufferedReader = {
+    if(!exists)createFile()
+    Files.newBufferedReader(path, charset)
+  }
 
   override def newWriter(charset: Charset, append: Boolean = false): BufferedWriter =
-    if(append)Files.newBufferedWriter(path, charset, StandardOpenOption.APPEND)
-    else Files.newBufferedWriter(path, charset)
+    if(append)Files.newBufferedWriter(path, charset, CREATE, APPEND)
+    else Files.newBufferedWriter(path, charset, CREATE)
 
   override def readLines: Seq[String] = Files.readAllLines(path, GluinoIO.defaultCharset)
   override def readLines(charset: Charset): Seq[String] = Files.readAllLines(path, charset)
@@ -85,6 +89,21 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
     Files.write(path, List(text), charset)
 
   //***** File Operation *****
+
+  override def createFile(): Option[IOException] = try{
+    Files.createFile(path)
+    None
+  }catch{
+    case ex: IOException => Some(ex)
+  }
+
+  override def createDirectory(): Option[IOException] = try{
+    Files.createDirectory(path)
+    None
+  }catch{
+    case ex: IOException => Some(ex)
+  }
+
   override def move(dest: Path, isOverride: Boolean = false): Option[IOException] = try{
     if(isOverride)
       Files.move(getFile, dest, StandardCopyOption.REPLACE_EXISTING)
@@ -115,10 +134,11 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   }
 
   //***** File *****
-  override def eachFile(consumer: Path => Unit): Unit = {
+  override def eachFile[R](consumer: Path => R): Seq[R] = {
     val ds = Files.list(path)
     try{
-      ds.foreach(consumer)
+      // convert iterator to List (not Stream) because iteration is stopped after directoryStream closed
+      ds.iterator.toList.map(consumer)
     }finally ds.close()
   }
 }
