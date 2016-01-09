@@ -63,14 +63,13 @@ trait InputStreamWrapperLike extends GluinoIO
   def withObjectInputStream[R](classLoader: ClassLoader)(consumer: ObjectInputStream => R): R =
     newObjectInputStream(classLoader).withObjectInputStream(consumer)
 
-
   override protected def getDataInputStream: DataInputStream = newDataInputStream()
   def newDataInputStream(): DataInputStream = new DataInputStream(getInputStream)
 
   //***** Reader factory/accessor *****
   override protected def getReader: BufferedReader = newReader(GluinoIO.defaultCharset)
 
-  def newReader(charset: Charset): BufferedReader =
+  def newReader(charset: Charset = GluinoIO.defaultCharset): BufferedReader =
     new BufferedReader(new InputStreamReader(getInputStream, charset))
 
   //+++++ ReaderWrapperLike method with Charset +++++

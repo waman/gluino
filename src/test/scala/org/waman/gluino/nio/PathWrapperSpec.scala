@@ -108,6 +108,7 @@ class PathWrapperSpec
     }
   }
 
+  //********** More Specific Type of Exception Conformations **********
   "***** File Operations for PathWrapper *****" - {
 
     "createFile() method should" - {

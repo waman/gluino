@@ -3,12 +3,14 @@ package org.waman.gluino.nio
 import java.io._
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
+import java.nio.file.StandardCopyOption.REPLACE_EXISTING
 import java.nio.file.StandardOpenOption._
 import java.nio.file._
 import java.nio.file.attribute.UserDefinedFileAttributeView
 
 import org.waman.gluino.function.GluinoFunction
-import org.waman.gluino.io.{FileTypeFilterProvider, FileWrapperLike, GluinoIO}
+import org.waman.gluino.io.GluinoIO.defaultCharset
+import org.waman.gluino.io.{FileTypeFilterProvider, FileWrapperLike}
 
 import scala.collection.JavaConversions._
 
@@ -47,7 +49,7 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   def \(child: Path): Path = /(child)
 
   //***** File Attributes *****
-  def getUserDefinedFileAttribute(name: String, charset: Charset = GluinoIO.defaultCharset): String = {
+  def getUserDefinedFileAttribute(name: String, charset: Charset = defaultCharset): String = {
     val att = Files.getFileAttributeView(path, classOf[UserDefinedFileAttributeView])
     val n = att.size(name)
     val byteBuffer = ByteBuffer.allocate(n)
@@ -55,14 +57,14 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
     new String(byteBuffer.array(), charset)
   }
 
-  def setUserDefinedFileAttribute(name: String, value: String, charset: Charset = GluinoIO.defaultCharset): Unit = {
+  def setUserDefinedFileAttribute(name: String, value: String, charset: Charset = defaultCharset): Unit = {
     val att = Files.getFileAttributeView(path, classOf[UserDefinedFileAttributeView])
     val byteBuffer = ByteBuffer.wrap(value.getBytes(charset))
     att.write(name, byteBuffer)
   }
 
   //***** byte, InputStream/OutputStream *****
-  override def newInputStream = Files.newInputStream(path, CREATE)
+  override def newInputStream() = Files.newInputStream(path)
 
   override def newOutputStream(append: Boolean = false) =
     if(append)Files.newOutputStream(path, CREATE, APPEND)
@@ -72,21 +74,18 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   override def bytes_=(bytes: Array[Byte]): Unit = Files.write(path, bytes)
 
   //***** text(String), Reader/Writer *****
-  override def newReader(charset: Charset): BufferedReader = {
-    if(!exists)createFile()
+  override def newReader(charset: Charset = defaultCharset): BufferedReader =
     Files.newBufferedReader(path, charset)
-  }
 
-  override def newWriter(charset: Charset, append: Boolean = false): BufferedWriter =
+  override def newWriter(charset: Charset = defaultCharset, append: Boolean = false): BufferedWriter =
     if(append)Files.newBufferedWriter(path, charset, CREATE, APPEND)
     else Files.newBufferedWriter(path, charset, CREATE)
 
-  override def readLines: Seq[String] = Files.readAllLines(path, GluinoIO.defaultCharset)
+  override def readLines: Seq[String] = Files.readAllLines(path, defaultCharset)
   override def readLines(charset: Charset): Seq[String] = Files.readAllLines(path, charset)
 
-  override def text_= (text: String) = Files.write(path, List(text))
-  override def setText(text: String, charset: Charset) =
-    Files.write(path, List(text), charset)
+  override def setText(text: String, charset: Charset = defaultCharset) =
+    Files.write(path, text.getBytes(charset))
 
   //***** File Operation *****
 
@@ -106,7 +105,7 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
 
   override def move(dest: Path, isOverride: Boolean = false): Option[IOException] = try{
     if(isOverride)
-      Files.move(getFile, dest, StandardCopyOption.REPLACE_EXISTING)
+      Files.move(getFile, dest, REPLACE_EXISTING)
     else
       Files.move(getFile, dest)
     None
@@ -116,7 +115,7 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
 
   override def copy(dest: Path, isOverride: Boolean = false): Option[IOException] = try{
     if(isOverride)
-      Files.copy(getFile, dest, StandardCopyOption.REPLACE_EXISTING)
+      Files.copy(getFile, dest, REPLACE_EXISTING)
     else
       Files.copy(getFile, dest)
     None

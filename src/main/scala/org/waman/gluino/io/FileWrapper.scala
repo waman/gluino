@@ -37,29 +37,24 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper] {
   override def \(child: String): File = new File(file.getPath + "\\" + child)
 
   //***** byte, InputStream/OutputStream *****
-  override def newInputStream: InputStream = {
-    createFileIfNotExist()
-    new FileInputStream(file)
-  }
+  override def newInputStream(): InputStream = new FileInputStream(file)
 
   override def newOutputStream(append: Boolean = false): OutputStream = {
-    createFileIfNotExist()
+    createFileIfNotExists()
     new FileOutputStream(file, append)
   }
 
   //***** String(text), Reader/Writer *****
-  override def newReader(charset: Charset): BufferedReader = {
-    createFileIfNotExist()
+  override def newReader(charset: Charset = GluinoIO.defaultCharset): BufferedReader =
     new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))
-  }
 
-  override def newWriter(charset: Charset, append: Boolean): BufferedWriter = {
-    createFileIfNotExist()
+  override def newWriter(charset: Charset = GluinoIO.defaultCharset, append: Boolean = false): BufferedWriter = {
+    createFileIfNotExists()
     new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), charset))
   }
 
   //***** File Operation *****
-  private def createFileIfNotExist(): Unit = if(!exists)createFile()
+  def createFileIfNotExists(): Unit = if(!exists)createFile()
 
   override def createFile(): Option[IOException] = {
     val result = file.createNewFile()

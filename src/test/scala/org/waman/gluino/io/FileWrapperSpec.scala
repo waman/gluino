@@ -182,6 +182,430 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
     }
   }
 
+  "***** set content in a lump *****" - {
+
+    "Bytes" - {
+
+      "bytes_=() method should" - {
+
+        "write bytes to this file" in new FileWrapperLike_FileWithContentFixture {
+          __Exercise__
+          sut.bytes = "内容".getBytes(ISO2022)
+          __Verify__
+          text(path, ISO2022) should equal ("内容")
+        }
+      }
+    }
+
+    "Text" - {
+
+      "setText() method should" - {
+
+        "set the content of this file to the specified text" in
+          new FileWrapperLike_FileWithContentFixture {
+            __Exercise__
+            sut.setText("Some content")
+            __Verify__
+            text(path) should equal ("Some content")
+          }
+
+        "set the content of this file to the specified text with the specified encoding" in
+          new FileWrapperLike_FileWithContentFixture {
+            __Exercise__
+            sut.setText("内容", ISO2022)
+            __Verify__
+            text(path, ISO2022) should equal ("内容")
+          }
+      }
+
+      "text_=() method should" - {
+
+        "set the content of this file to the specified text" in
+          new FileWrapperLike_FileWithContentFixture {
+            __Exercise__
+            sut.text = "Some content"
+            __Verify__
+            text(path) should equal ("Some content")
+          }
+      }
+    }
+  }
+
+  "***** Tests of fileIO for NOT existing file *****" - {
+
+    "Byte array" - {
+
+      "Reading 'bytes' property should throw IOException" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Verify__
+          an [IOException] should be thrownBy { sut.bytes }
+        }
+
+      "Writing 'bytes' property should create a new file" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.bytes = "Some content".getBytes
+          __Verify__
+          path should exist
+          text(path) should equal ("Some content")
+        }
+    }
+
+    "Byte stream (InputStream/OutputStream)" - {
+
+      // newXxxxInputStream()
+      "newInputStream() method should throw IOException" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Verify__
+          an [IOException] should be thrownBy { sut.newInputStream() }
+        }
+
+      "newDataInputStream() method should throw IOException" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Verify__
+          an [IOException] should be thrownBy { sut.newDataInputStream() }
+        }
+
+      "newObjectInputStream() method should throw IOException" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Verify__
+          an [IOException] should be thrownBy { sut.newObjectInputStream() }
+        }
+
+      "newObjectInputStream(ClassLoader) method should throw IOException" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Verify__
+          an [IOException] should be thrownBy { sut.newObjectInputStream(ClassLoader.getSystemClassLoader) }
+        }
+
+      // withXxxxInputStream()
+      "withInputStream() method should throw IOException" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Verify__
+          an [IOException] should be thrownBy { sut.withInputStream(f => f) }
+        }
+
+      "withDataInputStream() method should throw IOException" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Verify__
+          an [IOException] should be thrownBy { sut.withDataInputStream(f => f) }
+        }
+
+      "withObjectInputStream() method should throw IOException" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Verify__
+          an [IOException] should be thrownBy { sut.withObjectInputStream(f => f) }
+        }
+
+      "withObjectInputStream(ClassLoader)() method should throw IOException" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Verify__
+          an [IOException] should be thrownBy { sut.withObjectInputStream(ClassLoader.getSystemClassLoader)(f => f) }
+        }
+
+      // newXxxxOutputStream()
+      "newOutputStream() method should create a new file" - {
+
+        "the 'append' arg is omitted" in new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.newOutputStream().close()
+          __Verify__
+          path should exist
+        }
+
+        "the 'append' arg is true" in new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.newOutputStream(append = true).close()
+          __Verify__
+          path should exist
+        }
+
+        "the 'append' arg is false" in new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.newOutputStream(append = false).close()
+          __Verify__
+          path should exist
+        }
+      }
+
+      "newDataOutputStream() method should create a new file" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.newDataOutputStream().close()
+          __Verify__
+          path should exist
+        }
+
+      "newObjectOutputStream() method should create a new file" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.newObjectOutputStream().close()
+          __Verify__
+          path should exist
+        }
+
+      // withXxxxOutputStream()
+      "withOutputStream() method should create a new file" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.withOutputStream(f => f)
+          __Verify__
+          path should exist
+        }
+
+      "withOutputStreamAppend() method should create a new file" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.withOutputStreamAppend(f => f)
+          __Verify__
+          path should exist
+        }
+
+      "withDataOutputStream() method should create a new file" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.withDataOutputStream(f => f)
+          __Verify__
+          path should exist
+        }
+
+      "withObjectOutputStream() method should create a new file" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.withObjectOutputStream(f => f)
+          __Verify__
+          path should exist
+        }
+    }
+
+    "String" - {
+
+      "Reading 'text' property should throw IOException" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Verify__
+          an [IOException] should be thrownBy { sut.text }
+        }
+
+      "text(Charset) should throw IOException" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Verify__
+          an [IOException] should be thrownBy { sut.text(ISO2022) }
+        }
+
+      "Writing 'text' property should create a new file" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.text = "Some content"
+          __Verify__
+          path should exist
+          text(path) should equal("Some content")
+        }
+
+      "setText(String) should create a new file" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.setText("Some content")
+          __Verify__
+          path should exist
+          text(path) should equal("Some content")
+        }
+
+      "setText(String, Charset) should create a new file" in
+        new FileWrapperLike_NotExistingFileFixture {
+          __Exercise__
+          sut.setText("内容", ISO2022)
+          __Verify__
+          path should exist
+          text(path, ISO2022) should equal("内容")
+        }
+    }
+
+    "Character stream (Reader/Writer)" - {
+
+      // newReader/Writer()
+      "newReader() method should" - {
+
+        "throw IOException (with no arg)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Verify__
+            an[IOException] should be thrownBy {
+              sut.newReader()
+            }
+          }
+
+        "throw IOException (character set is specified)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Verify__
+            an[IOException] should be thrownBy {
+              sut.newReader(ISO2022)
+            }
+          }
+      }
+
+      "newWriter() method should" - {
+
+        "crate this file (with no arg)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.newWriter().close()
+            __Verify__
+            path should exist
+          }
+
+        "crate this file (character set is specified)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.newWriter(ISO2022).close()
+            __Verify__
+            path should exist
+          }
+
+        "crate this file (with append arg)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.newWriter(append = true).close()
+            __Verify__
+            path should exist
+          }
+
+        "crate this file (with charset and append)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.newWriter(ISO2022, append = true).close()
+            __Verify__
+            path should exist
+          }
+      }
+
+      "newPrintWriter() method should" - {
+
+        "crate this file (with no arg)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.newPrintWriter().close()
+            __Verify__
+            path should exist
+          }
+
+        "crate this file (character set is specified)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.newPrintWriter(ISO2022).close()
+            __Verify__
+            path should exist
+          }
+
+        "crate this file (with append arg)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.newPrintWriter(append = true).close()
+            __Verify__
+            path should exist
+          }
+
+        "crate this file (with charset and append)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.newPrintWriter(ISO2022, append = true).close()
+            __Verify__
+            path should exist
+          }
+      }
+
+      // withReader/Writer()
+      "withReader() method should" - {
+
+        "throw IOException" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Verify__
+            an [IOException] should be thrownBy { sut.withReader(f => f) }
+          }
+
+        "throw IOException (charset is specified)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Verify__
+            an [IOException] should be thrownBy { sut.withReader(ISO2022)(f => f) }
+          }
+      }
+
+      "withWriter() method should" - {
+
+        "crate this file" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.withWriter(f => f)
+            __Verify__
+            path should exist
+          }
+
+        "create this file (charset is specified)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.withWriter(ISO2022)(f => f)
+            __Verify__
+            path should exist
+          }
+      }
+
+      "withWriterAppend() method should" - {
+
+        "crate this file" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.withWriterAppend(f => f)
+            __Verify__
+            path should exist
+          }
+
+        "create this file (charset is specified)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.withWriterAppend(ISO2022)(f => f)
+            __Verify__
+            path should exist
+          }
+      }
+
+      "withPrintWriter() method should" - {
+
+        "crate this file" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.withPrintWriter(f => f)
+            __Verify__
+            path should exist
+          }
+
+        "create this file (charset is specified)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.withPrintWriter(ISO2022)(f => f)
+            __Verify__
+            path should exist
+          }
+      }
+
+      "withPrintWriterAppend() method should" - {
+
+        "crate this file" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.withPrintWriterAppend(f => f)
+            __Verify__
+            path should exist
+          }
+
+        "create this file (charset is specified)" in
+          new FileWrapperLike_NotExistingFileFixture {
+            __Exercise__
+            sut.withPrintWriterAppend(ISO2022)(f => f)
+            __Verify__
+            path should exist
+          }
+      }
+    }
+  }
+
   "***** File Operations *****" - {
 
     "createFile() method should" - {

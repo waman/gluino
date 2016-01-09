@@ -40,27 +40,26 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def createDirectory(): Option[IOException]
 
   //***** Byte, InputStream/OutputStream *****
-  def newInputStream: InputStream
+  def newInputStream(): InputStream
   def newOutputStream(append: Boolean = false): OutputStream
-  override protected def getInputStream: InputStream = newInputStream
+  override protected def getInputStream: InputStream = newInputStream()
   override protected def getOutputStream: OutputStream = newOutputStream(false)
 
   def withOutputStreamAppend[R](consumer: OutputStream => R): R =
     newOutputStream(true).withOutputStream(consumer)
 
-  def bytes_=(bytes: Array[Byte]): Unit =
-    newOutputStream().withOutputStream(_.write(bytes))
+  def bytes_=(bytes: Array[Byte]): Unit = newOutputStream().withOutputStream(_.write(bytes))
 
   override def append(input: Outputtable): Unit = withOutputStreamAppend(_.append(input))
 
-  def asOutputtable(): Outputtable = newInputStream
+  def asOutputtable(): Outputtable = newInputStream()
 
   def <<(file: F): W = <<(wrap(file))
   def <<(wrapper: W): W = <<(wrapper.asOutputtable())
 
   //***** String, Reader/Writer *****
-  def newReader(charset: Charset): BufferedReader
-  def newWriter(charset: Charset, append: Boolean): BufferedWriter
+  def newReader(charset: Charset = defaultCharset): BufferedReader
+  def newWriter(charset: Charset = defaultCharset, append: Boolean = false): BufferedWriter
   override protected def getReader: BufferedReader = newReader(defaultCharset)
   override protected def getWriter: BufferedWriter = newWriter(defaultCharset, append = false)
 
@@ -73,7 +72,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   override def text: String = super.text
   override def text(charset: Charset): String = super.text(charset)
   def text_=(text: String): Unit = setText(text, defaultCharset)
-  def setText(text: String, charset: Charset) = withWriter(_.write(text))
+  def setText(text: String, charset: Charset = defaultCharset) = withWriter(charset)(_.write(text))
 
   override def readLines: Seq[String] = super.readLines
   override def readLines(charset: Charset): Seq[String] = super.readLines(charset)
@@ -83,8 +82,10 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def asWritable(charset: Charset = defaultCharset): Writable = newReader(charset)
 
   //***** PrintWriter *****
-  def newPrintWriter(charset: Charset, append: Boolean): PrintWriter =
+  def newPrintWriter(charset: Charset = defaultCharset, append: Boolean = false): PrintWriter =
     new PrintWriter(newWriter(charset, append))
+
+  def withPrintWriterAppend[R](consumer: PrintWriter => R): R = withPrintWriterAppend(defaultCharset)(consumer)
 
   def withPrintWriterAppend[R](charset: Charset)(consumer: PrintWriter => R): R =
     newPrintWriter(charset, append = true).withPrintWriter(consumer)

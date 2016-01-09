@@ -1,8 +1,7 @@
 package org.waman.gluino.io
 
 import java.io.OutputStream
-import java.nio.charset.Charset
-import java.nio.file.{Files, Path}
+import java.nio.file.Path
 
 import org.waman.gluino.io.GluinoIO.{lineSeparator => sep}
 import org.waman.gluino.io.datastream.{CloseableDataOutputStreamWrapperLikeSpec, DataOutputStreamWrapperLikeSpec}
