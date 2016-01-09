@@ -133,11 +133,10 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   }
 
   //***** File *****
-  override def eachFile[R](consumer: Path => R): Seq[R] = {
+  override def eachFile(consumer: Path => Unit): Unit = {
     val ds = Files.list(path)
     try{
-      // convert iterator to List (not Stream) because iteration is stopped after directoryStream closed
-      ds.iterator.toList.map(consumer)
+      ds.foreach(consumer)
     }finally ds.close()
   }
 }

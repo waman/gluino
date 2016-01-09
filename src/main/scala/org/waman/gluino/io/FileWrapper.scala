@@ -125,8 +125,9 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper] {
     }
   }
 
-  override def eachFile[R](consumer: File => R): Seq[R] = file match {
-    case d if d.isDirectory => d.listFiles().map(consumer)
+  override def eachFile(consumer: File => Unit): Unit = file match {
+    case d if d.isDirectory =>
+      d.listFiles().foreach(consumer)
     case f =>
       throw new IOException("eachFile() must be called on a directory: " + f)
   }

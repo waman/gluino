@@ -23,7 +23,11 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def \(child: String): F
 
   def size: Long
-  def directorySize: Long = eachFileRecurse(FileType.Files)(wrap(_).size).sum
+  def directorySize: Long = {
+    var sum = 0L
+    eachFileRecurse(FileType.Files)(sum += wrap(_).size)
+    sum
+  }
 
   def exists: Boolean
 
@@ -116,73 +120,66 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   private def toFilter(fileType: FileType, filter: F => Boolean): F => Boolean =
     f => toFilter(fileType)(f) && filter(f)
 
-  private def consumeIfFileTypeMatches[R](file: F, filter: F => Boolean, consumer: F => R): Seq[R] =
+  private def consumeIfFileTypeMatches(file: F, filter: F => Boolean, consumer: F => Unit): Unit =
     if (filter(file)) Seq(consumer(file))
     else Nil
 
   // eachFiles
-  def eachFile[R](consumer: F => R): Seq[R]
+  def eachFile(consumer: F => Unit): Unit
 
-  def eachFile[R](fileType: FileType)(consumer: F => R): Seq[R] =
+  def eachFile(fileType: FileType)(consumer: F => Unit): Unit =
     doEachFileMatch(toFilter(fileType), consumer)
 
-  def eachFileMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
+  def eachFileMatch(filter: F => Boolean)(consumer: F => Unit): Unit =
     doEachFileMatch(toFilter(FileType.Any, filter), consumer)
 
-  def eachFileMatch[R](fileType: FileType, filter: F => Boolean)(consumer: F => R): Seq[R] =
+  def eachFileMatch(fileType: FileType, filter: F => Boolean)(consumer: F => Unit): Unit =
     doEachFileMatch(toFilter(fileType, filter), consumer)
 
-  private def doEachFileMatch[R](filter: F => Boolean, consumer: F => R): Seq[R] = {
-    var result = Seq[R]()
-    eachFile(result ++= consumeIfFileTypeMatches(_, filter, consumer))
-    result
-  }
+  private def doEachFileMatch(filter: F => Boolean, consumer: F => Unit): Unit =
+    eachFile(consumeIfFileTypeMatches(_, filter, consumer))
 
-  def eachFileRecurse[R](fileType: FileType = FileType.Any, visitDirectoryLater: Boolean = false)
-                     (consumer: F => R): Seq[R] =
+  def eachFileRecurse(fileType: FileType = FileType.Any, visitDirectoryLater: Boolean = false)
+                     (consumer: F => Unit): Unit =
     doEachFileMatchRecurse(toFilter(fileType), visitDirectoryLater)(consumer)
 
-  def eachFileMatchRecurse[R](fileType: FileType, filter: F => Boolean, visitDirectoryLater: Boolean = false)
-                          (consumer: F => R): Seq[R] =
+  def eachFileMatchRecurse(fileType: FileType, filter: F => Boolean, visitDirectoryLater: Boolean = false)
+                          (consumer: F => Unit): Unit =
     doEachFileMatchRecurse(toFilter(fileType, filter), visitDirectoryLater)(consumer)
 
-  private def doEachFileMatchRecurse[R](filter: F => Boolean, visitDirectoryLater: Boolean)
-                                    (consumer: F => R): Seq[R] = {
-    var result = Seq[R]()
-
+  private def doEachFileMatchRecurse(filter: F => Boolean, visitDirectoryLater: Boolean)
+                                    (consumer: F => Unit): Unit = {
     if (!visitDirectoryLater)
-      result ++= consumeIfFileTypeMatches(getFile, filter, consumer)
+      consumeIfFileTypeMatches(getFile, filter, consumer)
 
     eachFile { f =>
       wrap(f) match {
         case file if file.isFile =>
-          result ++= consumeIfFileTypeMatches(f, filter, consumer)
+          consumeIfFileTypeMatches(f, filter, consumer)
         case dir if dir.isDirectory =>
-          result ++= dir.doEachFileMatchRecurse(filter, visitDirectoryLater)(consumer)
+          dir.doEachFileMatchRecurse(filter, visitDirectoryLater)(consumer)
         case _ =>
       }
     }
 
     if (visitDirectoryLater)
-      result ++= consumeIfFileTypeMatches(getFile, filter, consumer)
-
-    result
+      consumeIfFileTypeMatches(getFile, filter, consumer)
   }
 
   // eachDir
-  def eachDir[R](consumer: F => R): Seq[R] = eachFile(FileType.Directories)(consumer)
+  def eachDir(consumer: F => Unit): Unit = eachFile(FileType.Directories)(consumer)
 
-  def eachDirMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
+  def eachDirMatch(filter: F => Boolean)(consumer: F => Unit): Unit =
     eachFileMatch(FileType.Directories, filter)(consumer)
 
-  def eachDirRecurse[R](consumer: F => R): Seq[R] =
+  def eachDirRecurse(consumer: F => Unit): Unit =
     eachDirRecurse(visitParentLater = false)(consumer)
 
-  def eachDirRecurse[R](visitParentLater: Boolean)(consumer: F => R): Seq[R] =
+  def eachDirRecurse(visitParentLater: Boolean)(consumer: F => Unit): Unit =
     eachFileRecurse(FileType.Directories, visitParentLater)(consumer)
 
-  def eachDirMatchRecurse[R](filter: F => Boolean, visitParentLater: Boolean = false)
-                         (consumer: F => R): Seq[R] =
+  def eachDirMatchRecurse(filter: F => Boolean, visitParentLater: Boolean = false)
+                         (consumer: F => Unit): Unit =
     eachFileMatchRecurse(FileType.Directories, filter, visitParentLater)(consumer)
 
 
