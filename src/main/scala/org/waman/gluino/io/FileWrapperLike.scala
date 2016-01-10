@@ -189,37 +189,37 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     result
   }
 
-  def mapFile[R](consumer: F => R): Seq[R] = collect(eachFile, consumer)
+  def mapFiles[R](consumer: F => R): Seq[R] = collect(eachFile, consumer)
 
-  def mapFile[R](fileType: FileType)(consumer: F => R): Seq[R] = collect(eachFile(fileType), consumer)
+  def mapFiles[R](fileType: FileType)(consumer: F => R): Seq[R] = collect(eachFile(fileType), consumer)
 
-  def mapFileMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
+  def mapFilesMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
     collect(eachFileMatch(filter), consumer)
 
-  def mapFileMatch[R](fileType: FileType, filter: F => Boolean)(consumer: F => R): Seq[R] =
+  def mapFilesMatch[R](fileType: FileType, filter: F => Boolean)(consumer: F => R): Seq[R] =
     collect(eachFileMatch(fileType, filter), consumer)
 
-  def mapFileRecurse[R](fileType: FileType = FileType.Any, visitDirectoryLater: Boolean = false)
-                     (consumer: F => R): Seq[R] =
+  def mapFilesRecurse[R](fileType: FileType = FileType.Any, visitDirectoryLater: Boolean = false)
+                        (consumer: F => R): Seq[R] =
     collect(eachFileRecurse(fileType, visitDirectoryLater), consumer)
 
-  def mapFileMatchRecurse[R](fileType: FileType, filter: F => Boolean, visitDirectoryLater: Boolean = false)
-                          (consumer: F => R): Seq[R] =
+  def mapFilesMatchRecurse[R](fileType: FileType, filter: F => Boolean, visitDirectoryLater: Boolean = false)
+                             (consumer: F => R): Seq[R] =
     collect(eachFileMatchRecurse(fileType, filter, visitDirectoryLater), consumer)
 
   // mapDir
-  def mapDir[R](consumer: F => R): Seq[R] = collect(eachDir, consumer)
+  def mapDirs[R](consumer: F => R): Seq[R] = collect(eachDir, consumer)
 
-  def mapDirMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
+  def mapDirsMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
     collect(eachDirMatch(filter), consumer)
 
-  def mapDirRecurse[R](consumer: F => R): Seq[R] = collect(eachDirRecurse, consumer)
+  def mapDirsRecurse[R](consumer: F => R): Seq[R] = collect(eachDirRecurse, consumer)
 
-  def mapDirRecurse[R](visitParentLater: Boolean)(consumer: F => R): Seq[R] =
+  def mapDirsRecurse[R](visitParentLater: Boolean)(consumer: F => R): Seq[R] =
     collect(eachDirRecurse(visitParentLater), consumer)
 
-  def mapDirMatchRecurse[R](filter: F => Boolean, visitParentLater: Boolean = false)
-                         (consumer: F => R): Seq[R] =
+  def mapDirsMatchRecurse[R](filter: F => Boolean, visitParentLater: Boolean = false)
+                            (consumer: F => R): Seq[R] =
     collect(eachDirMatchRecurse(filter, visitParentLater), consumer)
 
   //***** Directory Operations *****

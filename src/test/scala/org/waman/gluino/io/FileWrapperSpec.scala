@@ -1944,26 +1944,26 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
       }
     }
 
-    "***** mapFile[Match][Recurse]() *****" - {
+    "***** mapFiles[Match][Recurse]() *****" - {
 
-      "mapFile{} method should" - {
+      "mapFiles{} method should" - {
 
         "map files and directories in the specified directory (NOT deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFile(f => f)
+            val result = sut.mapFiles(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq("child1.txt", "child2.txt", "child3.txt", "dir1", "dir2", "dir3")
           }
       }
 
-      "mapFile(FileType){} method should" - {
+      "mapFiles(FileType){} method should" - {
 
         "map files in the specified directory if the argument is FileType.Files (NOT deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFile(FileType.Files)(f => f)
+            val result = sut.mapFiles(FileType.Files)(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq("child1.txt", "child2.txt", "child3.txt")
@@ -1972,7 +1972,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "map directories in the specified directory if the argument is FileType.Directories (NOT deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFile(FileType.Directories)(f => f)
+            val result = sut.mapFiles(FileType.Directories)(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq("dir1", "dir2", "dir3")
@@ -1981,7 +1981,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "map files and directories in the specified directory if the argument is FileType.Any (NOT deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFile(FileType.Any)(f => f)
+            val result = sut.mapFiles(FileType.Any)(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq("child1.txt", "child2.txt", "child3.txt", "dir1", "dir2", "dir3")
@@ -1993,19 +1993,19 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "map files and directories which matches the specified condition in the specified directory (NOT deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileMatch(fileNameContains("2"))(f => f)
+            val result = sut.mapFilesMatch(fileNameContains("2"))(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq("child2.txt", "dir2")
           }
       }
 
-      "mapFileMatch(FileType, F => Boolean){} method should" - {
+      "mapFilesMatch(FileType, F => Boolean){} method should" - {
 
         "map files which matches the specified condition in the specified directory if the FileType argument is Files (NOT deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileMatch(FileType.Files, fileNameContains("2"))(f => f)
+            val result = sut.mapFilesMatch(FileType.Files, fileNameContains("2"))(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs Seq("child2.txt")
           }
@@ -2013,7 +2013,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "map directories which matches the specified condition in the specified directory if the FileType argument is Directories (NOT deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileMatch(FileType.Directories, fileNameContains("2"))(f => f)
+            val result = sut.mapFilesMatch(FileType.Directories, fileNameContains("2"))(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs Seq("dir2")
           }
@@ -2021,19 +2021,19 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "map files and directories which matches the specified condition in the specified directory if the FileType argument is Any (NOT deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileMatch(FileType.Any, fileNameContains("2"))(f => f)
+            val result = sut.mapFilesMatch(FileType.Any, fileNameContains("2"))(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq("child2.txt", "dir2")
           }
       }
 
-      "mapFileRecurse(FileType, Boolean){} method should" - {
+      "mapFilesRecurse(FileType, Boolean){} method should" - {
 
         "map files (deeply iterate) in the specified directory if the FileType argument is Files" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileRecurse(FileType.Files)(f => f)
+            val result = sut.mapFilesRecurse(FileType.Files)(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq("child1.txt", "child2.txt", "child3.txt",
@@ -2045,7 +2045,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "map directories (deeply iterate) in the specified directory if the FileType argument is Directories" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileRecurse(FileType.Directories)(f => f)
+            val result = sut.mapFilesRecurse(FileType.Directories)(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq(sut.fileName, "dir1", "dir2", "dir3", "dir31")
@@ -2054,7 +2054,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "map files and directories (deeply iterate) in the specified directory if the FileType argument is FileType.Any" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileRecurse(FileType.Any)(f => f)
+            val result = sut.mapFilesRecurse(FileType.Any)(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq("child1.txt", "child2.txt", "child3.txt",
@@ -2067,7 +2067,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "map files and directories (deeply iterate) in the specified directory if the FileType argument is omitted" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileRecurse()(f => f)
+            val result = sut.mapFilesRecurse()(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq("child1.txt", "child2.txt", "child3.txt",
@@ -2080,7 +2080,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "visit each directory after its children if visitDirectoryLater is true" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val files = sut.mapFileRecurse(FileType.Any, visitDirectoryLater = true)(f => f)
+            val files = sut.mapFilesRecurse(FileType.Any, visitDirectoryLater = true)(f => f)
             __Verify__
             val result = fileNames(files)
             result should contain inOrder("child11.txt", "dir1", sut.fileName)
@@ -2097,7 +2097,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "visit each directory before its children if visitDirectoryLater is false (DO deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val files = sut.mapFileRecurse(FileType.Any, visitDirectoryLater = false)(f => f)
+            val files = sut.mapFilesRecurse(FileType.Any, visitDirectoryLater = false)(f => f)
             __Verify__
             var result = fileNames(files)
             result should contain inOrder(sut.fileName, "dir1", "child11.txt")
@@ -2114,7 +2114,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "visit each directory before its children if visitDirectoryLater is omitted" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val files = sut.mapFileRecurse(FileType.Any)(f => f)
+            val files = sut.mapFilesRecurse(FileType.Any)(f => f)
             __Verify__
             val result = fileNames(files)
             result should contain inOrder(sut.fileName, "dir1", "child11.txt")
@@ -2130,12 +2130,12 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
       }
 
 
-      "mapFileMatchRecurse(F => Boolean, FileType, Boolean){} method should" - {
+      "mapFilesMatchRecurse(F => Boolean, FileType, Boolean){} method should" - {
 
         "map files which matches the specified condition in the specified directory if the FileType argument is Files" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileMatchRecurse(FileType.Files, fileNameContains("2"))(f => f)
+            val result = sut.mapFilesMatchRecurse(FileType.Files, fileNameContains("2"))(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq("child2.txt", "child12.txt", "child21.txt", "child22.txt", "child23.txt", "child312.txt")
@@ -2144,7 +2144,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "map directories which matches the specified condition in the specified directory if the FileType argument is Directories" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileMatchRecurse(FileType.Directories, fileNameContains("3"))(f => f)
+            val result = sut.mapFilesMatchRecurse(FileType.Directories, fileNameContains("3"))(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq(sut.fileName, "dir3", "dir31")
@@ -2153,7 +2153,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "map files and directories which matches the specified condition in the specified directory if the FileType argument is Any" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileMatchRecurse(FileType.Any, fileNameContains("3"))(f => f)
+            val result = sut.mapFilesMatchRecurse(FileType.Any, fileNameContains("3"))(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq("child3.txt", "child23.txt",
@@ -2164,7 +2164,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "visit each directory after its children if visitDirectoryLater is true" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileMatchRecurse(FileType.Any, fileNameContains("3"), visitDirectoryLater = true)(f => f)
+            val result = sut.mapFilesMatchRecurse(FileType.Any, fileNameContains("3"), visitDirectoryLater = true)(f => f)
             __Verify__
             fileNames(result) should contain inOrder("child312.txt", "dir31", "dir3", sut.fileName)
           }
@@ -2172,7 +2172,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "visit each directory before its children if visitDirectoryLater is false (DO deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileMatchRecurse(FileType.Any, fileNameContains("3"), visitDirectoryLater = false)(f => f)
+            val result = sut.mapFilesMatchRecurse(FileType.Any, fileNameContains("3"), visitDirectoryLater = false)(f => f)
             __Verify__
             fileNames(result) should contain inOrder(sut.fileName, "dir3", "dir31", "child311.txt")
           }
@@ -2180,43 +2180,43 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "visit each directory before its children if visitDirectoryLater is omitted" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapFileMatchRecurse(FileType.Any, fileNameContains("3"))(f => f)
+            val result = sut.mapFilesMatchRecurse(FileType.Any, fileNameContains("3"))(f => f)
             __Verify__
             fileNames(result) should contain inOrder(sut.fileName, "dir3", "dir31", "child312.txt")
           }
       }
     }
 
-    "***** mapDir[Match][Recurse] *****" - {
+    "***** mapDirs[Match][Recurse] *****" - {
 
-      "mapDir{} method should" - {
+      "mapDirs{} method should" - {
 
         "map directories in the specified directory (NOT deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapDir(f => f)
+            val result = sut.mapDirs(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs Seq("dir1", "dir2", "dir3")
           }
       }
 
-      "mapDirMatch(F => Boolean){} method should" - {
+      "mapDirsMatch(F => Boolean){} method should" - {
 
         "map directories which matches the specified condition in the specified directory (NOT deeply iterate)" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapDirMatch(fileNameContains("2"))(f => f)
+            val result = sut.mapDirsMatch(fileNameContains("2"))(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs Seq("dir2")
           }
       }
 
-      "mapDirRecurse{} method should" - {
+      "mapDirsRecurse{} method should" - {
 
         "map directories (deeply iterate) in the specified directory" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapDirRecurse(f => f)
+            val result = sut.mapDirsRecurse(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs
               Seq(sut.fileName, "dir1", "dir2", "dir3", "dir31")
@@ -2225,7 +2225,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "visit each directory before its children." in
           new FileWrapperLike_ReadOnlyDirFixture {
               __Exercise__
-            val dirs = sut.mapDirRecurse(f => f)
+            val dirs = sut.mapDirsRecurse(f => f)
             __Verify__
             val result = fileNames(dirs)
             result should contain inOrder (sut.fileName, "dir1")
@@ -2234,12 +2234,12 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
           }
       }
 
-      "mapDirRecurse(Boolean){} method should" - {
+      "mapDirsRecurse(Boolean){} method should" - {
 
         "visit each directory after its children if visitParentLater is true" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val dirs = sut.mapDirRecurse(visitParentLater = true)(f => f)
+            val dirs = sut.mapDirsRecurse(visitParentLater = true)(f => f)
             __Verify__
             val result = fileNames(dirs)
             result should contain inOrder("dir1", sut.fileName)
@@ -2250,7 +2250,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "visit each directory before its children if visitParentLater is false" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val dirs = sut.mapDirRecurse(visitParentLater = false)(f => f)
+            val dirs = sut.mapDirsRecurse(visitParentLater = false)(f => f)
             __Verify__
             val result = fileNames(dirs)
             result should contain inOrder(sut.fileName, "dir1")
@@ -2260,12 +2260,12 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
       }
 
 
-      "mapDirMatchRecurse(F => Boolean, Boolean){} method should" - {
+      "mapDirsMatchRecurse(F => Boolean, Boolean){} method should" - {
 
         "map directories which matches the specified condition in the specified directory" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapDirMatchRecurse(fileNameContains("3"))(f => f)
+            val result = sut.mapDirsMatchRecurse(fileNameContains("3"))(f => f)
             __Verify__
             fileNames(result) should contain theSameElementsAs Seq(sut.fileName, "dir3", "dir31")
           }
@@ -2273,7 +2273,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "visit directory after its children if visitParentLater is true" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapDirMatchRecurse(fileNameContains("3"), visitParentLater = true)(f => f)
+            val result = sut.mapDirsMatchRecurse(fileNameContains("3"), visitParentLater = true)(f => f)
             __Verify__
             fileNames(result) should contain inOrder("dir31", "dir3", sut.fileName)
           }
@@ -2281,7 +2281,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "visit directory before its children if visitParentLater is false" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapDirMatchRecurse(fileNameContains("3"), visitParentLater = false)(f => f)
+            val result = sut.mapDirsMatchRecurse(fileNameContains("3"), visitParentLater = false)(f => f)
             __Verify__
             fileNames(result) should contain inOrder(sut.fileName, "dir3", "dir31")
           }
@@ -2289,7 +2289,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         "visit directory before its children if visitDirectoryLater is omitted" in
           new FileWrapperLike_ReadOnlyDirFixture {
             __Exercise__
-            val result = sut.mapDirMatchRecurse(fileNameContains("3"))(f => f)
+            val result = sut.mapDirsMatchRecurse(fileNameContains("3"))(f => f)
             __Verify__
             fileNames(result) should contain inOrder(sut.fileName, "dir3", "dir31")
           }
