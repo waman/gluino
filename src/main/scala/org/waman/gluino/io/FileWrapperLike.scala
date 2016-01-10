@@ -182,6 +182,45 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
                          (consumer: F => Unit): Unit =
     eachFileMatchRecurse(FileType.Directories, filter, visitParentLater)(consumer)
 
+  // mapFiles
+  private def collect[R](ite: (F => Unit) => Unit, consumer: F => R): Seq[R] = {
+    var result = Seq[R]()
+    ite(result :+= consumer(_))
+    result
+  }
+
+  def mapFile[R](consumer: F => R): Seq[R] = collect(eachFile, consumer)
+
+  def mapFile[R](fileType: FileType)(consumer: F => R): Seq[R] = collect(eachFile(fileType), consumer)
+
+  def mapFileMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
+    collect(eachFileMatch(filter), consumer)
+
+  def mapFileMatch[R](fileType: FileType, filter: F => Boolean)(consumer: F => R): Seq[R] =
+    collect(eachFileMatch(fileType, filter), consumer)
+
+  def mapFileRecurse[R](fileType: FileType = FileType.Any, visitDirectoryLater: Boolean = false)
+                     (consumer: F => R): Seq[R] =
+    collect(eachFileRecurse(fileType, visitDirectoryLater), consumer)
+
+  def mapFileMatchRecurse[R](fileType: FileType, filter: F => Boolean, visitDirectoryLater: Boolean = false)
+                          (consumer: F => R): Seq[R] =
+    collect(eachFileMatchRecurse(fileType, filter, visitDirectoryLater), consumer)
+
+  // mapDir
+  def mapDir[R](consumer: F => R): Seq[R] = collect(eachDir, consumer)
+
+  def mapDirMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
+    collect(eachDirMatch(filter), consumer)
+
+  def mapDirRecurse[R](consumer: F => R): Seq[R] = collect(eachDirRecurse, consumer)
+
+  def mapDirRecurse[R](visitParentLater: Boolean)(consumer: F => R): Seq[R] =
+    collect(eachDirRecurse(visitParentLater), consumer)
+
+  def mapDirMatchRecurse[R](filter: F => Boolean, visitParentLater: Boolean = false)
+                         (consumer: F => R): Seq[R] =
+    collect(eachDirMatchRecurse(filter, visitParentLater), consumer)
 
   //***** Directory Operations *****
   protected def newNotDirectoryException(message: String): IOException

@@ -3,15 +3,22 @@ package org.waman.gluino.nio
 import java.io.{BufferedReader, BufferedWriter, InputStream, OutputStream}
 import java.nio.channels.SeekableByteChannel
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets.UTF_8
 import java.nio.file._
 import java.nio.file.attribute._
 
 import org.waman.gluino.function.GluinoFunction
+import org.waman.gluino.io.GluinoIO
 
 import scala.collection.JavaConversions._
 
-class FilesCategory(path: Path) extends GluinoFunction{
+import scala.language.implicitConversions
+
+trait FilesCategory extends AttributeConverter{
+
+  implicit def convertPathToFilesDelegate(path:Path): FilesDelegate = new FilesDelegate(path)
+}
+
+class FilesDelegate(path: Path) extends GluinoFunction  {
 
   //***** Creation *****
   def createFile(attributes: Seq[FileAttribute[_]] = Nil): Path =
@@ -34,21 +41,21 @@ class FilesCategory(path: Path) extends GluinoFunction{
   // links
   def createLink(target: Path): Path = Files.createLink(path, target)
 
-  def createSymbolicLink(target: Path, attributes: Seq[FileAttribute[_]] = Nil) =
+  def createSymbolicLink(target: Path, attributes: Seq[FileAttribute[_]] = Nil): Path =
     Files.createSymbolicLink(path, target, attributes:_*)
 
 
   //***** Operation *****
   // exist/delete
-//  def exists: Boolean = Files.exists(path)
-  def exists(options: Set[LinkOption]): Boolean = Files.exists(path, options.toArray:_*)
-  def notExists: Boolean = Files.notExists(path)
-  def	notExists(options: Set[LinkOption]): Boolean = Files.notExists(path, options.toArray:_*)
-//  def delete(): Unit = Files.delete(path)
+  def exists(options: Set[LinkOption] = Set()): Boolean = Files.exists(path, options.toArray:_*)
+  def	notExists(options: Set[LinkOption] = Set()): Boolean = Files.notExists(path, options.toArray:_*)
+  def delete(): Unit = Files.delete(path)
   def	deleteIfExists(): Boolean = Files.deleteIfExists(path)
 
   // copy/move
-  def copyFromStream(in: InputStream, options: Set[CopyOption] = Set()): Long = Files.copy(in, path, options.toArray:_*)
+  def copyFromStream(in: InputStream, options: Set[CopyOption] = Set()): Long =
+    Files.copy(in, path, options.toArray:_*)
+
   def copyToStream(out: OutputStream): Long = Files.copy(path, out)
 
   def copyFrom(source: Path, options: Set[CopyOption] = Set()): Path =
@@ -71,7 +78,6 @@ class FilesCategory(path: Path) extends GluinoFunction{
   def	isWritable: Boolean = Files.isWritable(path)
 
   // Byte
-  @Deprecated
   def readAllBytes(): Array[Byte] = Files.readAllBytes(path)
 
   /** @see java.nio.file.Files#write(Path, byte[], OpenOption*) */
@@ -79,10 +85,10 @@ class FilesCategory(path: Path) extends GluinoFunction{
     Files.write(path, bytes, options.toArray:_*)
 
   // InputStream/OutputStream
-  def newInputStream(options: Set[OpenOption]): InputStream =
+  def newInputStream(options: Set[OpenOption] = Set()): InputStream =
     Files.newInputStream(path, options.toArray:_*)
 
-  def	newOutputStream(options: Set[OpenOption]): OutputStream =
+  def	newOutputStream(options: Set[OpenOption] = Set()): OutputStream =
     Files.newOutputStream(path, options.toArray:_*)
 
   // ByteChannel
@@ -91,26 +97,25 @@ class FilesCategory(path: Path) extends GluinoFunction{
     Files.newByteChannel(path, options, attributes:_*)
 
   // Seq[String]
-  @Deprecated
-  def readAllLines(charset: Charset = UTF_8): Seq[String] =
+  def readAllLines(charset: Charset = GluinoIO.defaultCharset): Seq[String] =
     Files.readAllLines(path, charset)
 
   def write
-    (lines: Seq[String], charset: Charset = UTF_8, options: Set[OpenOption] = Set()): Path =
+    (lines: Seq[String], charset: Charset = GluinoIO.defaultCharset, options: Set[OpenOption] = Set()): Path =
     Files.write(path, lines, charset, options.toArray:_*)
 
   // BufferedReader/BufferedWriter
-  def	newBufferedReader(charset: Charset = UTF_8): BufferedReader =
+  def	newBufferedReader(charset: Charset = GluinoIO.defaultCharset): BufferedReader =
     Files.newBufferedReader(path, charset)
 
   def	newBufferedWriter
-    (charset: Charset = UTF_8, options: Set[OpenOption] = Set()): BufferedWriter =
+    (charset: Charset = GluinoIO.defaultCharset, options: Set[OpenOption] = Set()): BufferedWriter =
     Files.newBufferedWriter(path, charset, options.toArray:_*)
 
   // Stream
   def lines(consumer: Stream[String] => Unit): Unit = lines()(consumer)
 
-  def	lines(charset: Charset = UTF_8)(consumer: Stream[String] => Unit): Unit = {
+  def	lines(charset: Charset = GluinoIO.defaultCharset)(consumer: Stream[String] => Unit): Unit = {
     val lines = Files.lines(path, charset)
     try{
       consumer(lines)
@@ -121,10 +126,8 @@ class FilesCategory(path: Path) extends GluinoFunction{
   }
 
   //***** Attributes *****
-  def isRegularFile: Boolean = Files.isRegularFile(path)
-  def isRegularFile(options: Set[LinkOption]): Boolean = Files.isRegularFile(path, options.toArray:_*)
-  def isDirectory: Boolean = Files.isDirectory(path)
-  def	isDirectory(options: Set[LinkOption]): Boolean = Files.isDirectory(path, options.toArray:_*)
+  def isRegularFile(options: Set[LinkOption] = Set()): Boolean = Files.isRegularFile(path, options.toArray:_*)
+  def	isDirectory(options: Set[LinkOption] = Set()): Boolean = Files.isDirectory(path, options.toArray:_*)
 
   def isExecutable: Boolean = Files.isExecutable(path)
   def isHidden: Boolean = Files.isHidden(path)
@@ -137,7 +140,6 @@ class FilesCategory(path: Path) extends GluinoFunction{
   def lastModifiedTime: FileTime = Files.getLastModifiedTime(path)
   def getLastModifiedTime(options: Set[LinkOption] = Set()): FileTime = Files.getLastModifiedTime(path)
   def lastModifiedTime_= (fileTime: FileTime): Path = Files.setLastModifiedTime(path, fileTime)
-  def lastModifiedTime_= (time: Long): Path = lastModifiedTime_=(FileTime.fromMillis(time))
 
   // Owner
   def owner: UserPrincipal = Files.getOwner(path)
@@ -204,11 +206,14 @@ class FilesCategory(path: Path) extends GluinoFunction{
 
 
   //***** walk file tree *****
-  def walkFileTree
-    (options: Set[FileVisitOption] = Set(), maxDepth: Int = Integer.MAX_VALUE, visitor: FileVisitor[_ >: Path]): Path =
+  def walkFileTree(options: Set[FileVisitOption] = Set(),
+                   maxDepth: Int = Integer.MAX_VALUE,
+                   visitor: FileVisitor[_ >: Path]): Path =
     Files.walkFileTree(path, options, maxDepth, visitor)
 
-  def find(matcher: (Path, BasicFileAttributes) => Boolean, maxDepth: Int = Integer.MAX_VALUE, options: Set[FileVisitOption] = Set())
+  def find(matcher: (Path, BasicFileAttributes) => Boolean,
+           maxDepth: Int = Integer.MAX_VALUE,
+           options: Set[FileVisitOption] = Set())
           (consumer: Stream[Path] => Unit): Unit = {
     val stream = Files.find(path, maxDepth, matcher, options.toArray: _*)
     try{
@@ -234,7 +239,7 @@ class FilesCategory(path: Path) extends GluinoFunction{
 
 
   //***** File System etc. *****
-  def probeContentType: String = Files.probeContentType(path)
+  def probeContentType(): String = Files.probeContentType(path)
 
-  def	getFileStore: FileStore = Files.getFileStore(path)
+  def	fileStore: FileStore = Files.getFileStore(path)
 }
