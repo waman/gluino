@@ -95,12 +95,12 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
           val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
 
           file("build.sbt") <<
-            s"""name := "${baseDir.getFileName}"
-                |
-                |version := "0.1-SNAPSHOT"
-                |
-                |libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
-                |""".stripMargin
+            """name := "test-project"
+              |
+              |version := "0.1-SNAPSHOT"
+              |
+              |libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
+              |""".stripMargin
 
           file("README.md") << "Read me!"
           file(".gitignore") << "target/"

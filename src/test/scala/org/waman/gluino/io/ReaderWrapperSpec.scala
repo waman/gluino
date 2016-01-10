@@ -131,7 +131,7 @@ trait ReaderWrapperLikeSpec extends GluinoIOCustomSpec{
 
     "splitEachLine() method should split each line by the specified regex" in new ReaderWrapperLikeFixture{
       __SetUp__
-      val result = new mutable.ListBuffer[String]()
+      val result = new mutable.ListBuffer[String]
       __Exercise__
       sut.splitEachLine("\\s+".r)(result ++= _)
       __Verify__

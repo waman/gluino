@@ -47,8 +47,10 @@ class FilesDelegate(path: Path) extends GluinoFunction  {
 
   //***** Operation *****
   // exist/delete
-  def exists(options: Set[LinkOption] = Set()): Boolean = Files.exists(path, options.toArray:_*)
-  def	notExists(options: Set[LinkOption] = Set()): Boolean = Files.notExists(path, options.toArray:_*)
+  def exists: Boolean = Files.exists(path)
+  def exists(options: Set[LinkOption]): Boolean = Files.exists(path, options.toArray:_*)
+  def	notExists: Boolean = Files.notExists(path)
+  def	notExists(options: Set[LinkOption]): Boolean = Files.notExists(path, options.toArray:_*)
   def delete(): Unit = Files.delete(path)
   def	deleteIfExists(): Boolean = Files.deleteIfExists(path)
 
@@ -126,8 +128,10 @@ class FilesDelegate(path: Path) extends GluinoFunction  {
   }
 
   //***** Attributes *****
-  def isRegularFile(options: Set[LinkOption] = Set()): Boolean = Files.isRegularFile(path, options.toArray:_*)
-  def	isDirectory(options: Set[LinkOption] = Set()): Boolean = Files.isDirectory(path, options.toArray:_*)
+  def isRegularFile: Boolean = Files.isRegularFile(path)
+  def isRegularFile(options: Set[LinkOption]): Boolean = Files.isRegularFile(path, options.toArray:_*)
+  def	isDirectory: Boolean = Files.isDirectory(path)
+  def	isDirectory(options: Set[LinkOption]): Boolean = Files.isDirectory(path, options.toArray:_*)
 
   def isExecutable: Boolean = Files.isExecutable(path)
   def isHidden: Boolean = Files.isHidden(path)

@@ -19,7 +19,7 @@ class GluinoFunctionSpec extends GluinoIOCustomSpec with GluinoFunction{
   "convertJavaFunctionToFunction() method should convert java.util.function.Function to Function of Scala" in {
     __SetUp__
     val jf: juf.Function[String, Integer] = new juf.Function[String, Integer]{
-      override def apply(s: String): Integer = s(0).toInt
+      override def apply(s: String): Integer = s.substring(0, 1).toInt
     }
     __Exercise__
     val f: String => Integer = convertJavaFunctionToFunction(jf)

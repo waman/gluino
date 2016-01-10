@@ -3,12 +3,17 @@ package org.waman.gluino.nio
 import java.nio.file.{NoSuchFileException, Files}
 import java.nio.file.attribute.PosixFilePermission
 
+import org.scalamock.scalatest.MockFactory
+
 import scala.collection.JavaConversions._
 
 import org.waman.gluino.io.GluinoIOCustomSpec
 import org.waman.scalatest_util.{WindowsAdministrated, ImplicitConversion, PosixFileSystemSpecific}
 
-class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with AttributeConverter{
+class FilesCategorySpec extends GluinoIOCustomSpec
+    with FilesCategory
+    with AttributeConverter
+    with MockFactory{
 
   "Implicit Conversion" taggedAs ImplicitConversion ignore {
 
@@ -29,7 +34,7 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
         Files.isRegularFile(path) should equal (true)
       }
 
-      // TODO
+      // TODO: case where FileAttribute arg is specified
     }
 
     "createDirectory() method should" - {
@@ -42,7 +47,7 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
         Files.isDirectory(dir) should equal (true)
       }
 
-      // TODO
+      // TODO: case where FileAttribute arg is specified
     }
 
     "createDirectories() method should" - {
@@ -57,7 +62,7 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
         Files.isDirectory(sut) should equal (true)
       }
 
-      // TODO
+      // TODO: case where FileAttribute arg is specified
     }
 
     "createLink(target: Path) method should create a link" in {
@@ -82,7 +87,7 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
         text(sut) should equal (contentAsString)
       }
 
-      // TODO
+      // TODO: case where FileAttribute arg is specified
     }
   }
    
@@ -116,7 +121,7 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
         sut.getFileName.toString should endWith (".txt")
       }
 
-      // TODO
+      // TODO: case where FileAttribute arg is specified
     }
 
     "createTempDirectory() method should" - {
@@ -138,7 +143,7 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
         Files.isDirectory(sut) should equal (true)
       }
 
-      // TODO
+      // TODO: case where FileAttribute arg is specified
     }
   }
 
@@ -148,52 +153,42 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
 
       "exists() method should" - {
 
-        "return true if the file exists" in {
+        "return true if the file exists" in new FileFixture{
           __Verify__
-          readOnlyPath.exists() should equal (true)
-        }
-
-        "return false if the file does not exist" in new NotExistingFileFixture {
-          __Verify__
-          path.exists() should equal (false)
+          path.exists should equal (true)
         }
 
         "return true if the directory exists" in new DirectoryFixture {
           __Verify__
-          dir.exists() should equal (true)
+          dir.exists should equal (true)
         }
 
-        "return false if the directory does not exist" in new NotExistingDirectoryFixture {
+        "return false if the file or directory does not exist" in new NotExistingFileFixture {
           __Verify__
-          dir.exists() should equal (false)
+          path.exists should equal (false)
         }
 
-        // TODO
+        // TODO: case where LinkOption arg is specified
       }
 
       "notExists()"- {
 
-        "return false if the file exists" in {
+        "return false if the file exists" in new FileFixture{
           __Verify__
-          readOnlyPath.notExists() should equal (false)
-        }
-
-        "return true if the file does not exist" in new NotExistingFileFixture {
-          __Verify__
-          path.notExists() should equal (true)
+          path.notExists should equal (false)
         }
 
         "return false if the directory exists" in new DirectoryFixture {
           __Verify__
-          dir.notExists() should equal (false)
+          dir.notExists should equal (false)
         }
 
-        "return true if the directory does not exist" in new NotExistingDirectoryFixture {
+        "return true if the file does not exist" in new NotExistingFileFixture {
           __Verify__
-          dir.notExists() should equal (true)
+          path.notExists should equal (true)
         }
 
-        // TODO
+        // TODO: case where LinkOption arg is specified
       }
 
       "delete() method should" - {
@@ -236,13 +231,6 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
           path should not (exist)
         }
 
-        "do nothing if the specified file does not exist" in new NotExistingFileFixture {
-          __Exercise__
-          path.deleteIfExists()
-          __Verify__
-          path should not (exist)
-        }
-
         "delete the specified directory if exists" in new DirectoryFixture {
           __Exercise__
           dir.deleteIfExists()
@@ -250,11 +238,11 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
           dir should not (exist)
         }
 
-        "do nothing if the specified directory does not exist" in new NotExistingDirectoryFixture {
+        "do nothing if the specified file or directory does not exist" in new NotExistingFileFixture {
           __Exercise__
-          dir.deleteIfExists()
+          path.deleteIfExists()
           __Verify__
-          dir should not (exist)
+          path should not (exist)
         }
       }
     }
@@ -302,15 +290,33 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
 
   "***** Read/Write *****" - {
 
-    "isReadable" - {
-//      Files.isReadable(path)
+    "isReadable method should" - {
+
+      "return true if the file is readable" in new FileFixture {
+        __Verify__
+        path.isReadable should be (true)
+      }
+
+      "return false if the file is not readable" in new NotExistingFileFixture {
+        __Verify__
+        path.isReadable should be (false)
+      }
     }
 
-    "isWritable" - {
-//      Files.isWritable(path)
+    "isWritable method should" - {
+
+      "return true if the file is writable" in new FileFixture {
+        __Verify__
+        path.isWritable should be (true)
+      }
+
+      "return false if the file is not writable" in new NotExistingFileFixture {
+        __Verify__
+        path.isWritable should be (false)
+      }
     }
 
-    "Byte" - {
+    "Bytes" - {
 
       "readAllBytes() method should" - {
 
@@ -336,37 +342,121 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
     "InputStream/OutputStream" - {
 
       "newInputStream(options: Set[OpenOption]) method should" - {
-//        Files.newInputStream(path, options.toArray: _*)
+
+        "create an InputStream of this file (with no OpenOption)" in {
+          __Exercise__
+          val sut = readOnlyPath.newInputStream()
+          __Verify__
+          val bytes = new Array[Byte](contentAsString.getBytes.length)
+          sut.read(bytes)
+          new String(bytes) should equal(contentAsString)
+          __TearDown__
+          sut.close()
+        }
       }
 
       "newOutputStream(options: Set[OpenOption]) method should" - {
-//        Files.newOutputStream(path, options.toArray: _*)
+
+        "create an OutputStream of this file (with no OpenOption)" in new FileFixture{
+          __Exercise__
+          val sut = path.newOutputStream()
+          __Verify__
+          sut.write(contentAsString.getBytes())
+          sut.flush()
+          sut.close()
+          text(path) should equal (contentAsString)
+        }
       }
     }
 
     "ByteChannel" - {
 
       "newByteChannel(options: Set[OpenOption] = Nil, attributes: Seq[FileAttribute[_]] = Nil) method should" - {
-//        Files.newByteChannel(path, options, attributes: _*)
+        //        Files.newByteChannel(path, options, attributes: _*)
+      }
+    }
+
+    "String" - {
+
+      "readAllLines() method should" - {
+
+        "read all lines in this file (default character encoding is UTF-8)" in {
+          __Exercise__
+          val sut = readOnlyPath.readAllLines()
+          __Verify__
+          sut should contain theSameElementsInOrderAs content
+        }
+
+        "read all lines in this file with the specified encoding" in {
+          __Exercise__
+          val sut = readOnlyPathISO2022.readAllLines(ISO2022)
+          __Verify__
+          sut should contain theSameElementsInOrderAs contentISO2022
+        }
       }
 
-      "readAllLines(charset: Charset = GluinoIO.defaultCharset" - {
-//        Files.readAllLines(path, charset)
-      }
+      "write() method should" - {
 
-      "write(lines: Seq[String], charset: Charset = GluinoIO.defaultCharset, options: Set[OpenOption] = Nil) method should" - {
-//        Files.write(path, lines, charset, options.toArray: _*)
+        "write down the specified Strings to this file" in new FileFixture {
+          __Exercise__
+          path.write(content)
+          __Verify__
+          text(path) should equal (contentAsString)
+        }
+
+        "write down the specified Strings to this file with the specified encoding" in new FileFixture {
+          __Exercise__
+          path.write(contentISO2022, ISO2022)
+          __Verify__
+          text(path, ISO2022) should equal (contentAsStringISO2022)
+        }
       }
     }
 
     "BufferedReader/BufferedWriter) method should" - {
 
-      "newBufferedReader(charset: Charset = GluinoIO.defaultCharset" - {
-//        Files.newBufferedReader(path, charset)
+      "newBufferedReader() method should" - {
+
+        "create a BufferedReader (default character encoding is UTF-8)" in {
+          __Exercise__
+          val sut = readOnlyPath.newBufferedReader()
+          __Verify__
+          sut.readLine() should equal (content.head)
+          __TearDown__
+          sut.close()
+        }
+
+        "create a BufferedReader with the specified encoding" in {
+          __Exercise__
+          val sut = readOnlyPathISO2022.newBufferedReader(ISO2022)
+          __Verify__
+          sut.readLine() should equal (contentISO2022.head)
+          __TearDown__
+          sut.close()
+        }
       }
 
-      "newBufferedWriter(charset: Charset = GluinoIO.defaultCharset, options: Set[OpenOption] = Nil) method should" - {
-//        Files.newBufferedWriter(path, charset, options.toArray: _*)
+      "newBufferedWriter() method should" - {
+
+        "create a BufferedWriter (default encoding is UTF-8)" in new FileFixture {
+          __Exercise__
+          val sut = path.newBufferedWriter()
+          __Verify__
+          sut.write("Some content")
+          sut.flush()
+          sut.close()
+          text(path) should equal ("Some content")
+        }
+
+        "create a BufferedWriter with the specified encoding" in new FileFixture {
+          __Exercise__
+          val sut = path.newBufferedWriter(ISO2022)
+          __Verify__
+          sut.write("内容")
+          sut.flush()
+          sut.close()
+          text(path, ISO2022) should equal ("内容")
+        }
       }
     }
 
@@ -390,26 +480,53 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
 
   "***** Attributes *****" - {
 
-    "Boolean Properties) method should" - {
+    "Boolean Properties" - {
 
-      "isRegularFile" - {
-//        Files.isRegularFile(path)
+      "isRegularFile() method should" - {
+
+        "return true if the path is a regular file" in new FileFixture {
+          __Verify__
+          path.isRegularFile should be (true)
+        }
+
+        "return false if the path is a directory" in new DirectoryFixture {
+          __Verify__
+          dir.isRegularFile should be (false)
+        }
       }
 
-      "isRegularFile(options: Set[LinkOption]" - {
+      "isRegularFile(options: Set[LinkOption]) method should" - {
 //        Files.isRegularFile(path, options.toArray: _*)
       }
 
-      "isDirectory" - {
-//        Files.isDirectory(path)
+      "isDirectory() method should" - {
+
+        "return true if the path is a regular file" in new DirectoryFixture {
+          __Verify__
+          dir.isDirectory should be (true)
+        }
+
+        "return false if the path is a directory" in new FileFixture {
+          __Verify__
+          path.isDirectory should be (false)
+        }
       }
 
       "isDirectory(options: Set[LinkOption]) method should" - {
 //        Files.isDirectory(path, options.toArray: _*)
       }
 
-      "isExecutable" - {
-//        Files.isExecutable(path)
+      "isExecutable method should" - {
+
+        "return true if the file is executable" in new FileFixture {
+          __Verify__
+          path.isExecutable should be (true)
+        }
+
+        "return false if the file is not executable" in new NotExistingFileFixture {
+          __Verify__
+          path.isExecutable should be (false)
+        }
       }
 
       "isHidden" - {
@@ -417,13 +534,35 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
       }
 
       "isSameFile(path2: Path) method should" - {
-//        Files.isSameFile(path, path2)
+
+        "return true if the arg path is the same file as this" in new FileFixture {
+          __SetUp__
+          val target = path
+          __Verify__
+          path.isSameFile(target) should be (true)
+        }
+
+        "return false if the arg path is not the same file as this" in new FileFixture {
+          __SetUp__
+          val target = GluinoPath.createTempFile(deleteOnExit = true)
+          __Verify__
+          path.isSameFile(target) should be (false)
+        }
       }
 
-      "isSymbolicLink" taggedAs WindowsAdministrated in new WindowsAdministratorRequirement {
-        new SymbolicLinkFixture {
+      "isSymbolicLink method should" - {
+
+        "return true if the file is a symbolic link" taggedAs WindowsAdministrated in
+          new WindowsAdministratorRequirement {
+            new SymbolicLinkFixture {
+              __Verify__
+              symbolicLink.isSymbolicLink should be (true)
+            }
+        }
+
+        "return false if the file is not a symbolic link" in new FileFixture {
           __Verify__
-          symbolicLink.isSymbolicLink should equal (true)
+          path.isSymbolicLink should be (false)
         }
       }
     }
@@ -431,7 +570,7 @@ class FilesCategorySpec extends GluinoIOCustomSpec with FilesCategory with Attri
 
   "size method should return size of the file" in {
     __Verify__
-    readOnlyBigPath.size should equal (2600)
+    readOnlyBigPath.size should equal (26000L)
   }
 
   "lastModified" - {

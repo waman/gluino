@@ -23,11 +23,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def \(child: String): F
 
   def size: Long
-  def directorySize: Long = {
-    var sum = 0L
-    eachFileRecurse(FileType.Files)(sum += wrap(_).size)
-    sum
-  }
+  def directorySize: Long = mapFilesRecurse(FileType.Files)(wrap(_).size).sum
 
   def exists: Boolean
 
