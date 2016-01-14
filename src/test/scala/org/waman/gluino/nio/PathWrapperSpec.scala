@@ -5,8 +5,10 @@ import java.nio.charset.StandardCharsets
 import java.nio.file._
 
 import org.scalatest.OptionValues._
-import org.waman.gluino.io.FileWrapperLikeSpec
+import org.waman.gluino.io.{FileType, FileWrapperLikeSpec}
 import org.waman.gluino.nio.GluinoPath._
+
+import scala.collection.mutable
 
 class PathWrapperSpec
     extends FileWrapperLikeSpec[Path, PathWrapper]{

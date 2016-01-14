@@ -2,6 +2,8 @@ package org.waman.gluino.io
 
 import java.io._
 import java.nio.charset.Charset
+import java.nio.file.FileVisitResult
+import java.nio.file.FileVisitResult._
 
 import org.waman.gluino.io.GluinoIO.defaultCharset
 
@@ -23,7 +25,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def \(child: String): F
 
   def size: Long
-  def directorySize: Long = mapFilesRecurse(FileType.Files)(wrap(_).size).sum
+  def directorySize: Long = filesRecurse(FileType.Files).map(wrap).map(_.size).sum
 
   def exists: Boolean
 
@@ -116,7 +118,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   private def toFilter(fileType: FileType, filter: F => Boolean): F => Boolean =
     f => toFilter(fileType)(f) && filter(f)
 
-  private def consumeIfFileTypeMatches(file: F, filter: F => Boolean, consumer: F => Unit): Unit =
+  private def consumeFileIfMatches(file: F, filter: F => Boolean, consumer: F => Unit): Unit =
     if (filter(file)) Seq(consumer(file))
     else Nil
 
@@ -133,7 +135,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     doEachFileMatch(toFilter(fileType, filter), consumer)
 
   private def doEachFileMatch(filter: F => Boolean, consumer: F => Unit): Unit =
-    eachFile(consumeIfFileTypeMatches(_, filter, consumer))
+    eachFile(consumeFileIfMatches(_, filter, consumer))
 
   def eachFileRecurse(fileType: FileType = FileType.Any, visitDirectoryLater: Boolean = false)
                      (consumer: F => Unit): Unit =
@@ -146,12 +148,12 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   private def doEachFileMatchRecurse(filter: F => Boolean, visitDirectoryLater: Boolean)
                                     (consumer: F => Unit): Unit = {
     if (!visitDirectoryLater)
-      consumeIfFileTypeMatches(getFile, filter, consumer)
+      consumeFileIfMatches(getFile, filter, consumer)
 
     eachFile { f =>
       wrap(f) match {
         case file if file.isFile =>
-          consumeIfFileTypeMatches(f, filter, consumer)
+          consumeFileIfMatches(f, filter, consumer)
         case dir if dir.isDirectory =>
           dir.doEachFileMatchRecurse(filter, visitDirectoryLater)(consumer)
         case _ =>
@@ -159,7 +161,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     }
 
     if (visitDirectoryLater)
-      consumeIfFileTypeMatches(getFile, filter, consumer)
+      consumeFileIfMatches(getFile, filter, consumer)
   }
 
   // eachDir
@@ -178,45 +180,149 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
                          (consumer: F => Unit): Unit =
     eachFileMatchRecurse(FileType.Directories, filter, visitParentLater)(consumer)
 
-  // mapFiles
-  private def collect[R](ite: (F => Unit) => Unit, consumer: F => R): Seq[R] = {
-    var result = Seq[R]()
-    ite(result :+= consumer(_))
+  // files
+  private def collect(ite: (F => Unit) => Unit): Seq[F] = {
+    var result = Seq[F]()
+    ite(result :+= _)
     result
   }
 
-  def mapFiles[R](consumer: F => R): Seq[R] = collect(eachFile, consumer)
+  def files: Seq[F] = collect(eachFile)
+  def files(fileType: FileType): Seq[F] = collect(eachFile(fileType))
 
-  def mapFiles[R](fileType: FileType)(consumer: F => R): Seq[R] = collect(eachFile(fileType), consumer)
+  def filesMatch(filter: F => Boolean): Seq[F] =
+    collect(eachFileMatch(filter))
 
-  def mapFilesMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
-    collect(eachFileMatch(filter), consumer)
+  def filesMatch(fileType: FileType, filter: F => Boolean): Seq[F] =
+    collect(eachFileMatch(fileType, filter))
 
-  def mapFilesMatch[R](fileType: FileType, filter: F => Boolean)(consumer: F => R): Seq[R] =
-    collect(eachFileMatch(fileType, filter), consumer)
+  def filesRecurse(fileType: FileType = FileType.Any, visitDirectoryLater: Boolean = false): Seq[F] =
+    collect(eachFileRecurse(fileType, visitDirectoryLater))
 
-  def mapFilesRecurse[R](fileType: FileType = FileType.Any, visitDirectoryLater: Boolean = false)
-                        (consumer: F => R): Seq[R] =
-    collect(eachFileRecurse(fileType, visitDirectoryLater), consumer)
+  def filesMatchRecurse(fileType: FileType, filter: F => Boolean, visitDirectoryLater: Boolean = false): Seq[F] =
+    collect(eachFileMatchRecurse(fileType, filter, visitDirectoryLater))
 
-  def mapFilesMatchRecurse[R](fileType: FileType, filter: F => Boolean, visitDirectoryLater: Boolean = false)
-                             (consumer: F => R): Seq[R] =
-    collect(eachFileMatchRecurse(fileType, filter, visitDirectoryLater), consumer)
+  // dirs
+  def dirs: Seq[F] = collect(eachDir)
 
-  // mapDir
-  def mapDirs[R](consumer: F => R): Seq[R] = collect(eachDir, consumer)
+  def dirsMatch(filter: F => Boolean): Seq[F] =
+    collect(eachDirMatch(filter))
 
-  def mapDirsMatch[R](filter: F => Boolean)(consumer: F => R): Seq[R] =
-    collect(eachDirMatch(filter), consumer)
+  def dirsRecurse: Seq[F] = collect(eachDirRecurse)
 
-  def mapDirsRecurse[R](consumer: F => R): Seq[R] = collect(eachDirRecurse, consumer)
+  def dirsRecurse(visitParentLater: Boolean): Seq[F] =
+    collect(eachDirRecurse(visitParentLater))
 
-  def mapDirsRecurse[R](visitParentLater: Boolean)(consumer: F => R): Seq[R] =
-    collect(eachDirRecurse(visitParentLater), consumer)
+  def dirsMatchRecurse(filter: F => Boolean, visitParentLater: Boolean = false): Seq[F] =
+    collect(eachDirMatchRecurse(filter, visitParentLater))
 
-  def mapDirsMatchRecurse[R](filter: F => Boolean, visitParentLater: Boolean = false)
-                            (consumer: F => R): Seq[R] =
-    collect(eachDirMatchRecurse(filter, visitParentLater), consumer)
+  // traverse
+  def continue     = FileVisitResult.CONTINUE
+  def skipSiblings = FileVisitResult.SKIP_SIBLINGS
+  def skipSubtree  = FileVisitResult.SKIP_SUBTREE
+  def terminate    = FileVisitResult.TERMINATE
+
+  def defaultOrderingForTraverse: Ordering[F] = new Ordering[F]{
+    override def compare(a: F, b: F): Int = {
+      val x = wrap(a)
+      val y = wrap(b)
+      if(x.isFile != y.isFile)
+        x.isFile.compare(y.isFile)
+      else
+        x.fileName.compare(y.fileName)
+    }
+  }
+
+  def traverse(fileType: FileType = FileType.Any,
+               filter: F => Boolean = null,
+               nameFilter: String => Boolean = null,
+               excludeFilter: F => Boolean = null,
+               excludeNameFilter: String => Boolean = null,
+
+               preDir: F => FileVisitResult = null,
+               postDir: F => FileVisitResult = null,
+
+               visitRoot: Boolean = false,
+               preRoot: Boolean = false,
+               postRoot: Boolean = false,
+               maxDepth: Int = Integer.MAX_VALUE,
+
+               sort: Ordering[F] = defaultOrderingForTraverse)
+              (consumer: F => FileVisitResult): Unit = {
+    // canonicalize the arguments
+    val _filter: F => Boolean =
+      generateFilter(fileType, filter, nameFilter, excludeFilter, excludeNameFilter)
+
+    val _preDir: (F, Boolean) => FileVisitResult =
+      if(preDir != null)
+        if(preRoot) (f, isRoot) => preDir(f)
+        else        (f, isRoot) => if(!isRoot) preDir(f) else CONTINUE
+      else          (f, isRoot) => CONTINUE
+
+    val _postDir: (F, Boolean) => FileVisitResult =
+      if(postDir != null)
+        if(postRoot) (f, isRoot) => postDir(f)
+        else         (f, isRoot) => if(!isRoot)postDir(f) else CONTINUE
+      else           (f, isRoot) => CONTINUE
+
+    val _maxDepth: Int = if(maxDepth < 0) Integer.MAX_VALUE else maxDepth
+
+    val _consumer: (F, Boolean) => FileVisitResult =
+      if(visitRoot) (f, isRoot) => consumer(f)
+      else          (f, isRoot) => if(!isRoot)consumer(f) else CONTINUE
+
+    // execute traversing
+    traverseDirectory(getFile, isRoot = true, _filter, _preDir, _postDir, _maxDepth, sort, _consumer)
+  }
+
+  private def generateFilter(fileType: FileType = FileType.Any,
+                             filter: F => Boolean,
+                             nameFilter: String => Boolean,
+                             excludeFilter: F => Boolean,
+                             excludeNameFilter: String => Boolean): F => Boolean = {
+    var filters: Seq[F => Boolean] = Seq(toFilter(fileType))
+    if(filter != null) filters :+= filter
+    if(nameFilter != null) filters :+= { f: F => nameFilter(wrap(f).fileName) }
+    if(excludeFilter != null) filters :+= { f: F => !excludeFilter(f) }
+    if(excludeNameFilter != null) filters :+= { f: F => !excludeNameFilter(wrap(f).fileName)}
+
+    f => filters.forall(_(f))
+  }
+
+  private def traverseDirectory(dir: F,
+                                isRoot: Boolean,
+                                filter: F => Boolean,
+                                preDir: (F, Boolean) => FileVisitResult,
+                                postDir: (F, Boolean) => FileVisitResult,
+                                maxDepth: Int,
+                                sort: Ordering[F],
+                                consumer: (F, Boolean) => FileVisitResult): FileVisitResult = {
+    if(maxDepth < 0) return CONTINUE
+
+    def traverseChildren(): FileVisitResult = {
+      wrap(dir).files.sortWith(sort.lt).foreach{ child =>
+        wrap(child) match {
+          case d if d.isDirectory =>
+            traverseDirectory(
+              child, isRoot = false, filter, preDir, postDir,
+              maxDepth-1, sort, consumer)
+          case f if f.isFile =>
+            if(filter(child))consumer(child, false)
+        }
+      }
+      CONTINUE
+    }
+
+    //***** execute traversing *****
+    if(filter(dir)){
+      preDir(dir, isRoot)
+      consumer(dir, isRoot)
+      traverseChildren()
+      postDir(dir, isRoot)
+    }else{
+      traverseChildren()
+    }
+  }
 
   //***** Directory Operations *****
   protected def newNotDirectoryException(message: String): IOException
