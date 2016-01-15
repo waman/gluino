@@ -75,7 +75,8 @@ trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec
       result should contain theSameElementsInOrderAs objectContent
     }
 
-    "throw an EOFException if the specified integer is bigger than the number of objects retained in the file" in
+    """throw an EOFException if the specified integer is bigger than
+      | the number of objects retained in the file""".stripMargin in
       new ObjectInputStreamWrapperLikeFixture{
         __Verify__
         an [EOFException] should be thrownBy {
@@ -83,11 +84,12 @@ trait ObjectInputStreamWrapperLikeSpec extends GluinoIOCustomSpec
         }
       }
 
-    "throw an IllegalArgumentException if the specified integer is negative" in new ObjectInputStreamWrapperLikeFixture{
-      __Verify__
-      an [IllegalArgumentException] should be thrownBy {
-        sut.readAnyRefs(-1)
-      }
+    "throw an IllegalArgumentException if the specified integer is negative" in
+      new ObjectInputStreamWrapperLikeFixture{
+        __Verify__
+        an [IllegalArgumentException] should be thrownBy {
+          sut.readAnyRefs(-1)
+        }
     }
   }
 }

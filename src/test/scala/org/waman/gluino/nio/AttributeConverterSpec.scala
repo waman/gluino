@@ -92,7 +92,8 @@ class AttributeConverterSpec extends GluinoIOCustomSpec with AttributeConverter{
         sut.value().loneElement should be (OTHERS_EXECUTE)
       }
 
-      "convert String 'rwx------' to a file attribute of java.util.Set of OWNER_READ, OWNER_WRITE and OWNER_EXECUTE" in {
+      """convert String 'rwx------' to a file attribute of java.util.Set of
+        | OWNER_READ, OWNER_WRITE and OWNER_EXECUTE""".stripMargin in {
         __Exercise__
         val sut = posix("rwx------")
         __Verify__

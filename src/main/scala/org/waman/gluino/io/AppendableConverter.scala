@@ -53,10 +53,10 @@ trait AppendableConverter extends GluinoIO{
     convertInputStreamToOutputtable(Files.newInputStream(path))
 
   implicit def convertFileWrapperToOutputtable(wrapper: FileWrapper): Outputtable =
-    convertInputStreamToOutputtable(wrapper.newInputStream)
+    convertInputStreamToOutputtable(wrapper.newInputStream())
 
   implicit def convertPathWrapperToOutputtable(wrapper: PathWrapper): Outputtable =
-    convertInputStreamToOutputtable(wrapper.newInputStream)
+    convertInputStreamToOutputtable(wrapper.newInputStream())
 
   //***** Writable *****
   implicit def convertStringToWritable(text: String): Writable = new Writable{

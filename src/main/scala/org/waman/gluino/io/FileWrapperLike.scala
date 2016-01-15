@@ -216,12 +216,6 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def dirsMatchRecurse(filter: F => Boolean, visitParentLater: Boolean = false): Seq[F] =
     collect(eachDirMatchRecurse(filter, visitParentLater))
 
-  // traverse
-  def continue     = FileVisitResult.CONTINUE
-  def skipSiblings = FileVisitResult.SKIP_SIBLINGS
-  def skipSubtree  = FileVisitResult.SKIP_SUBTREE
-  def terminate    = FileVisitResult.TERMINATE
-
   def defaultOrderingForTraverse: Ordering[F] = new Ordering[F]{
     override def compare(a: F, b: F): Int = {
       val x = wrap(a)
@@ -247,7 +241,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
                postRoot: Boolean = false,
                maxDepth: Int = Integer.MAX_VALUE,
 
-               sort: Ordering[F] = defaultOrderingForTraverse)
+               sort: (F, F) => Boolean = defaultOrderingForTraverse.lt)
               (consumer: F => FileVisitResult): Unit = {
     // canonicalize the arguments
     val _filter: F => Boolean =
@@ -295,12 +289,12 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
                                 preDir: (F, Boolean) => FileVisitResult,
                                 postDir: (F, Boolean) => FileVisitResult,
                                 maxDepth: Int,
-                                sort: Ordering[F],
+                                sort: (F, F) => Boolean,
                                 consumer: (F, Boolean) => FileVisitResult): FileVisitResult = {
     if(maxDepth < 0) return CONTINUE
 
     def traverseChildren(): FileVisitResult = {
-      wrap(dir).files.sortWith(sort.lt).foreach{ child =>
+      wrap(dir).files.sortWith(sort).foreach{ child =>
         wrap(child) match {
           case d if d.isDirectory =>
             traverseDirectory(
@@ -314,14 +308,10 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
     }
 
     //***** execute traversing *****
-    if(filter(dir)){
-      preDir(dir, isRoot)
-      consumer(dir, isRoot)
-      traverseChildren()
-      postDir(dir, isRoot)
-    }else{
-      traverseChildren()
-    }
+    preDir(dir, isRoot)
+    if(filter(dir))consumer(dir, isRoot)
+    traverseChildren()
+    postDir(dir, isRoot)
   }
 
   //***** Directory Operations *****
@@ -423,4 +413,14 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
       case ex: IOException => Some(ex)
     }
   }
+}
+
+object TraverseUtil{
+
+  implicit def convertAnyToFileVisitResult(any: Any): FileVisitResult = FileVisitResult.CONTINUE
+
+  def continue     = FileVisitResult.CONTINUE
+  def skipSiblings = FileVisitResult.SKIP_SIBLINGS
+  def skipSubtree  = FileVisitResult.SKIP_SUBTREE
+  def terminate    = FileVisitResult.TERMINATE
 }

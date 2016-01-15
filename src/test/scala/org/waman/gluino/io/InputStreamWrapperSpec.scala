@@ -98,18 +98,19 @@ trait InputStreamWrapperLikeSpec
         sum should equal(contentAsStringISO2022.foldLeft(0)(_ + _.asInstanceOf[Int]))
       }
 
-      "transformChar() method should transform each char and write down to the specified writer" in new InputStreamWrapperLikeISO2022Fixture {
-        new WriterFixture {
-          __Exercise__
-          sut.transformChar(writer, ISO2022) {
-            case c if c == '行' => '番'
-            case c => c
+      "transformChar() method should transform each char and write down to the specified writer" in
+        new InputStreamWrapperLikeISO2022Fixture {
+          new WriterFixture {
+            __Exercise__
+            sut.transformChar(writer, ISO2022) {
+              case c if c == '行' => '番'
+              case c => c
+            }
+            __Verify__
+            Files.readAllLines(path) should contain theSameElementsInOrderAs
+              List("1番目", "2番目", "3番目")
           }
-          __Verify__
-          Files.readAllLines(path) should contain theSameElementsInOrderAs
-            List("1番目", "2番目", "3番目")
         }
-      }
 
       "text method should return file content as String" in new InputStreamWrapperLikeISO2022Fixture {
         __Verify__
@@ -118,16 +119,18 @@ trait InputStreamWrapperLikeSpec
     }
 
     "***** lines *****" - {
-      "eachLines(String => Unit) method should read lines one by one" in new InputStreamWrapperLikeISO2022Fixture {
-        __SetUp__
-        val result = new mutable.ListBuffer[String]
-        __Exercise__
-        sut.eachLine(ISO2022)(result += _)
-        __Verify__
-        result should contain theSameElementsInOrderAs contentISO2022
-      }
+      "eachLines(String => Unit) method should read lines one by one" in
+        new InputStreamWrapperLikeISO2022Fixture {
+          __SetUp__
+          val result = new mutable.ListBuffer[String]
+          __Exercise__
+          sut.eachLine(ISO2022)(result += _)
+          __Verify__
+          result should contain theSameElementsInOrderAs contentISO2022
+        }
 
-      "eachLine(Int)((String, Int) => Unit) method should read lines one by one with line number. The first arg specifies the starting number." in
+      """eachLine(Int)((String, Int) => Unit) method should read lines one by one with line number.
+        | The first arg specifies the starting number.""".stripMargin in
         new InputStreamWrapperLikeISO2022Fixture {
           __SetUp__
           val result = new mutable.ListBuffer[String]
@@ -164,7 +167,8 @@ trait InputStreamWrapperLikeSpec
           }
         }
 
-      "filterLine(Writer)(String => Boolean) method should filter line and write down to the specified writer" in
+      """filterLine(Writer)(String => Boolean) method should filter line
+        | and write down to the specified writer""".stripMargin in
         new InputStreamWrapperLikeISO2022Fixture {
           new WriterFixture {
             __Exercise__
@@ -174,15 +178,16 @@ trait InputStreamWrapperLikeSpec
           }
         }
 
-      "transformLine() method should transform each line and write down to the specified writer" in new InputStreamWrapperLikeISO2022Fixture {
-        new WriterFixture {
-          __Exercise__
-          sut.transformLine(writer, ISO2022)(line => s"""[$line]""")
-          __Verify__
-          Files.readAllLines(path) should contain theSameElementsInOrderAs
-            List("[1行目]", "[2行目]", "[3行目]")
+      "transformLine() method should transform each line and write down to the specified writer" in
+        new InputStreamWrapperLikeISO2022Fixture {
+          new WriterFixture {
+            __Exercise__
+            sut.transformLine(writer, ISO2022)(line => s"""[$line]""")
+            __Verify__
+            Files.readAllLines(path) should contain theSameElementsInOrderAs
+              List("[1行目]", "[2行目]", "[3行目]")
+          }
         }
-      }
 
       "readLines method should read all lines in File" in new InputStreamWrapperLikeISO2022Fixture {
         __Exercise__

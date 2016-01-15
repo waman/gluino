@@ -5,13 +5,10 @@ import java.nio.charset.StandardCharsets
 import java.nio.file._
 
 import org.scalatest.OptionValues._
-import org.waman.gluino.io.{FileType, FileWrapperLikeSpec}
+import org.waman.gluino.io.FileWrapperLikeSpec
 import org.waman.gluino.nio.GluinoPath._
 
-import scala.collection.mutable
-
-class PathWrapperSpec
-    extends FileWrapperLikeSpec[Path, PathWrapper]{
+class PathWrapperSpec extends FileWrapperLikeSpec[Path, PathWrapper]{
 
   override protected def wrap(path: Path): PathWrapper = new PathWrapper(path)
   override protected def asF(path: Path): Path = path
@@ -72,7 +69,8 @@ class PathWrapperSpec
         value should equal ("倭マン")
       }
 
-      "return a value of a user-defined file attribute as String with UTF-8 encoding if the charset arg is omitted" in
+      """return a value of a user-defined file attribute as String with UTF-8 encoding
+        | if the charset arg is omitted""".stripMargin in
         new FileFixture {
           assumeFileSystemSupportsUserDefinedFileAttribute()
           __SetUp__
@@ -97,7 +95,8 @@ class PathWrapperSpec
         s should equal ("倭マン")
       }
 
-      "set the specified attribute to the specified String with UTF-8 encoding if the charset arg is omitted" in
+      """set the specified attribute to the specified String with UTF-8 encoding
+        | if the charset arg is omitted""".stripMargin in
         new FileFixture {
           assumeFileSystemSupportsUserDefinedFileAttribute()
           __Exercise__
@@ -138,7 +137,8 @@ class PathWrapperSpec
     "renameTo() method should" - {
 
       // for files
-      "RETURN an Option[FileAlreadyExistsException] if the target file exists and the 'isOverride' arg is omitted" in
+      """RETURN an Option[FileAlreadyExistsException] if the target file exists
+        | and the 'isOverride' arg is omitted""".stripMargin in
         new FileWrapperLike_FileFixture {
           __SetUp__
           val target = createTempFile(deleteOnExit = true)
@@ -149,7 +149,8 @@ class PathWrapperSpec
           path should exist
         }
 
-      "RETURN an Option[FileAlreadyExistsException] if the target file exists and the 'isOverride' arg is false" in
+      """RETURN an Option[FileAlreadyExistsException] if the target file exists
+        | and the 'isOverride' arg is false""".stripMargin in
         new FileWrapperLike_FileFixture {
           __SetUp__
           val target = createTempFile(deleteOnExit = true)
@@ -161,7 +162,8 @@ class PathWrapperSpec
         }
 
       // for directories
-      "RETURN an Option[FileAlreadyExistsException] if the target directory exists and the 'isOverride' arg is omitted" in
+      """RETURN an Option[FileAlreadyExistsException] if the target directory exists
+        | and the 'isOverride' arg is omitted""".stripMargin in
         new FileWrapperLike_DirectoryFixture {
           __SetUp__
           val target = createTempDirectory(deleteOnExit = true)
@@ -172,7 +174,8 @@ class PathWrapperSpec
           dir should exist
         }
 
-      "RETURN an Option[FileAlreadyExistsException] if the target directory exists and the 'isOverride' arg is false" in
+      """RETURN an Option[FileAlreadyExistsException] if the target directory exists
+        | and the 'isOverride' arg is false""".stripMargin in
         new FileWrapperLike_DirectoryFixture {
           __SetUp__
           val target = createTempDirectory(deleteOnExit = true)
@@ -183,7 +186,8 @@ class PathWrapperSpec
           dir should exist
         }
 
-      "RETURN an Option[DirectoryNotEmptyException] if the 'isOverride' arg is true and the target directory is not empty" in
+      """RETURN an Option[DirectoryNotEmptyException] if the 'isOverride' arg is true
+        | and the target directory is not empty""".stripMargin in
         new FileWrapperLike_NotEmptyDirectoryFixture {
           __SetUp__
           val target = GluinoPath.createTempDirectory(deleteOnExit = true)
@@ -199,7 +203,8 @@ class PathWrapperSpec
     "move() method should" - {
 
       // for files
-      "RETURN an Option[FileAlreadyExistsException] if the target file exists and the 'isOverride' arg is omitted" in
+      """RETURN an Option[FileAlreadyExistsException] if the target file exists
+        | and the 'isOverride' arg is omitted""".stripMargin in
         new FileWrapperLike_FileFixture {
           __SetUp__
           val target = createTempFile(deleteOnExit = true)
@@ -210,7 +215,8 @@ class PathWrapperSpec
           path should exist
         }
 
-      "RETURN an Option[FileAlreadyExistsException] if the target file exists and the 'isOverride' arg is false" in
+      """RETURN an Option[FileAlreadyExistsException] if the target file exists
+        | and the 'isOverride' arg is false""".stripMargin in
         new FileWrapperLike_FileFixture {
           __SetUp__
           val target = createTempFile(deleteOnExit = true)
@@ -222,7 +228,8 @@ class PathWrapperSpec
         }
 
       // for directories
-      "RETURN an Option[FileAlreadyExistsException] if the target directory exists and the 'isOverride' arg is omitted" in
+      """RETURN an Option[FileAlreadyExistsException] if the target directory exists
+        | and the 'isOverride' arg is omitted""".stripMargin in
         new FileWrapperLike_DirectoryFixture {
           __SetUp__
           val target = createTempDirectory(deleteOnExit = true)
@@ -233,7 +240,8 @@ class PathWrapperSpec
           dir should exist
         }
 
-      "RETURN an Option[FileAlreadyExistsException] if the target directory exists and the 'isOverride' arg is false" in
+      """RETURN an Option[FileAlreadyExistsException] if the target directory exists
+        | and the 'isOverride' arg is false""".stripMargin in
         new FileWrapperLike_DirectoryFixture {
           __SetUp__
           val target = createTempDirectory(deleteOnExit = true)
@@ -244,7 +252,8 @@ class PathWrapperSpec
           dir should exist
         }
 
-      "RETURN an Option[DirectoryNotEmptyException] if the 'isOverride' arg is true and the target directory is not empty" in
+      """RETURN an Option[DirectoryNotEmptyException] if the 'isOverride' arg is true
+        | and the target directory is not empty""".stripMargin in
         new FileWrapperLike_NotEmptyDirectoryFixture {
           __SetUp__
           val target = GluinoPath.createTempDirectory(deleteOnExit = true)
@@ -260,7 +269,8 @@ class PathWrapperSpec
     "copy() method should" - {
 
       // for files
-      "RETURN an Option[FileAlreadyExistsException] if the target file exists and the 'isOverride' arg is omitted" in
+      """RETURN an Option[FileAlreadyExistsException] if the target file exists
+        | and the 'isOverride' arg is omitted""".stripMargin in
         new FileWrapperLike_FileFixture {
           __SetUp__
           val target = createTempFile(deleteOnExit = true)
@@ -270,7 +280,8 @@ class PathWrapperSpec
           result.value should be (a [FileAlreadyExistsException])
         }
 
-      "RETURN an Option[FileAlreadyExistsException] if the target file exists and the 'isOverride' arg is false" in
+      """RETURN an Option[FileAlreadyExistsException] if the target file exists
+        | and the 'isOverride' arg is false""".stripMargin in
         new FileWrapperLike_FileFixture {
           __SetUp__
           val target = createTempFile(deleteOnExit = true)
@@ -281,7 +292,8 @@ class PathWrapperSpec
         }
 
       // for directories
-      "RETURN an Option[FileAlreadyExistsException] if the target directory exists and the 'isOverride' arg is omitted" in
+      """RETURN an Option[FileAlreadyExistsException] if the target directory exists
+        | and the 'isOverride' arg is omitted""".stripMargin in
         new FileWrapperLike_DirectoryFixture {
           __SetUp__
           val target = createTempDirectory(deleteOnExit = true)
@@ -292,7 +304,8 @@ class PathWrapperSpec
           dir should exist
         }
 
-      "RETURN an Option[FileAlreadyExistsException] if the target directory exists and the 'isOverride' arg is false" in
+      """RETURN an Option[FileAlreadyExistsException] if the target directory exists
+        | and the 'isOverride' arg is false""".stripMargin in
         new FileWrapperLike_DirectoryFixture {
           __SetUp__
           val target = createTempDirectory(deleteOnExit = true)
@@ -303,7 +316,8 @@ class PathWrapperSpec
           dir should exist
         }
 
-      "RETURN an Option[DirectoryNotEmptyException] if the 'isOverride' arg is true and the target directory is not empty" in
+      """RETURN an Option[DirectoryNotEmptyException] if the 'isOverride' arg is true
+        | and the target directory is not empty""".stripMargin in
         new FileWrapperLike_NotEmptyDirectoryFixture {
           __SetUp__
           val target = GluinoPath.createTempDirectory(deleteOnExit = true)
@@ -342,7 +356,8 @@ class PathWrapperSpec
 
     "moveDir() method should" - {
 
-      "RETURN an Option[FileAlreadyExistsException] if the target directory already exists and the 'isOverride' arg is omitted" in
+      """RETURN an Option[FileAlreadyExistsException] if the target directory already exists
+        | and the 'isOverride' arg is omitted""".stripMargin in
         new FileWrapperLike_DirectoryWithFilesFixture {
           __SetUp__
           val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
@@ -353,7 +368,8 @@ class PathWrapperSpec
           result.value should be (an [FileAlreadyExistsException])
         }
 
-      "RETURN an Option[FileAlreadyExistsException] if the target directory already exists and the 'isOverride' arg is false" in
+      """RETURN an Option[FileAlreadyExistsException] if the target directory already exists
+        | and the 'isOverride' arg is false""".stripMargin in
         new FileWrapperLike_DirectoryWithFilesFixture {
           __SetUp__
           val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
@@ -375,7 +391,8 @@ class PathWrapperSpec
 
     "copyDir() method should" - {
 
-      "RETURN an Option[FileAlreadyExistsException] if the target directory already exists and the 'isOverride' arg is omitted" in
+      """RETURN an Option[FileAlreadyExistsException] if the target directory already exists
+        | and the 'isOverride' arg is omitted""".stripMargin in
         new FileWrapperLike_DirectoryWithFilesFixture {
           __SetUp__
           val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
@@ -386,7 +403,8 @@ class PathWrapperSpec
           result.value should be (an [FileAlreadyExistsException])
         }
 
-      "RETURN an Option[FileAlreadyExistsException] if the target directory already exists and the 'isOverride' arg is false" in
+      """RETURN an Option[FileAlreadyExistsException] if the target directory already exists
+        | and the 'isOverride' arg is false""".stripMargin in
         new FileWrapperLike_DirectoryWithFilesFixture {
           __SetUp__
           val targetPath = GluinoPath.createTempDirectory(deleteOnExit = true)
