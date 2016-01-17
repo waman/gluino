@@ -1,6 +1,7 @@
 package org.waman.gluino.io
 
 import java.io.{File, IOException}
+import java.nio.file.attribute.BasicFileAttributes
 import java.nio.file.{FileVisitResult, Files, Path}
 
 import org.scalatest.OptionValues._
@@ -2565,7 +2566,6 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
             val result = mutable.MutableList[String]()
             __Exercise__
             sut.traverse(fileType=FileType.Directories,
-                         excludeNameFilter= s => s.contains("2"),
                          postDir={ f => result += ("post-" + wrap(f).fileName); FileVisitResult.CONTINUE},
                          postRoot=true) { f =>
               result += wrap(f).fileName
@@ -2573,7 +2573,263 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
             }
             __Verify__
             result should contain theSameElementsInOrderAs
-              Seq("dir1", "post-dir1", "dir3", "dir31", "post-dir31", "post-dir3", "post-"+sut.fileName)
+              Seq("dir1", "post-dir1", "dir2", "post-dir2",
+                "dir3", "dir31", "post-dir31", "post-dir3", "post-"+sut.fileName)
+          }
+      }
+
+      "(maxDepth arg)" - {
+
+        "visit only child files and directories under the root directory if the 'maxDepth' arg is 0" in
+          new FileWrapperLike_DirectoryWithFilesFixture {
+            __SetUp__
+            val result = mutable.MutableList[F]()
+            __Exercise__
+            sut.traverse(maxDepth = 0) { f =>
+              result += f
+              FileVisitResult.CONTINUE
+            }
+            __Verify__
+            fileNames(result) should contain theSameElementsInOrderAs
+              Seq("dir1", "dir2",  "dir3", "child1.txt", "child2.txt", "child3.txt")
+          }
+
+          "visit files and directories upto the specified depth if the 'maxDepth' arg is set" in
+            new FileWrapperLike_DirectoryWithFilesFixture {
+              __SetUp__
+              val result = mutable.MutableList[F]()
+              __Exercise__
+              sut.traverse(maxDepth = 1) { f =>
+                result += f
+                FileVisitResult.CONTINUE
+              }
+              __Verify__
+              fileNames(result) should contain theSameElementsInOrderAs
+                Seq("dir1", "child11.txt", "child12.txt",
+                  "dir2", "child21.txt", "child22.txt", "child23.txt",
+                  "dir3", "dir31", "child31.txt",
+                  "child1.txt", "child2.txt", "child3.txt")
+            }
+      }
+
+      "(sort)" - {
+
+        "iterate sibling files and directories by the specified order" in
+          new FileWrapperLike_DirectoryWithFilesFixture {
+            __SetUp__
+            val result = mutable.MutableList[F]()
+            val order = (a: F, b: F) => {
+              val x = wrap(a)
+              val y = wrap(b)
+              if (x.isFile != y.isFile) x.isFile > y.isFile
+              else x.fileName < y.fileName
+            }
+            __Exercise__
+            sut.traverse(sort = order) { f =>
+              result += f
+              FileVisitResult.CONTINUE
+            }
+            __Verify__
+            fileNames(result) should contain theSameElementsInOrderAs
+              Seq("child1.txt", "child2.txt", "child3.txt",
+                "dir1", "child11.txt", "child12.txt",
+                "dir2", "child21.txt", "child22.txt", "child23.txt",
+                "dir3", "child31.txt", "dir31", "child311.txt", "child312.txt")
+          }
+      }
+
+      "(return FileVisitResult)" - {
+
+        // TERMINATE
+        "terminate traversing if the consumer return FileVisitResult.TERMINATE" in
+          new FileWrapperLike_DirectoryWithFilesFixture {
+            __SetUp__
+            val result = mutable.MutableList[F]()
+            __Exercise__
+            sut.traverse(){ f =>
+              result += f
+              val w = wrap(f)
+              if(w.isDirectory && w.fileName.contains("2"))
+                FileVisitResult.TERMINATE
+              else
+                FileVisitResult.CONTINUE
+            }
+            __Verify__
+            fileNames(result) should contain theSameElementsInOrderAs
+              Seq("dir1", "child11.txt", "child12.txt", "dir2")
+          }
+
+        "terminate traversing if the preDir return FileVisitResult.TERMINATE" in
+          new FileWrapperLike_DirectoryWithFilesFixture {
+            __SetUp__
+            val result = mutable.MutableList[F]()
+            val preDir = { f: F =>
+              if(wrap(f).fileName.contains("2"))
+                FileVisitResult.TERMINATE
+              else
+                FileVisitResult.CONTINUE
+            }
+            __Exercise__
+            sut.traverse(preDir = preDir){ f =>
+              result += f
+              FileVisitResult.CONTINUE
+            }
+            __Verify__
+            fileNames(result) should contain theSameElementsInOrderAs
+              Seq("dir1", "child11.txt", "child12.txt")
+          }
+
+        "terminate traversing if the postDir return FileVisitResult.TERMINATE" in
+          new FileWrapperLike_DirectoryWithFilesFixture {
+            __SetUp__
+            val result = mutable.MutableList[F]()
+            val postDir = { f: F =>
+              if(wrap(f).fileName.contains("2"))
+                FileVisitResult.TERMINATE
+              else
+                FileVisitResult.CONTINUE
+            }
+            __Exercise__
+            sut.traverse(postDir = postDir){ f =>
+              result += f
+              FileVisitResult.CONTINUE
+            }
+            __Verify__
+            fileNames(result) should contain theSameElementsInOrderAs
+              Seq("dir1", "child11.txt", "child12.txt",
+                "dir2", "child21.txt", "child22.txt", "child23.txt")
+          }
+
+        // SKIP_SUBTREE
+        "skip traversing subtree if the consumer return FileVisitResult.SKIP_SUBTREE" in
+          new FileWrapperLike_DirectoryWithFilesFixture {
+            __SetUp__
+            val result = mutable.MutableList[F]()
+            __Exercise__
+            sut.traverse(){ f =>
+              result += f
+              val w = wrap(f)
+              if(w.isDirectory && w.fileName.contains("31"))
+                FileVisitResult.SKIP_SUBTREE
+              else
+                FileVisitResult.CONTINUE
+            }
+            __Verify__
+            fileNames(result) should contain theSameElementsInOrderAs
+              Seq("dir1", "child11.txt", "child12.txt",
+                "dir2", "child21.txt", "child22.txt", "child23.txt",
+                "dir3", "dir31", "child31.txt",
+                "child1.txt", "child2.txt", "child3.txt")
+          }
+
+        "skip traversing subtree if the preDir return FileVisitResult.SKIP_SUBTREE" in
+          new FileWrapperLike_DirectoryWithFilesFixture {
+            __SetUp__
+            val result = mutable.MutableList[F]()
+            val preDir = { f: F =>
+              if(wrap(f).fileName.contains("31"))
+                FileVisitResult.SKIP_SUBTREE
+              else
+                FileVisitResult.CONTINUE
+            }
+            __Exercise__
+            sut.traverse(preDir = preDir){ f =>
+              result += f
+              FileVisitResult.CONTINUE
+            }
+            __Verify__
+            fileNames(result) should contain theSameElementsInOrderAs
+              Seq("dir1", "child11.txt", "child12.txt",
+                "dir2", "child21.txt", "child22.txt", "child23.txt",
+                "dir3", "dir31", "child31.txt",
+                "child1.txt", "child2.txt", "child3.txt")
+          }
+
+        """skip traversing subtree if the postDir return FileVisitResult.SKIP_SUBTREE
+          |(this does not effect to result because the subtree has already been traversed when postDir is called)
+          |""".stripMargin in
+          new FileWrapperLike_DirectoryWithFilesFixture {
+            __SetUp__
+            val result = mutable.MutableList[F]()
+            val postDir = { f: F =>
+              if(wrap(f).fileName.contains("31"))
+                FileVisitResult.SKIP_SUBTREE
+              else
+                FileVisitResult.CONTINUE
+            }
+            __Exercise__
+            sut.traverse(postDir = postDir){ f =>
+              result += f
+              FileVisitResult.CONTINUE
+            }
+            __Verify__
+            fileNames(result) should contain theSameElementsInOrderAs
+              Seq("dir1", "child11.txt", "child12.txt",
+                "dir2", "child21.txt", "child22.txt", "child23.txt",
+                "dir3", "dir31", "child311.txt", "child312.txt", "child31.txt",
+                "child1.txt", "child2.txt", "child3.txt")
+          }
+
+        // SKIP_SIBLINGS
+        "skip traversing siblings if the consumer return FileVisitResult.SKIP_SIBLINGS" in
+          new FileWrapperLike_DirectoryWithFilesFixture {
+            __SetUp__
+            val result = mutable.MutableList[F]()
+            __Exercise__
+            sut.traverse(){ f =>
+              result += f
+              val w = wrap(f)
+              if(w.isDirectory && w.fileName.contains("2"))
+                FileVisitResult.SKIP_SIBLINGS
+              else
+                FileVisitResult.CONTINUE
+            }
+            __Verify__
+            fileNames(result) should contain theSameElementsInOrderAs
+              Seq("dir1", "child11.txt", "child12.txt",
+                "dir2", "child21.txt", "child22.txt", "child23.txt")
+          }
+
+        "skip traversing siblings if the preDir return FileVisitResult.SKIP_SIBLINGS" in
+          new FileWrapperLike_DirectoryWithFilesFixture {
+            __SetUp__
+            val result = mutable.MutableList[F]()
+            val preDir = { f: F =>
+              if(wrap(f).fileName.contains("2"))
+                FileVisitResult.SKIP_SIBLINGS
+              else
+                FileVisitResult.CONTINUE
+            }
+            __Exercise__
+            sut.traverse(preDir = preDir){ f =>
+              result += f
+              FileVisitResult.CONTINUE
+            }
+            __Verify__
+            fileNames(result) should contain theSameElementsInOrderAs
+              Seq("dir1", "child11.txt", "child12.txt",
+                "dir2", "child21.txt", "child22.txt", "child23.txt")
+          }
+
+        "skip traversing siblings if the postDir return FileVisitResult.SKIP_SIBLINGS" in
+          new FileWrapperLike_DirectoryWithFilesFixture {
+            __SetUp__
+            val result = mutable.MutableList[F]()
+            val postDir = { f: F =>
+              if(wrap(f).fileName.contains("2"))
+                FileVisitResult.SKIP_SIBLINGS
+              else
+                FileVisitResult.CONTINUE
+            }
+            __Exercise__
+            sut.traverse(postDir = postDir){ f =>
+              result += f
+              FileVisitResult.CONTINUE
+            }
+            __Verify__
+            fileNames(result) should contain theSameElementsInOrderAs
+              Seq("dir1", "child11.txt", "child12.txt",
+                "dir2", "child21.txt", "child22.txt", "child23.txt")
           }
       }
     }

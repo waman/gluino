@@ -216,15 +216,12 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   def dirsMatchRecurse(filter: F => Boolean, visitParentLater: Boolean = false): Seq[F] =
     collect(eachDirMatchRecurse(filter, visitParentLater))
 
-  def defaultOrderingForTraverse: Ordering[F] = new Ordering[F]{
-    override def compare(a: F, b: F): Int = {
-      val x = wrap(a)
-      val y = wrap(b)
-      if(x.isFile != y.isFile)
-        x.isFile.compare(y.isFile)
-      else
-        x.fileName.compare(y.fileName)
-    }
+  def defaultOrderingForTraverse: (F, F) => Boolean = { (a, b) =>
+    val (x, y) = (wrap(a), wrap(b))
+    if(x.isFile != y.isFile)
+      x.isFile < y.isFile
+    else
+      x.fileName < y.fileName
   }
 
   def traverse(fileType: FileType = FileType.Any,
@@ -241,7 +238,7 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
                postRoot: Boolean = false,
                maxDepth: Int = Integer.MAX_VALUE,
 
-               sort: (F, F) => Boolean = defaultOrderingForTraverse.lt)
+               sort: (F, F) => Boolean = defaultOrderingForTraverse)
               (consumer: F => FileVisitResult): Unit = {
     // canonicalize the arguments
     val _filter: F => Boolean =
@@ -291,27 +288,63 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
                                 maxDepth: Int,
                                 sort: (F, F) => Boolean,
                                 consumer: (F, Boolean) => FileVisitResult): FileVisitResult = {
-    if(maxDepth < 0) return CONTINUE
+    var skipSubtree = if(maxDepth < 0) true else false
+    var skipSibling = false
 
-    def traverseChildren(): FileVisitResult = {
-      wrap(dir).files.sortWith(sort).foreach{ child =>
-        wrap(child) match {
+    def traverseSubtree(): FileVisitResult = {
+      wrap(dir).files.sortWith(sort).toStream.map{ child =>
+        val result: FileVisitResult = wrap(child) match {
           case d if d.isDirectory =>
             traverseDirectory(
               child, isRoot = false, filter, preDir, postDir,
               maxDepth-1, sort, consumer)
+
           case f if f.isFile =>
             if(filter(child))consumer(child, false)
+            else CONTINUE
         }
+        result
+      }.find(result => result == TERMINATE || result == SKIP_SIBLINGS) match {
+        case Some(TERMINATE) => TERMINATE
+        case _ => CONTINUE
       }
-      CONTINUE
     }
 
     //***** execute traversing *****
-    preDir(dir, isRoot)
-    if(filter(dir))consumer(dir, isRoot)
-    traverseChildren()
-    postDir(dir, isRoot)
+    // preDir
+    preDir(dir, isRoot) match {
+      case TERMINATE     => return TERMINATE
+      case SKIP_SUBTREE  => skipSubtree = true
+      case SKIP_SIBLINGS => skipSibling = true
+      case _ =>
+    }
+
+    // consumer
+    if(filter(dir)){
+      consumer(dir, isRoot) match {
+        case TERMINATE     => return TERMINATE
+        case SKIP_SUBTREE  => skipSubtree = true
+        case SKIP_SIBLINGS => skipSibling = true
+        case _ =>
+      }
+    }
+
+    // subtree
+    if(!skipSubtree){
+      traverseSubtree() match {
+        case TERMINATE => return TERMINATE
+        case _         =>
+      }
+    }
+
+    // postDir
+    postDir(dir, isRoot) match {
+      case TERMINATE     => TERMINATE
+      case SKIP_SIBLINGS => SKIP_SIBLINGS
+      case _ =>
+        if(skipSibling) SKIP_SIBLINGS
+        else            CONTINUE
+    }
   }
 
   //***** Directory Operations *****
