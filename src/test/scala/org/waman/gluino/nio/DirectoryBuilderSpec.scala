@@ -95,7 +95,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
           val baseDir = GluinoPath.createTempDirectory(prefix = "project-")
 
           file("build.sbt") <<
-            """name := "test-project"
+            s"""name := "${baseDir.getFileName}"
               |
               |version := "0.1-SNAPSHOT"
               |
@@ -218,7 +218,7 @@ class DirectoryBuilderSpec extends GluinoIOCustomSpec with GluinoPath{
         __Verify__
         val sut = projectHome / "src" / "test-link.lnk"
         sut should exist
-        text(sut) should equal ("Some content.")
+        Files.readAllLines(sut).get(0) should equal ("Some content.")
         __TearDown__
         projectHome.deleteDir()
       }

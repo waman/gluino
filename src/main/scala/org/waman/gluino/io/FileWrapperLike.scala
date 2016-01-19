@@ -2,6 +2,7 @@ package org.waman.gluino.io
 
 import java.io._
 import java.nio.charset.Charset
+import java.nio.file.Path
 import java.nio.file.FileVisitResult
 import java.nio.file.FileVisitResult._
 
@@ -56,8 +57,12 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
 
   def asOutputtable(): Outputtable = newInputStream()
 
-  def <<(file: F): W = <<(wrap(file))
-  def <<(wrapper: W): W = <<(wrapper.asOutputtable())
+  def <<(bytes: Array[Byte]): W = <<(convertByteArrayToOutputtable(bytes))
+  def <<(bytes: Seq[Byte]): W = <<(convertByteSeqToOutputtable(bytes))
+  def <<(input: InputStream): W = <<(convertInputStreamToOutputtable(input))
+  def <<(file: File): W = <<(convertFileToOutputtable(file))
+  def <<(path: Path): W = <<(convertPathToOutputtable(path))
+  def <<(f: FileWrapperLike[_, _]): W = <<(f.asOutputtable())
 
   //***** String, Reader/Writer *****
   def newReader(charset: Charset = defaultCharset): BufferedReader
@@ -82,6 +87,10 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   override def append(input: Writable): Unit = withWriterAppend(input.writeTo(_))
 
   def asWritable(charset: Charset = defaultCharset): Writable = newReader(charset)
+
+  def <<(s: String): W = <<(convertStringToWritable(s))
+  def <<(reader: Reader): W = <<(convertReaderToWritable(reader))
+  def <<(reader: BufferedReader): W = <<(convertBufferedReaderToWritable(reader))
 
   //***** PrintWriter *****
   def newPrintWriter(charset: Charset = defaultCharset, append: Boolean = false): PrintWriter =

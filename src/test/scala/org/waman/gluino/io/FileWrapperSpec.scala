@@ -1,7 +1,6 @@
 package org.waman.gluino.io
 
 import java.io.{File, IOException}
-import java.nio.file.attribute.BasicFileAttributes
 import java.nio.file.{FileVisitResult, Files, Path}
 
 import org.scalatest.OptionValues._
@@ -1438,9 +1437,16 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
 
     "<< operator should" - {
 
+      "write down the specified String to this file" in new FileWrapperLike_FileWithContentFixture {
+        __Exercise__
+        sut << "fourth line."
+        __Verify__
+        text(path) should equal(contentAsString + "fourth line.")
+      }
+
       "copy content from the specified file to this one" in new FileWrapperLike_NotExistingFileFixture {
         __Exercise__
-        val result = sut << asF(readOnlyPath)
+        val result = sut << readOnlyPath
         __Verify__
         path should exist
         text(path) should equal(contentAsString)
@@ -1451,7 +1457,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
       "copy content from the specified file to this one even if this file exists" in
         new FileWrapperLike_FileFixture {
           __Exercise__
-          val result = sut << asF(readOnlyPath)
+          val result = sut << readOnlyPath
           __Verify__
           path should exist
           text(path) should equal(contentAsString)
@@ -1462,7 +1468,7 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
       "append content from the specified file to this one if this has content" in
         new FileWrapperLike_FileWithContentFixture {
           __Exercise__
-          val result = sut << asF(readOnlyPath)
+          val result = sut << readOnlyPath
           __Verify__
           path should exist
           text(path) should equal(contentAsString + contentAsString)
