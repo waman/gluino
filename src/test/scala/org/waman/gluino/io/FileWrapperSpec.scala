@@ -646,12 +646,51 @@ trait FileWrapperLikeSpec[F, W <: FileWrapperLike[F, W]]
         sut should be a 'directory
       }
 
-      "RETURN an Option[IOException] if the directory already exist" in
+      "RETURN an Option[IOException] if the same-name file already exists" in
         new FileWrapperLike_FileFixture {
           __Exercise__
           val result = sut.createDirectory()
           __Verify__
           result.value should be (a [IOException])
+        }
+
+      "do nothing if the directory already exists" in
+        new FileWrapperLike_DirectoryFixture {
+          __Exercise__
+          val result = sut.createDirectory()
+          __Verify__
+          result.value should be (a [IOException])
+        }
+    }
+
+    "createDirectories() method should" - {
+
+      "create ancestor directories" in new NotExistingDirectoryFixture {
+        __SetUp__
+        val dddir = dir.resolve("ddir").resolve("dddir")
+        val sut = newFileWrapperLike(dddir)
+        __Exercise__
+        val result = sut.createDirectories()
+        __Verify__
+        result should be (None)
+        dddir should exist
+        sut should be a 'directory
+      }
+
+      "RETURN an Option[IOException] if the same-name file already exists" in
+        new FileWrapperLike_FileFixture {
+          __Exercise__
+          val result = sut.createDirectories()
+          __Verify__
+          result.value should be (a [IOException])
+        }
+
+      "do nothing if the directory already exists" in
+        new FileWrapperLike_DirectoryFixture {
+          __Exercise__
+          val result = sut.createDirectories()
+          __Verify__
+          result should be (None)
         }
     }
 

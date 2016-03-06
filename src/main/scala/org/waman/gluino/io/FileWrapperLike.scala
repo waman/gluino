@@ -39,8 +39,27 @@ trait FileWrapperLike[F, W <: FileWrapperLike[F, W]] extends GluinoIO
   protected def getFileFilterProvider: FileTypeFilterProvider[F]
 
   //***** Create *****
+  def getParent: W
   def createFile(): Option[IOException]
   def createDirectory(): Option[IOException]
+  def createDirectories(): Option[IOException] = {
+    if(exists && isDirectory) return None
+    try {
+      val parent = getParent
+      if (!parent.exists) {
+        parent.createDirectories() match {
+          case None =>
+          case some => return some
+        }
+      }
+      createDirectory() match {
+        case None => None
+        case some => some
+      }
+    } catch {
+      case ex: IOException => Some(ex)
+    }
+  }
 
   //***** Byte, InputStream/OutputStream *****
   def newInputStream(): InputStream

@@ -19,6 +19,8 @@ class FileWrapper(file: File) extends FileWrapperLike[File, FileWrapper] {
 
   override def isDirectory: Boolean = file.isDirectory
 
+  override def getParent: FileWrapper = wrap(file.getParentFile)
+
   override def size: Long = file.length
 
   def isOlderThan(arg: File): Boolean = file.lastModified < arg.lastModified

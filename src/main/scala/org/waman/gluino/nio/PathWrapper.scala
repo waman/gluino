@@ -28,6 +28,8 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
   override def isFile: Boolean = Files.isRegularFile(path)
   override def isDirectory: Boolean = Files.isDirectory(path)
 
+  override def getParent: PathWrapper = wrap(path.getParent)
+
   override def size: Long = Files.size(path)
 
   def isOlderThan(arg: Path): Boolean =
@@ -101,6 +103,16 @@ class PathWrapper(path: Path) extends FileWrapperLike[Path, PathWrapper]
     None
   }catch{
     case ex: IOException => Some(ex)
+  }
+
+  override def createDirectories(): Option[IOException] = {
+    if(exists && isDirectory)return None
+    try{
+      Files.createDirectories(path)
+      None
+    }catch{
+      case ex: IOException => Some(ex)
+    }
   }
 
   override def move(dest: Path, isOverride: Boolean = false): Option[IOException] = try{
